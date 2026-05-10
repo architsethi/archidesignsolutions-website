@@ -17,8 +17,8 @@
 .projectsGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); }
 .projectCard { overflow: hidden; cursor: pointer; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); transition: border-color var(--transition-base), box-shadow var(--transition-base); }
 .projectCard:hover { border-color: var(--border-medium); box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
-.projectImage { width: 100%; aspect-ratio: 4/3; background-size: cover; background-position: center; position: relative; transition: transform var(--transition-slow); }
-.projectCard:hover .projectImage { transform: scale(1.03); }
+.projectImage { width: 100%; aspect-ratio: 4/3; position: relative; overflow: hidden; }
+.projectCard:hover .projectImage img { transform: scale(1.05); transition: transform var(--transition-slow); }
 .projectOverlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.7) 100%); display: flex; align-items: flex-end; padding: var(--space-5); opacity: 0; transition: opacity var(--transition-base); }
 .projectCard:hover .projectOverlay { opacity: 1; }
 .projectCategory { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--white); background: var(--accent-red); padding: 4px 10px; border-radius: var(--radius-sm); }

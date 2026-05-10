@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
 
@@ -14,9 +15,19 @@ export default function ContactPage() {
 
   return (
     <div className={styles.page}>
+      {/* ── Hero with image ── */}
       <section className={styles.hero}>
-        <div className="container">
-          <span className={`label-mono ${styles.label}`}>Contact</span>
+        <Image
+          src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=85"
+          alt="ArchiDesignSolutions office"
+          fill
+          priority
+          style={{ objectFit: "cover" }}
+          sizes="100vw"
+        />
+        <div className={styles.heroOverlay} />
+        <div className={`container ${styles.heroContent}`}>
+          <span className={`label-mono ${styles.heroLabel}`}>Contact</span>
           <h1 className={styles.heroTitle}>
             Let&apos;s Build
             <br />
@@ -104,47 +115,60 @@ export default function ContactPage() {
               </div>
             </ScrollReveal>
 
-            {/* Contact Info */}
+            {/* Contact Info + Map */}
             <ScrollReveal delay={0.2}>
-              <div className={styles.info}>
-                <div className={styles.infoBlock}>
-                  <span className={`label-mono ${styles.infoLabel}`}>Visit Us</span>
-                  <p className={styles.infoText}>
-                    208B, Prakriti Corporate<br />
-                    Y.N. Road, New Palasia<br />
-                    Indore — 452001<br />
-                    Madhya Pradesh, India
-                  </p>
+              <div className={styles.infoColumn}>
+                {/* Office image */}
+                <div className={styles.officeImage}>
+                  <Image
+                    src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=85"
+                    alt="ArchiDesignSolutions workspace"
+                    fill
+                    style={{ objectFit: "cover" }}
+                    sizes="(max-width: 1024px) 100vw, 40vw"
+                  />
                 </div>
 
-                <div className={styles.infoBlock}>
-                  <span className={`label-mono ${styles.infoLabel}`}>Email</span>
-                  <a href="mailto:solutions.archit@gmail.com" className={styles.infoLink}>
-                    solutions.archit@gmail.com
-                  </a>
-                  <a href="mailto:solutions.prakriti@gmail.com" className={styles.infoLink}>
-                    solutions.prakriti@gmail.com
-                  </a>
-                </div>
+                <div className={styles.info}>
+                  <div className={styles.infoBlock}>
+                    <span className={`label-mono ${styles.infoLabel}`}>Visit Us</span>
+                    <p className={styles.infoText}>
+                      208B, Prakriti Corporate<br />
+                      Y.N. Road, New Palasia<br />
+                      Indore — 452001<br />
+                      Madhya Pradesh, India
+                    </p>
+                  </div>
 
-                <div className={styles.infoBlock}>
-                  <span className={`label-mono ${styles.infoLabel}`}>Phone</span>
-                  <a href="tel:+919179797359" className={styles.infoLink}>
-                    +91 91797 97359
-                  </a>
-                  <a href="tel:+919826290327" className={styles.infoLink}>
-                    +91 9826290327
-                  </a>
-                </div>
+                  <div className={styles.infoBlock}>
+                    <span className={`label-mono ${styles.infoLabel}`}>Email</span>
+                    <a href="mailto:solutions.archit@gmail.com" className={styles.infoLink}>
+                      solutions.archit@gmail.com
+                    </a>
+                    <a href="mailto:solutions.prakriti@gmail.com" className={styles.infoLink}>
+                      solutions.prakriti@gmail.com
+                    </a>
+                  </div>
 
-                <div className={styles.infoBlock}>
-                  <span className={`label-mono ${styles.infoLabel}`}>Follow</span>
-                  <a href="https://www.instagram.com/archidesignsolutions/" target="_blank" rel="noopener noreferrer" className={styles.infoLink}>
-                    Instagram →
-                  </a>
-                  <a href="https://wa.me/919179797359" target="_blank" rel="noopener noreferrer" className={styles.infoLink}>
-                    WhatsApp →
-                  </a>
+                  <div className={styles.infoBlock}>
+                    <span className={`label-mono ${styles.infoLabel}`}>Phone</span>
+                    <a href="tel:+919179797359" className={styles.infoLink}>
+                      +91 91797 97359
+                    </a>
+                    <a href="tel:+919826290327" className={styles.infoLink}>
+                      +91 9826290327
+                    </a>
+                  </div>
+
+                  <div className={styles.infoBlock}>
+                    <span className={`label-mono ${styles.infoLabel}`}>Follow</span>
+                    <a href="https://www.instagram.com/archidesignsolutions/" target="_blank" rel="noopener noreferrer" className={styles.infoLink}>
+                      Instagram →
+                    </a>
+                    <a href="https://wa.me/919179797359" target="_blank" rel="noopener noreferrer" className={styles.infoLink}>
+                      WhatsApp →
+                    </a>
+                  </div>
                 </div>
               </div>
             </ScrollReveal>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
 
@@ -15,6 +16,7 @@ const posts = [
     category: "Green Building",
     date: "April 2026",
     readTime: "6 min read",
+    image: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=800&q=80",
   },
   {
     slug: "interior-design-trends-2026",
@@ -23,6 +25,7 @@ const posts = [
     category: "Interior Design",
     date: "March 2026",
     readTime: "5 min read",
+    image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80",
   },
   {
     slug: "ai-architecture-workflows",
@@ -31,6 +34,7 @@ const posts = [
     category: "Innovation",
     date: "February 2026",
     readTime: "8 min read",
+    image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80",
   },
 ];
 
@@ -57,13 +61,24 @@ export default function BlogPage() {
             {posts.map((post, i) => (
               <ScrollReveal key={post.slug} delay={i * 0.1}>
                 <article className={styles.postCard}>
-                  <div className={styles.postMeta}>
-                    <span className={styles.postCategory}>{post.category}</span>
-                    <span className={styles.postDate}>{post.date}</span>
+                  <div className={styles.postImageWrap}>
+                    <Image
+                      src={post.image}
+                      alt={post.title}
+                      fill
+                      style={{ objectFit: "cover" }}
+                      sizes="(max-width: 768px) 100vw, 320px"
+                    />
                   </div>
-                  <h2 className={styles.postTitle}>{post.title}</h2>
-                  <p className={styles.postExcerpt}>{post.excerpt}</p>
-                  <span className={styles.postRead}>{post.readTime} →</span>
+                  <div className={styles.postContent}>
+                    <div className={styles.postMeta}>
+                      <span className={styles.postCategory}>{post.category}</span>
+                      <span className={styles.postDate}>{post.date}</span>
+                    </div>
+                    <h2 className={styles.postTitle}>{post.title}</h2>
+                    <p className={styles.postExcerpt}>{post.excerpt}</p>
+                    <span className={styles.postRead}>{post.readTime} →</span>
+                  </div>
                 </article>
               </ScrollReveal>
             ))}

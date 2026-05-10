@@ -7,7 +7,7 @@
    ═══════════════════════════════════════ */
 .hero {
   position: relative;
-  height: calc(100vh - 72px);
+  min-height: calc(100vh - 72px);
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -48,11 +48,10 @@
 .heroContent {
   position: relative;
   z-index: 4;
-  padding: var(--space-12) 0;
-  padding-left: var(--space-4);
+  padding: var(--space-10) 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-7);
+  gap: var(--space-6);
 }
 
 .heroLabel {
@@ -70,12 +69,12 @@
 }
 
 .heroTitle {
-  font-size: clamp(48px, 7.5vw, 96px);
+  font-size: clamp(42px, 6vw, 84px);
   font-weight: 700;
-  line-height: 0.96;
+  line-height: 0.98;
   letter-spacing: -0.04em;
   color: var(--text-primary);
-  max-width: 940px;
+  max-width: 880px;
 }
 
 .heroSubtitle {
@@ -95,7 +94,7 @@
 .heroIndicators {
   display: flex;
   gap: var(--space-6);
-  margin-top: var(--space-8);
+  margin-top: var(--space-4);
 }
 
 .indicator {
