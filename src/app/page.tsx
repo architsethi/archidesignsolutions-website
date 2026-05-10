@@ -9,9 +9,24 @@ import { motion, AnimatePresence } from "framer-motion";
 /* ═══ Hero Slide Data ═══ */
 const heroSlides = [
   {
-    label: "Architecture",
+    label: "Residential High-Rise",
     title: "Defining Skylines,\nShaping Communities",
     image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1920&q=85",
+  },
+  {
+    label: "Residential Commercial",
+    title: "Where Living\nMeets Enterprise",
+    image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&q=85",
+  },
+  {
+    label: "Town Planning",
+    title: "Visionary Frameworks\nFor Tomorrow",
+    image: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=1920&q=85",
+  },
+  {
+    label: "Urban Design",
+    title: "Cities Built\nFor People",
+    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1920&q=85",
   },
   {
     label: "Interior Design",
@@ -19,14 +34,9 @@ const heroSlides = [
     image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1920&q=85",
   },
   {
-    label: "Master Planning",
-    title: "Visionary Frameworks\nFor Tomorrow",
-    image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&q=85",
-  },
-  {
-    label: "Green Building",
-    title: "Sustainable Design\nIn Harmony",
-    image: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=1920&q=85",
+    label: "Landscape Design",
+    title: "Nature Woven\nInto Architecture",
+    image: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=1920&q=85",
   },
 ];
 
