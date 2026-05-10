@@ -315,21 +315,21 @@ export default function HomePage() {
               View Our Work →
             </Link>
           </motion.div>
+        </div>
 
-          {/* Slide Indicators */}
-          <div className={styles.heroIndicators}>
-            {heroSlides.map((slide, i) => (
-              <button
-                key={i}
-                className={`${styles.indicator} ${i === currentSlide ? styles.active : ""}`}
-                onClick={() => goToSlide(i)}
-                aria-label={`Go to ${slide.label}`}
-              >
-                <span className={styles.indicatorBar} />
-                <span className={styles.indicatorLabel}>{slide.label}</span>
-              </button>
-            ))}
-          </div>
+        {/* Slide Indicators — full width */}
+        <div className={styles.heroIndicators}>
+          {heroSlides.map((slide, i) => (
+            <button
+              key={i}
+              className={`${styles.indicator} ${i === currentSlide ? styles.active : ""}`}
+              onClick={() => goToSlide(i)}
+              aria-label={`Go to ${slide.label}`}
+            >
+              <span className={styles.indicatorBar} />
+              <span className={styles.indicatorLabel}>{slide.label}</span>
+            </button>
+          ))}
         </div>
 
         {/* Scroll Hint */}
