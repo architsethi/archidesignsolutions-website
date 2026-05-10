@@ -14,9 +14,14 @@ const heroSlides = [
     image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1920&q=85",
   },
   {
-    label: "Residential Commercial",
-    title: "Where Living\nMeets Enterprise",
-    image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&q=85",
+    label: "Residence Design",
+    title: "Crafting Homes\nThat Inspire",
+    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=85",
+  },
+  {
+    label: "Office Spaces",
+    title: "Where Ideas\nMeet Enterprise",
+    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=85",
   },
   {
     label: "Town Planning",
