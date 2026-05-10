@@ -48,19 +48,19 @@ export default function InteractiveGrid({ className }: InteractiveGridProps) {
       const spacing = 60;
       const mx = mouseRef.current.x;
       const my = mouseRef.current.y;
-      const radius = 200;
+      const radius = 250;
 
       /* Vertical lines */
       for (let x = spacing; x < w; x += spacing) {
         const dist = Math.abs(x - mx);
         const proximity = Math.max(0, 1 - dist / radius);
-        const alpha = 0.04 + proximity * 0.12;
+        const alpha = 0.08 + proximity * 0.22;
 
         ctx.beginPath();
         ctx.moveTo(x, 0);
         ctx.lineTo(x, h);
         ctx.strokeStyle = `rgba(0, 0, 0, ${alpha})`;
-        ctx.lineWidth = proximity > 0.3 ? 0.8 : 0.4;
+        ctx.lineWidth = proximity > 0.3 ? 1.2 : 0.5;
         ctx.stroke();
       }
 
@@ -68,13 +68,13 @@ export default function InteractiveGrid({ className }: InteractiveGridProps) {
       for (let y = spacing; y < h; y += spacing) {
         const dist = Math.abs(y - my);
         const proximity = Math.max(0, 1 - dist / radius);
-        const alpha = 0.04 + proximity * 0.12;
+        const alpha = 0.08 + proximity * 0.22;
 
         ctx.beginPath();
         ctx.moveTo(0, y);
         ctx.lineTo(w, y);
         ctx.strokeStyle = `rgba(0, 0, 0, ${alpha})`;
-        ctx.lineWidth = proximity > 0.3 ? 0.8 : 0.4;
+        ctx.lineWidth = proximity > 0.3 ? 1.2 : 0.5;
         ctx.stroke();
       }
 
@@ -87,8 +87,8 @@ export default function InteractiveGrid({ className }: InteractiveGridProps) {
           if (dist < radius) {
             const proximity = 1 - dist / radius;
             ctx.beginPath();
-            ctx.arc(x, y, 1.5 + proximity * 2, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(200, 50, 43, ${proximity * 0.6})`;
+            ctx.arc(x, y, 2 + proximity * 3, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(200, 50, 43, ${proximity * 0.75})`;
             ctx.fill();
           }
         }
