@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./page.module.css";
@@ -42,6 +42,13 @@ const galleryImages = [
     src: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80",
     label: "MEP Engineering",
   },
+];
+
+/* ═══ Rotating Taglines ═══ */
+const taglines = [
+  "that define generations",
+  "that inspire communities",
+  "that stand the test of time",
 ];
 
 /* ═══ Services Data ═══ */
@@ -142,6 +149,39 @@ const testimonials = [
 export default function HomePage() {
   const [lightbox, setLightbox] = useState<{ src: string; label: string } | null>(null);
 
+  /* ── Typewriter state ── */
+  const [phraseIdx, setPhraseIdx] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentPhrase = taglines[phraseIdx];
+
+    if (!isDeleting && displayText === currentPhrase) {
+      /* Full text shown — pause 4s then start deleting */
+      const pause = setTimeout(() => setIsDeleting(true), 4000);
+      return () => clearTimeout(pause);
+    }
+
+    if (isDeleting && displayText === "") {
+      /* Fully deleted — move to next phrase, start typing */
+      setIsDeleting(false);
+      setPhraseIdx((prev) => (prev + 1) % taglines.length);
+      return;
+    }
+
+    /* Type or delete one character */
+    const speed = isDeleting ? 20 : 35;
+    const timer = setTimeout(() => {
+      setDisplayText((prev) =>
+        isDeleting
+          ? prev.slice(0, -1)
+          : currentPhrase.slice(0, prev.length + 1)
+      );
+    }, speed);
+    return () => clearTimeout(timer);
+  }, [displayText, isDeleting, phraseIdx]);
+
   /* Double arrays for seamless infinite loops */
   const marqueeItems = [...galleryImages, ...galleryImages];
   const testimonialItems = [...testimonials, ...testimonials];
@@ -164,10 +204,10 @@ export default function HomePage() {
               <span className={styles.heroTitleItalic}>design </span>
               <span className={styles.heroTitleBold}>spaces</span>
               <br />
-              <span className={styles.heroTitleLight}>that </span>
-              <span className={styles.heroTitleBold}>define </span>
-              <span className={styles.heroTitleFade}>gener</span>
-              <span className={styles.heroTitleAccent}>ations</span>
+              <span className={styles.heroTypedLine}>
+                {displayText}
+                <span className={styles.heroCursor} />
+              </span>
             </h1>
           </motion.div>
 
