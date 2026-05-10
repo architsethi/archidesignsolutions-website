@@ -1,11 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
 import InteractiveGrid from "@/components/InteractiveGrid";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 /* ═══ Marquee Gallery Images ═══ */
 const galleryImages = [
@@ -139,6 +140,8 @@ const testimonials = [
 
 /* ═══ Homepage ═══ */
 export default function HomePage() {
+  const [lightbox, setLightbox] = useState<{ src: string; label: string } | null>(null);
+
   /* Double arrays for seamless infinite loops */
   const marqueeItems = [...galleryImages, ...galleryImages];
   const testimonialItems = [...testimonials, ...testimonials];
@@ -197,7 +200,11 @@ export default function HomePage() {
         >
           <div className={styles.marqueeTrack}>
             {marqueeItems.map((img, i) => (
-              <div key={i} className={styles.marqueeCard}>
+              <div
+                key={i}
+                className={styles.marqueeCard}
+                onClick={() => setLightbox({ src: img.src.replace('w=800', 'w=1600'), label: img.label })}
+              >
                 <div className={styles.marqueeImageWrap}>
                   <Image
                     src={img.src}
@@ -213,6 +220,47 @@ export default function HomePage() {
           </div>
         </motion.div>
       </section>
+
+      {/* ═══════ LIGHTBOX ═══════ */}
+      <AnimatePresence>
+        {lightbox && (
+          <motion.div
+            className={styles.lightbox}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={() => setLightbox(null)}
+          >
+            <motion.div
+              className={styles.lightboxInner}
+              initial={{ scale: 0.85, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Image
+                src={lightbox.src}
+                alt={lightbox.label}
+                width={1200}
+                height={750}
+                style={{ objectFit: "cover", width: '100%', height: 'auto', borderRadius: 'var(--radius-lg)' }}
+              />
+              <span className={styles.lightboxLabel}>{lightbox.label}</span>
+            </motion.div>
+            <button
+              className={styles.lightboxClose}
+              onClick={() => setLightbox(null)}
+              aria-label="Close"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ═══════ SERVICES ═══════ */}
       <section className={styles.services}>
