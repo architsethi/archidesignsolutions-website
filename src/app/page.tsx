@@ -74,48 +74,56 @@ const services = [
     title: "Architectural Design",
     desc: "Innovative solutions balancing aesthetics, function, and structural integrity for every building type.",
     href: "/services#architecture",
+    img: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600&q=80",
   },
   {
     num: "02",
     title: "Interior Design",
     desc: "Curated interiors that reflect your personality — merging comfort with contemporary elegance.",
     href: "/services#interior",
+    img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80",
   },
   {
     num: "03",
     title: "Master Planning",
     desc: "Strategic land-use planning and urban development frameworks for large-scale projects.",
     href: "/services#masterplanning",
+    img: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=600&q=80",
   },
   {
     num: "04",
     title: "Green Building",
     desc: "Sustainable architecture with energy-efficient systems and eco-friendly, IGBC-aligned materials.",
     href: "/services#greenbuilding",
+    img: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=600&q=80",
   },
   {
     num: "05",
     title: "Approvals & Permissions",
     desc: "Seamless handling of regulatory approvals, building permits, and compliance documentation.",
     href: "/services#approvals",
+    img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80",
   },
   {
     num: "06",
     title: "MEP Services",
     desc: "Mechanical, electrical and plumbing engineering seamlessly integrated with architectural plans.",
     href: "/services#mep",
+    img: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&q=80",
   },
   {
     num: "07",
     title: "Landscape Design",
     desc: "Beautiful outdoor environments designed to complement and extend the built structure.",
     href: "/services#landscape",
+    img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80",
   },
   {
     num: "08",
     title: "Project Management",
     desc: "End-to-end oversight ensuring timely delivery within budget and quality standards.",
     href: "/services#projectmgmt",
+    img: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80",
   },
 ];
 
@@ -131,32 +139,32 @@ const stats = [
 const testimonials = [
   {
     quote: "Working with ArchiDesignSolutions transformed our vision. Their attention to detail and commitment to timeless design is unmatched.",
-    author: "Residential Client",
+    author: "Rajesh Malhotra",
     project: "Private Residence, Indore",
   },
   {
     quote: "From concept to completion, the team delivered beyond all expectations. Our office complex has become a Bhopal landmark.",
-    author: "Corporate Client",
+    author: "Priya Sharma",
     project: "Office Complex, Bhopal",
   },
   {
     quote: "Our home is a seamless blend of modern aesthetics and Indian sensibility — warm, beautiful, entirely ours.",
-    author: "Homeowner",
+    author: "Vikram & Anita Joshi",
     project: "Luxury Villa, Indore",
   },
   {
     quote: "Their green building expertise helped us achieve LEED certification while keeping costs in check. Exceptional professionals.",
-    author: "Institutional Client",
+    author: "Dr. Sunil Kapoor",
     project: "Green Campus Project",
   },
   {
     quote: "The master planning they delivered for our township project was visionary — infrastructure, community spaces, everything considered.",
-    author: "Developer",
+    author: "Aditya Mehta",
     project: "Township, Bhopal",
   },
   {
     quote: "Incredible interior work. Every room tells a story. The material palette they chose is both luxurious and understated.",
-    author: "Hospitality Client",
+    author: "Kavita Deshmukh",
     project: "Boutique Hotel, Ujjain",
   },
 ];
@@ -410,6 +418,29 @@ export default function HomePage() {
         )}
       </AnimatePresence>
 
+      {/* ═══════ STATS ═══════ */}
+      <section className={styles.statsSection}>
+        <div className="container">
+          <ScrollReveal>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>
+                Built on <span className={styles.accent}>Experience</span>
+              </h2>
+            </div>
+          </ScrollReveal>
+          <div className={styles.statsGrid}>
+            {stats.map((stat, i) => (
+              <ScrollReveal key={stat.label} delay={i * 0.1}>
+                <div className={styles.stat}>
+                  <span className={styles.statValue}>{stat.value}</span>
+                  <span className={styles.statLabel}>{stat.label}</span>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ═══════ SERVICES ═══════ */}
       <section className={styles.services}>
         <div className="container">
@@ -432,34 +463,22 @@ export default function HomePage() {
             {services.map((service, i) => (
               <ScrollReveal key={service.num} delay={i * 0.06}>
                 <Link href={service.href} className={styles.serviceCard}>
-                  <span className={styles.serviceNum}>{service.num}</span>
-                  <h3 className={styles.serviceTitle}>{service.title}</h3>
-                  <p className={styles.serviceDesc}>{service.desc}</p>
-                  <span className={styles.serviceArrow}>→</span>
+                  <div className={styles.serviceImageWrap}>
+                    <Image
+                      src={service.img}
+                      alt={service.title}
+                      fill
+                      style={{ objectFit: "cover" }}
+                      sizes="300px"
+                    />
+                  </div>
+                  <div className={styles.serviceBody}>
+                    <span className={styles.serviceNum}>{service.num}</span>
+                    <h3 className={styles.serviceTitle}>{service.title}</h3>
+                    <p className={styles.serviceDesc}>{service.desc}</p>
+                    <span className={styles.serviceArrow}>→</span>
+                  </div>
                 </Link>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════ STATS ═══════ */}
-      <section className={styles.statsSection}>
-        <div className="container">
-          <ScrollReveal>
-            <div className={styles.sectionHeader}>
-              <h2 className={styles.sectionTitle}>
-                Built on <span className={styles.accent}>Experience</span>
-              </h2>
-            </div>
-          </ScrollReveal>
-          <div className={styles.statsGrid}>
-            {stats.map((stat, i) => (
-              <ScrollReveal key={stat.label} delay={i * 0.1}>
-                <div className={styles.stat}>
-                  <span className={styles.statValue}>{stat.value}</span>
-                  <span className={styles.statLabel}>{stat.label}</span>
-                </div>
               </ScrollReveal>
             ))}
           </div>
