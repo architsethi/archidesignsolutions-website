@@ -4,9 +4,10 @@ import { useRef, useEffect } from "react";
 
 interface InteractiveGridProps {
   className?: string;
+  opacity?: number;
 }
 
-export default function InteractiveGrid({ className }: InteractiveGridProps) {
+export default function InteractiveGrid({ className, opacity = 0.05 }: InteractiveGridProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
   const animRef = useRef<number>(0);
@@ -54,7 +55,7 @@ export default function InteractiveGrid({ className }: InteractiveGridProps) {
       for (let x = spacing; x < w; x += spacing) {
         const dist = Math.abs(x - mx);
         const proximity = Math.max(0, 1 - dist / radius);
-        const alpha = 0.05 + proximity * 0.14;
+        const alpha = opacity + proximity * 0.14;
 
         ctx.beginPath();
         ctx.moveTo(x, 0);
@@ -68,7 +69,7 @@ export default function InteractiveGrid({ className }: InteractiveGridProps) {
       for (let y = spacing; y < h; y += spacing) {
         const dist = Math.abs(y - my);
         const proximity = Math.max(0, 1 - dist / radius);
-        const alpha = 0.05 + proximity * 0.14;
+        const alpha = opacity + proximity * 0.14;
 
         ctx.beginPath();
         ctx.moveTo(0, y);
@@ -103,7 +104,7 @@ export default function InteractiveGrid({ className }: InteractiveGridProps) {
       window.removeEventListener("mousemove", handleMouseMove);
       cancelAnimationFrame(animRef.current);
     };
-  }, []);
+  }, [opacity]);
 
   return <canvas ref={canvasRef} className={className} />;
 }

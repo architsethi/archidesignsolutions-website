@@ -399,6 +399,7 @@
 .statsSection {
   position: relative;
   padding: var(--space-14) 0;
+  margin-top: -40px;
   background: var(--neutral-50);
   overflow: hidden;
 }
@@ -407,6 +408,8 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--space-5);
+  position: relative;
+  z-index: 1;
 }
 
 .stat {
@@ -418,6 +421,16 @@
   background: var(--white);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-subtle);
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.stat:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 8px 24px rgba(200, 50, 43, 0.08),
+    0 0 0 1px rgba(200, 50, 43, 0.12);
+  border-color: rgba(200, 50, 43, 0.2);
 }
 
 .statValue {
