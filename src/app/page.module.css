@@ -397,8 +397,10 @@
    STATS
    ═══════════════════════════════════════ */
 .statsSection {
+  position: relative;
   padding: var(--space-14) 0;
   background: var(--neutral-50);
+  overflow: hidden;
 }
 
 .statsGrid {

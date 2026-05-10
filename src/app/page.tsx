@@ -420,6 +420,7 @@ export default function HomePage() {
 
       {/* ═══════ STATS ═══════ */}
       <section className={styles.statsSection}>
+        <InteractiveGrid className={styles.heroCanvas} />
         <div className="container">
           <ScrollReveal>
             <div className={styles.sectionHeader}>

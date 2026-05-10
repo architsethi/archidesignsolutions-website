@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./Footer.module.css";
+import InteractiveGrid from "./InteractiveGrid";
 
 const mainLinks = [
   { label: "Home", href: "/" },
@@ -85,6 +86,8 @@ export default function Footer() {
 
       {/* Main Footer */}
       <div className={`container ${styles.main}`}>
+        <InteractiveGrid className={styles.footerCanvas} />
+
         {/* ── Top tier: Brand identity + Contact info ── */}
         <div className={styles.topTier}>
           <div className={styles.brandLogo}>

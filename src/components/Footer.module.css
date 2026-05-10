@@ -26,11 +26,22 @@
 
 /* ── Main Footer ── */
 .main {
+  position: relative;
   padding: var(--space-12) var(--margin-desktop);
+  overflow: hidden;
+}
+
+.footerCanvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* ── Top Tier: Brand + Contact ── */
 .topTier {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -98,6 +109,8 @@
 
 /* ── Divider ── */
 .midDivider {
+  position: relative;
+  z-index: 1;
   height: 1px;
   background: var(--border-subtle);
   margin: var(--space-8) 0;
@@ -105,6 +118,8 @@
 
 /* ── Bottom Tier: Link columns ── */
 .bottomTier {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--space-8);
