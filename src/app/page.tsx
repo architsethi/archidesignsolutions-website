@@ -44,11 +44,27 @@ const galleryImages = [
   },
 ];
 
-/* ═══ Rotating Taglines ═══ */
-const taglines = [
-  "that define generations",
-  "that inspire communities",
-  "that stand the test of time",
+/* ═══ Rotating Taglines (styled segments) ═══ */
+type Segment = { text: string; style: 'light' | 'bold' | 'fade' | 'accent' };
+const taglines: Segment[][] = [
+  [
+    { text: "that ", style: "light" },
+    { text: "define ", style: "bold" },
+    { text: "gener", style: "fade" },
+    { text: "ations", style: "accent" },
+  ],
+  [
+    { text: "that ", style: "light" },
+    { text: "inspire ", style: "bold" },
+    { text: "commun", style: "fade" },
+    { text: "ities", style: "accent" },
+  ],
+  [
+    { text: "that ", style: "light" },
+    { text: "stand the ", style: "bold" },
+    { text: "test of ", style: "fade" },
+    { text: "time", style: "accent" },
+  ],
 ];
 
 /* ═══ Services Data ═══ */
@@ -151,19 +167,20 @@ export default function HomePage() {
 
   /* ── Typewriter state ── */
   const [phraseIdx, setPhraseIdx] = useState(0);
-  const [displayText, setDisplayText] = useState("");
+  const [charCount, setCharCount] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  useEffect(() => {
-    const currentPhrase = taglines[phraseIdx];
+  const currentSegments = taglines[phraseIdx];
+  const fullLength = currentSegments.reduce((sum, s) => sum + s.text.length, 0);
 
-    if (!isDeleting && displayText === currentPhrase) {
+  useEffect(() => {
+    if (!isDeleting && charCount === fullLength) {
       /* Full text shown — pause 4s then start deleting */
       const pause = setTimeout(() => setIsDeleting(true), 4000);
       return () => clearTimeout(pause);
     }
 
-    if (isDeleting && displayText === "") {
+    if (isDeleting && charCount === 0) {
       /* Fully deleted — move to next phrase, start typing */
       setIsDeleting(false);
       setPhraseIdx((prev) => (prev + 1) % taglines.length);
@@ -173,14 +190,26 @@ export default function HomePage() {
     /* Type or delete one character */
     const speed = isDeleting ? 20 : 35;
     const timer = setTimeout(() => {
-      setDisplayText((prev) =>
-        isDeleting
-          ? prev.slice(0, -1)
-          : currentPhrase.slice(0, prev.length + 1)
-      );
+      setCharCount((prev) => prev + (isDeleting ? -1 : 1));
     }, speed);
     return () => clearTimeout(timer);
-  }, [displayText, isDeleting, phraseIdx]);
+  }, [charCount, isDeleting, phraseIdx, fullLength]);
+
+  /* Render styled segments up to charCount */
+  const renderTypedText = () => {
+    let remaining = charCount;
+    return currentSegments.map((seg, i) => {
+      if (remaining <= 0) return null;
+      const visible = seg.text.slice(0, remaining);
+      remaining -= seg.text.length;
+      const styleClass =
+        seg.style === 'light' ? styles.heroTitleLight :
+        seg.style === 'bold' ? styles.heroTitleBold :
+        seg.style === 'fade' ? styles.heroTitleFade :
+        styles.heroTitleAccent;
+      return <span key={i} className={styleClass}>{visible}</span>;
+    });
+  };
 
   /* Double arrays for seamless infinite loops */
   const testimonialItems = [...testimonials, ...testimonials];
@@ -272,7 +301,7 @@ export default function HomePage() {
               <span className={styles.heroTitleBold}>spaces</span>
               <br />
               <span className={styles.heroTypedLine}>
-                {displayText}
+                {renderTypedText()}
                 <span className={styles.heroCursor} />
               </span>
             </h1>
