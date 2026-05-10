@@ -86,7 +86,7 @@ export default function Footer() {
 
       {/* Main Footer */}
       <div className={`container ${styles.main}`}>
-        <InteractiveGrid className={styles.footerCanvas} opacity={0.03} />
+        <InteractiveGrid className={styles.footerCanvas} opacity={0.015} />
 
         {/* ── Top tier: Brand identity + Contact info ── */}
         <div className={styles.topTier}>
