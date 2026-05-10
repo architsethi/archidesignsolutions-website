@@ -489,23 +489,37 @@ export default function HomePage() {
       <section className={styles.philosophy}>
         <div className="container">
           <ScrollReveal>
-            <div className={styles.philosophyContent}>
-              <span className={`label-mono ${styles.sectionLabel}`}>
-                Our Philosophy
-              </span>
-              <h2 className={styles.sectionTitle}>
-                Simplicity is the <span className={styles.accent}>Key</span>
-              </h2>
-              <blockquote className={styles.philosophyQuote}>
-                &ldquo;We do not believe in creating complexities but we try to
-                establish harmony between the outward and the inward. Before
-                creating anything, an architect needs to observe most of the
-                things from micro to macro — and this is the simplest key to
-                design.&rdquo;
-              </blockquote>
-              <p className={styles.philosophyAuthor}>
-                — Ar. Amit Sethi, Founder
-              </p>
+            <div className={styles.philosophyLayout}>
+              {/* Founder portrait */}
+              <div className={styles.founderPortrait}>
+                <Image
+                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80"
+                  alt="Ar. Amit Sethi, Founder"
+                  width={400}
+                  height={500}
+                  style={{ objectFit: "cover", width: '100%', height: '100%' }}
+                />
+              </div>
+
+              {/* Quote content */}
+              <div className={styles.philosophyContent}>
+                <span className={`label-mono ${styles.sectionLabel}`}>
+                  Our Philosophy
+                </span>
+                <h2 className={styles.sectionTitle}>
+                  Simplicity is the <span className={styles.accent}>Key</span>
+                </h2>
+                <blockquote className={styles.philosophyQuote}>
+                  &ldquo;We do not believe in creating complexities but we try to
+                  establish harmony between the outward and the inward. Before
+                  creating anything, an architect needs to observe most of the
+                  things from micro to macro — and this is the simplest key to
+                  design.&rdquo;
+                </blockquote>
+                <p className={styles.philosophyAuthor}>
+                  — Ar. Amit Sethi, Founder
+                </p>
+              </div>
             </div>
           </ScrollReveal>
         </div>
