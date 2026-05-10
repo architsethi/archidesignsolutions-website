@@ -134,9 +134,10 @@
 
 .marqueeTrack {
   display: flex;
-  gap: var(--space-5);
+  gap: 0;
   width: max-content;
   animation: marqueeScroll 45s linear infinite;
+  padding: var(--space-6) var(--space-4);
 }
 
 .marqueeTrack:hover {
@@ -150,29 +151,36 @@
 
 .marqueeCard {
   flex-shrink: 0;
-  width: 420px;
+  width: 400px;
+  margin-right: -30px;
+  padding: var(--space-4);
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow:
+    0 4px 16px rgba(0,0,0,0.06),
+    0 12px 40px rgba(0,0,0,0.04);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  cursor: pointer;
-  transition: transform var(--transition-base);
 }
 .marqueeCard:hover {
-  transform: translateY(-6px);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.10),
+    0 20px 60px rgba(0,0,0,0.08);
+  z-index: 5;
 }
 
 .marqueeImageWrap {
   position: relative;
   width: 100%;
   aspect-ratio: 16/10;
-  border-radius: var(--radius-lg);
+  border-radius: calc(var(--radius-lg) - 4px);
   overflow: hidden;
-  border: 1px solid var(--border-subtle);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-  transition: box-shadow var(--transition-base);
-}
-.marqueeCard:hover .marqueeImageWrap {
-  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
 }
 
 .marqueeLabel {
@@ -182,6 +190,7 @@
   text-transform: uppercase;
   color: var(--text-tertiary);
   text-align: center;
+  padding: 0 var(--space-2) var(--space-1);
   transition: color var(--transition-fast);
 }
 .marqueeCard:hover .marqueeLabel {
