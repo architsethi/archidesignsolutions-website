@@ -1,48 +1,46 @@
 "use client";
 
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
 import InteractiveGrid from "@/components/InteractiveGrid";
 import { motion, AnimatePresence } from "framer-motion";
 
-/* ═══ Hero Slide Data ═══ */
-const heroSlides = [
+/* ═══ Marquee Gallery Images ═══ */
+const galleryImages = [
   {
+    src: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80",
     label: "Residential High-Rise",
-    title: "Defining Skylines,\nShaping Communities",
-    image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1920&q=85",
   },
   {
+    src: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
     label: "Residence Design",
-    title: "Crafting Homes\nThat Inspire",
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=85",
   },
   {
+    src: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
     label: "Office Spaces",
-    title: "Where Ideas\nMeet Enterprise",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=85",
   },
   {
+    src: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=800&q=80",
     label: "Town Planning",
-    title: "Visionary Frameworks\nFor Tomorrow",
-    image: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=1920&q=85",
   },
   {
+    src: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&q=80",
     label: "Urban Design",
-    title: "Cities Built\nFor People",
-    image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1920&q=85",
   },
   {
+    src: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80",
     label: "Interior Design",
-    title: "Spaces That\nTell Stories",
-    image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1920&q=85",
   },
   {
+    src: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80",
     label: "Landscape Design",
-    title: "Nature Woven\nInto Architecture",
-    image: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=1920&q=85",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80",
+    label: "MEP Engineering",
   },
 ];
 
@@ -130,37 +128,9 @@ const testimonials = [
   },
 ];
 
-/* ═══ Interactive Grid Background ═══ */
-/* ═══ Homepage Component ═══ */
+/* ═══ Homepage ═══ */
 export default function HomePage() {
-  const [currentSlide, setCurrentSlide] = useState(0);
   const [testimonialIdx, setTestimonialIdx] = useState(0);
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const heroRef = useRef<HTMLElement>(null);
-
-  /* Track mouse for parallax */
-  useEffect(() => {
-    const handleMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
-      if (heroRef.current) {
-        const rect = heroRef.current.getBoundingClientRect();
-        const cx = (e.clientX - rect.left) / rect.width - 0.5;
-        const cy = (e.clientY - rect.top) / rect.height - 0.5;
-        heroRef.current.style.setProperty("--mx", `${cx * 20}px`);
-        heroRef.current.style.setProperty("--my", `${cy * 12}px`);
-      }
-    };
-    window.addEventListener("mousemove", handleMove);
-    return () => window.removeEventListener("mousemove", handleMove);
-  }, []);
-
-  /* Auto-rotate hero slides */
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
 
   /* Auto-rotate testimonials */
   useEffect(() => {
@@ -170,136 +140,78 @@ export default function HomePage() {
     return () => clearInterval(timer);
   }, []);
 
-  const goToSlide = useCallback((index: number) => {
-    setCurrentSlide(index);
-  }, []);
-
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+  /* Double the gallery for seamless infinite loop */
+  const marqueeItems = [...galleryImages, ...galleryImages];
 
   return (
     <div className={styles.page}>
       {/* ═══════ HERO ═══════ */}
-      <section className={styles.hero} ref={heroRef}>
+      <section className={styles.hero}>
         <InteractiveGrid className={styles.heroCanvas} />
 
-        {/* Background Image */}
-        <AnimatePresence mode="wait">
+        {/* ── Catchphrase Typography ── */}
+        <div className={styles.heroHeadline}>
           <motion.div
-            key={currentSlide}
-            className={styles.heroImage}
-            style={{ backgroundImage: `url(${heroSlides[currentSlide].image})` }}
-            initial={{ opacity: 0, scale: 1.08 }}
-            animate={{ opacity: 0.65, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.97 }}
-            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-          />
-        </AnimatePresence>
-
-        {/* White gradient overlay */}
-        <div className={styles.heroGradient} />
-
-        {/* ── Slide Counter (top-right) ── */}
-        <div className={styles.heroCounter}>
-          <span className={styles.heroCounterCurrent}>
-            {String(currentSlide + 1).padStart(2, "0")}
-          </span>
-          <span className={styles.heroCounterDivider} />
-          <span className={styles.heroCounterTotal}>
-            {String(heroSlides.length).padStart(2, "0")}
-          </span>
-        </div>
-
-        {/* ── Nav Arrows (right side) ── */}
-        <div className={styles.heroNav}>
-          <button className={styles.heroNavBtn} onClick={prevSlide} aria-label="Previous slide">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
-          <button className={styles.heroNavBtn} onClick={nextSlide} aria-label="Next slide">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
-        </div>
-
-        {/* ── Content with mouse parallax ── */}
-        <div className={`container ${styles.heroContent}`}>
-          {/* Category label */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              className={styles.heroLabel}
-              key={`label-${currentSlide}`}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.5 }}
-            >
-              <span className={styles.heroDot} />
-              <span className="label-mono">{heroSlides[currentSlide].label}</span>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Title — parallax shifted by mouse */}
-          <div className={styles.heroTitleWrap}>
-            <AnimatePresence mode="wait">
-              <motion.h1
-                key={`title-${currentSlide}`}
-                className={styles.heroTitle}
-                initial={{ opacity: 0, y: 60 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -40 }}
-                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-              >
-                {heroSlides[currentSlide].title.split("\n").map((line, i) => (
-                  <span key={i}>
-                    {line}
-                    {i === 0 && <br />}
-                  </span>
-                ))}
-              </motion.h1>
-            </AnimatePresence>
-          </div>
-
-          {/* Explore link */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 0.6 }}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
           >
-            <Link href="/projects" className={styles.heroExplore}>
-              <span>Explore Projects</span>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <h1 className={styles.heroTitle}>
+              <span className={styles.heroTitleLight}>we </span>
+              <span className={styles.heroTitleItalic}>design </span>
+              <span className={styles.heroTitleBold}>spaces</span>
+              <br />
+              <span className={styles.heroTitleLight}>that </span>
+              <span className={styles.heroTitleBold}>define </span>
+              <span className={styles.heroTitleFade}>gener</span>
+              <span className={styles.heroTitleAccent}>ations</span>
+            </h1>
+          </motion.div>
+
+          <motion.div
+            className={styles.heroSub}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+          >
+            <p>
+              25 years of award-winning architecture, interior design
+              <br />
+              & urban planning — crafted for India and beyond.
+            </p>
+            <Link href="/contact" className={styles.heroCta}>
+              Start Your Project
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </Link>
           </motion.div>
         </div>
 
-        {/* ── Bottom category bar ── */}
-        <div className={styles.heroIndicators}>
-          {heroSlides.map((slide, i) => (
-            <button
-              key={i}
-              className={`${styles.indicator} ${i === currentSlide ? styles.active : ""}`}
-              onClick={() => goToSlide(i)}
-              aria-label={`Go to ${slide.label}`}
-            >
-              <span className={styles.indicatorLabel}>{slide.label}</span>
-              <span className={styles.indicatorProgress}>
-                {i === currentSlide && (
-                  <motion.span
-                    className={styles.indicatorFill}
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ duration: 5, ease: "linear" }}
+        {/* ── Infinite Scrolling Gallery ── */}
+        <motion.div
+          className={styles.marqueeWrap}
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div className={styles.marqueeTrack}>
+            {marqueeItems.map((img, i) => (
+              <div key={i} className={styles.marqueeCard}>
+                <div className={styles.marqueeImageWrap}>
+                  <Image
+                    src={img.src}
+                    alt={img.label}
+                    fill
+                    style={{ objectFit: "cover" }}
+                    sizes="360px"
                   />
-                )}
-              </span>
-            </button>
-          ))}
-        </div>
+                </div>
+                <span className={styles.marqueeLabel}>{img.label}</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
       </section>
 
       {/* ═══════ SERVICES ═══════ */}

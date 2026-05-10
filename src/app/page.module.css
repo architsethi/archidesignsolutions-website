@@ -3,240 +3,189 @@
 }
 
 /* ═══════════════════════════════════════
-   HERO SECTION
+   HERO SECTION — typographic + marquee
    ═══════════════════════════════════════ */
 .hero {
-  --mx: 0px;
-  --my: 0px;
   position: relative;
   min-height: calc(100vh - 72px);
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
   overflow: hidden;
-  background: var(--bg-primary);
+  background: var(--neutral-50);
 }
 
 .heroCanvas {
   position: absolute;
   inset: 0;
-  z-index: 3;
-  pointer-events: none;
-}
-
-.heroImage {
-  position: absolute;
-  inset: 0;
   z-index: 1;
-  background-size: cover;
-  background-position: center;
-  will-change: opacity, transform;
-}
-
-.heroGradient {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0.88) 0%,
-    rgba(255, 255, 255, 0.68) 30%,
-    rgba(255, 255, 255, 0.35) 50%,
-    rgba(255, 255, 255, 0.1) 70%,
-    transparent 85%
-  );
   pointer-events: none;
 }
 
-/* ── Slide Counter ── */
-.heroCounter {
-  position: absolute;
-  top: var(--space-8);
-  right: var(--margin-desktop);
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-}
-.heroCounterCurrent {
-  font-size: 48px;
-  font-weight: 200;
-  letter-spacing: -0.03em;
-  color: var(--text-primary);
-  line-height: 1;
-}
-.heroCounterDivider {
-  width: 32px;
-  height: 1px;
-  background: var(--border-medium);
-}
-.heroCounterTotal {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-tertiary);
-  letter-spacing: 0.04em;
-}
-
-/* ── Nav Arrows ── */
-.heroNav {
-  position: absolute;
-  right: var(--margin-desktop);
-  bottom: 80px;
-  z-index: 5;
-  display: flex;
-  gap: var(--space-2);
-}
-.heroNavBtn {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-full);
-  border: 1px solid var(--border-medium);
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--text-primary);
-  transition: all var(--transition-fast);
-}
-.heroNavBtn:hover {
-  background: var(--text-primary);
-  color: var(--white);
-  border-color: var(--text-primary);
-}
-
-/* ── Hero Content ── */
-.heroContent {
+/* ── Catchphrase Typography ── */
+.heroHeadline {
   position: relative;
-  z-index: 4;
-  padding: var(--space-10) 0;
-  padding-left: var(--space-8);
-  padding-bottom: 80px;
+  z-index: 2;
+  text-align: center;
+  padding: var(--space-10) var(--margin-desktop) var(--space-6);
+}
+
+.heroTitle {
+  font-size: clamp(48px, 8vw, 120px);
+  line-height: 0.92;
+  letter-spacing: -0.05em;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.heroTitleBold {
+  font-weight: 800;
+  color: var(--black);
+}
+
+.heroTitleLight {
+  font-weight: 300;
+  color: var(--neutral-500);
+}
+
+.heroTitleItalic {
+  font-weight: 400;
+  font-style: italic;
+  color: var(--accent-red);
+}
+
+.heroTitleFade {
+  font-weight: 700;
+  color: var(--neutral-300);
+}
+
+.heroTitleAccent {
+  font-weight: 700;
+  color: var(--accent-red);
+}
+
+/* Sub-text + CTA */
+.heroSub {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
-}
-
-.heroLabel {
-  display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-5);
+  margin-top: var(--space-7);
 }
 
-.heroDot {
-  width: 8px;
-  height: 8px;
-  background: var(--accent-red);
-  border-radius: var(--radius-full);
-  display: inline-block;
+.heroSub p {
+  font-size: clamp(14px, 1.2vw, 18px);
+  line-height: 1.7;
+  color: var(--text-secondary);
+  text-align: center;
+  max-width: 500px;
+  margin: 0;
 }
 
-/* Title with mouse parallax */
-.heroTitleWrap {
-  transform: translate(var(--mx), var(--my));
-  transition: transform 0.15s ease-out;
-}
-.heroTitle {
-  font-size: clamp(44px, 6.5vw, 88px);
-  font-weight: 700;
-  line-height: 0.96;
-  letter-spacing: -0.04em;
-  color: var(--text-primary);
-  max-width: 900px;
-}
-
-/* Explore link */
-.heroExplore {
+.heroCta {
   display: inline-flex;
   align-items: center;
   gap: var(--space-3);
+  padding: var(--space-3) var(--space-6);
+  background: var(--accent-red);
+  color: var(--white);
   font-size: 14px;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-primary);
-  text-decoration: none;
-  margin-top: var(--space-3);
-  transition: all var(--transition-fast);
-}
-.heroExplore svg {
-  transition: transform var(--transition-fast);
-}
-.heroExplore:hover {
-  color: var(--accent-red);
-}
-.heroExplore:hover svg {
-  transform: translateX(6px);
-}
-
-/* ── Bottom Category Bar ── */
-.heroIndicators {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 5;
-  display: flex;
-  gap: var(--space-2);
-  padding: var(--space-3) var(--margin-desktop);
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid var(--border-subtle);
-}
-
-.indicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  cursor: pointer;
-  background: var(--white);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: var(--space-2) var(--space-4);
-  flex: 1;
-  transition: all var(--transition-base);
-  position: relative;
-  overflow: hidden;
-}
-.indicator:hover {
-  border-color: var(--border-medium);
-  background: var(--neutral-50);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-}
-.indicator.active {
-  border-color: var(--accent-red);
-  background: rgba(200, 50, 43, 0.06);
-  box-shadow: 0 2px 12px rgba(200, 50, 43, 0.1);
-}
-
-.indicatorLabel {
-  font-size: 11px;
-  font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-base);
+}
+.heroCta:hover {
+  background: var(--black);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+.heroCta svg {
+  transition: transform var(--transition-fast);
+}
+.heroCta:hover svg {
+  transform: translateX(4px);
+}
+
+/* ── Infinite Marquee ── */
+.marqueeWrap {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  overflow: hidden;
+  padding: var(--space-6) 0 var(--space-8);
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 5%,
+    black 95%,
+    transparent 100%
+  );
+}
+
+.marqueeTrack {
+  display: flex;
+  gap: var(--space-5);
+  width: max-content;
+  animation: marqueeScroll 40s linear infinite;
+}
+
+.marqueeTrack:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marqueeCard {
+  flex-shrink: 0;
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  cursor: pointer;
+  transition: transform var(--transition-base);
+}
+.marqueeCard:hover {
+  transform: translateY(-6px);
+}
+
+.marqueeImageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/10;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  transition: box-shadow var(--transition-base);
+}
+.marqueeCard:hover .marqueeImageWrap {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
+
+.marqueeLabel {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--text-tertiary);
-  white-space: nowrap;
+  text-align: center;
   transition: color var(--transition-fast);
 }
-.indicator:hover .indicatorLabel { color: var(--text-primary); }
-.indicator.active .indicatorLabel { color: var(--accent-red); font-weight: 700; }
-
-/* Animated progress bar inside active card */
-.indicatorProgress {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: transparent;
-}
-.indicatorFill {
-  display: block;
-  height: 100%;
-  background: var(--accent-red);
-  transform-origin: left;
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+.marqueeCard:hover .marqueeLabel {
+  color: var(--accent-red);
 }
 
 /* ═══════════════════════════════════════
@@ -546,13 +495,11 @@
   .servicesGrid {
     grid-template-columns: repeat(2, 1fr);
   }
-
   .statsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .heroIndicators {
-    gap: var(--space-4);
+  .marqueeCard {
+    width: 280px;
   }
 }
 
@@ -560,63 +507,40 @@
   .page {
     padding-top: 64px;
   }
-
   .hero {
-    height: calc(100vh - 64px);
+    min-height: calc(100vh - 64px);
   }
-
-  .heroContent {
-    padding: var(--space-12) 0;
+  .heroHeadline {
+    padding: var(--space-8) var(--space-4) var(--space-4);
   }
-
-  .heroIndicators {
-    flex-wrap: wrap;
+  .marqueeCard {
+    width: 240px;
   }
-
-  .indicatorBar {
-    width: 40px;
-  }
-
-  .indicatorLabel {
-    display: none;
-  }
-
-  .scrollHint {
-    display: none;
-  }
-
   .servicesGrid {
     grid-template-columns: 1fr;
   }
-
   .serviceCard {
     min-height: auto;
     padding: var(--space-6);
   }
-
   .statsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 480px) {
-  .heroCta {
-    flex-direction: column;
+  .heroTitle {
+    font-size: 44px;
   }
-
-  .heroCta .btn {
-    width: 100%;
-    justify-content: center;
+  .marqueeCard {
+    width: 200px;
   }
-
   .statsGrid {
     grid-template-columns: 1fr 1fr;
   }
-
   .finalCtaButtons {
     flex-direction: column;
   }
-
   .finalCtaButtons .btn {
     width: 100%;
     justify-content: center;
