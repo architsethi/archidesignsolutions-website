@@ -24,32 +24,25 @@
   line-height: 1.08;
 }
 
-.divider {
-  display: none;
-}
-
 /* ── Main Footer ── */
 .main {
   padding: var(--space-12) var(--margin-desktop);
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1.6fr 0.7fr 0.9fr 1fr;
-  gap: var(--space-11);
-}
-
-/* ── Brand Column ── */
-.brand {
+/* ── Top Tier: Brand + Contact ── */
+.topTier {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-8);
+  flex-wrap: wrap;
 }
 
 .brandLogo {
   display: flex;
   align-items: center;
   gap: var(--space-4);
+  flex-shrink: 0;
 }
 
 .brandName {
@@ -69,39 +62,53 @@
   margin-top: 2px;
 }
 
-.brandTagline {
-  font-size: 14px;
-  line-height: 1.7;
+/* Contact as horizontal row */
+.contactRow {
+  display: flex;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+}
+
+.contactItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  line-height: 1.5;
   color: var(--text-secondary);
-  max-width: 360px;
 }
 
-/* ── Social ── */
-.social {
-  display: flex;
-  gap: var(--space-2);
-  margin-top: var(--space-1);
-}
-
-.socialLink {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+.contactLabel {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--text-tertiary);
-  background: var(--white);
-  transition: all var(--transition-base);
 }
 
-.socialLink:hover {
-  border-color: var(--accent-red);
+.contactItem a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.contactItem a:hover {
   color: var(--accent-red);
-  background: rgba(200, 50, 43, 0.06);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(200, 50, 43, 0.1);
+}
+
+/* ── Divider ── */
+.midDivider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: var(--space-8) 0;
+}
+
+/* ── Bottom Tier: Link columns ── */
+.bottomTier {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-8);
+  align-items: start;
 }
 
 /* ── Link Columns ── */
@@ -118,7 +125,6 @@
   text-transform: uppercase;
   color: var(--text-tertiary);
   padding-bottom: var(--space-3);
-  border-bottom: none;
 }
 
 .colList {
@@ -140,58 +146,38 @@
   transform: translateX(4px);
 }
 
-/* ── Contact Block ── */
-.contactBlock {
+/* ── Social Column ── */
+.socialCol {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  margin-bottom: var(--space-2);
+  gap: var(--space-4);
 }
 
-.contactLabel {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-}
-
-.contactText {
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--text-secondary);
-}
-
-.contactLink {
-  font-size: 13px;
-  color: var(--text-secondary);
-  text-decoration: none;
-  transition: color var(--transition-fast);
-}
-
-.contactLink:hover {
-  color: var(--accent-red);
-}
-
-/* ── Extra Links ── */
-.extraLinks {
+.social {
   display: flex;
-  flex-direction: column;
   gap: var(--space-2);
-  margin-top: var(--space-3);
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
 }
 
-.extraLink {
-  font-size: 12px;
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
   color: var(--text-tertiary);
-  text-decoration: none;
-  transition: color var(--transition-fast);
+  background: var(--white);
+  transition: all var(--transition-base);
 }
 
-.extraLink:hover {
+.socialLink:hover {
+  border-color: var(--accent-red);
   color: var(--accent-red);
+  background: rgba(200, 50, 43, 0.06);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(200, 50, 43, 0.1);
 }
 
 /* ── Bottom Bar ── */
@@ -225,31 +211,34 @@
 
 /* ── Responsive ── */
 @media (max-width: 1024px) {
-  .grid {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-8);
+  .bottomTier {
+    grid-template-columns: repeat(2, 1fr);
   }
-
   .main {
     padding: var(--space-10) var(--space-8);
   }
 }
 
 @media (max-width: 640px) {
-  .grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-8);
+  .topTier {
+    flex-direction: column;
+    gap: var(--space-6);
   }
-
+  .contactRow {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .bottomTier {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+  }
   .ctaInner {
     flex-direction: column;
     text-align: center;
   }
-
   .main {
     padding: var(--space-8) var(--margin-mobile);
   }
-
   .bottomInner {
     flex-direction: column;
     text-align: center;

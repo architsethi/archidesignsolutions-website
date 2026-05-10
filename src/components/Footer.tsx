@@ -11,12 +11,6 @@ const mainLinks = [
   { label: "Contact", href: "/contact" },
 ];
 
-const extraLinks = [
-  { label: "Careers", href: "/careers" },
-  { label: "Privacy Policy", href: "/privacy" },
-  { label: "Terms of Service", href: "/terms" },
-];
-
 const serviceLinks = [
   { label: "Architectural Design", href: "/services#architecture" },
   { label: "Interior Design", href: "/services#interior" },
@@ -25,6 +19,12 @@ const serviceLinks = [
   { label: "Landscape Design", href: "/services#landscape" },
   { label: "MEP Services", href: "/services#mep" },
   { label: "Project Management", href: "/services#projectmgmt" },
+];
+
+const legalLinks = [
+  { label: "Careers", href: "/careers" },
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Terms of Service", href: "/terms" },
 ];
 
 const socialLinks = [
@@ -83,53 +83,45 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className={styles.divider} />
-
       {/* Main Footer */}
       <div className={`container ${styles.main}`}>
-        <div className={styles.grid}>
-          {/* Col 1: Brand */}
-          <div className={styles.brand}>
-            <div className={styles.brandLogo}>
-              <Image
-                src="/logo.png"
-                alt="ArchiDesignSolutions"
-                width={48}
-                height={48}
-              />
-              <div>
-                <div className={styles.brandName}>
-                  Architectural and Interior
-                  <br />
-                  Design Solutions
-                </div>
-                <div className={styles.brandEst}>Est. 1999 · Indore, India</div>
+        {/* ── Top tier: Brand identity + Contact info ── */}
+        <div className={styles.topTier}>
+          <div className={styles.brandLogo}>
+            <Image
+              src="/logo.png"
+              alt="ArchiDesignSolutions"
+              width={48}
+              height={48}
+            />
+            <div>
+              <div className={styles.brandName}>
+                Architectural and Interior Design Solutions
               </div>
-            </div>
-            <p className={styles.brandTagline}>
-              We blend contemporary aesthetics with timeless principles — every
-              line drawn with purpose, every space crafted with intention.
-            </p>
-
-            {/* Social */}
-            <div className={styles.social}>
-              {socialLinks.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.socialLink}
-                  aria-label={s.label}
-                  title={s.label}
-                >
-                  {s.icon}
-                </a>
-              ))}
+              <div className={styles.brandEst}>Est. 1999 · Indore, India</div>
             </div>
           </div>
 
-          {/* Col 2: Pages */}
+          <div className={styles.contactRow}>
+            <div className={styles.contactItem}>
+              <span className={styles.contactLabel}>Office</span>
+              <span>208B, Prakriti Corporate, Y.N. Road, Indore — 452001</span>
+            </div>
+            <div className={styles.contactItem}>
+              <span className={styles.contactLabel}>Email</span>
+              <a href="mailto:solutions.archit@gmail.com">solutions.archit@gmail.com</a>
+            </div>
+            <div className={styles.contactItem}>
+              <span className={styles.contactLabel}>Phone</span>
+              <a href="tel:+919179797359">+91 91797 97359</a>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.midDivider} />
+
+        {/* ── Bottom tier: Link columns + Socials ── */}
+        <div className={styles.bottomTier}>
           <div className={styles.col}>
             <h4 className={styles.colTitle}>Navigate</h4>
             <ul className={styles.colList}>
@@ -143,7 +135,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 3: Services */}
           <div className={styles.col}>
             <h4 className={styles.colTitle}>Services</h4>
             <ul className={styles.colList}>
@@ -157,40 +148,34 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 4: Contact + Extra */}
           <div className={styles.col}>
-            <h4 className={styles.colTitle}>Contact</h4>
-            <div className={styles.contactBlock}>
-              <p className={styles.contactLabel}>Office</p>
-              <p className={styles.contactText}>
-                208B, Prakriti Corporate
-                <br />
-                Y.N. Road, New Palasia
-                <br />
-                Indore — 452001
-              </p>
-            </div>
-            <div className={styles.contactBlock}>
-              <p className={styles.contactLabel}>Email</p>
-              <a
-                href="mailto:solutions.archit@gmail.com"
-                className={styles.contactLink}
-              >
-                solutions.archit@gmail.com
-              </a>
-            </div>
-            <div className={styles.contactBlock}>
-              <p className={styles.contactLabel}>Phone</p>
-              <a href="tel:+919179797359" className={styles.contactLink}>
-                +91 91797 97359
-              </a>
-            </div>
+            <h4 className={styles.colTitle}>Legal</h4>
+            <ul className={styles.colList}>
+              {legalLinks.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className={styles.colLink}>
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-            <div className={styles.extraLinks}>
-              {extraLinks.map((l) => (
-                <Link key={l.href} href={l.href} className={styles.extraLink}>
-                  {l.label}
-                </Link>
+          <div className={styles.socialCol}>
+            <h4 className={styles.colTitle}>Follow Us</h4>
+            <div className={styles.social}>
+              {socialLinks.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.socialLink}
+                  aria-label={s.label}
+                  title={s.label}
+                >
+                  {s.icon}
+                </a>
               ))}
             </div>
           </div>
