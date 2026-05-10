@@ -1,0 +1,234 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-header);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: all var(--transition-base);
+}
+
+.header.scrolled {
+  border-bottom-color: var(--border-subtle);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-5) var(--margin-desktop);
+  height: 72px;
+}
+
+/* ── Logo ── */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  z-index: 10;
+}
+
+.logoText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.logoName {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.logoSub {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* ── Navigation ── */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.navLink {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  text-decoration: none;
+  position: relative;
+  padding: var(--space-2) 0;
+  transition: color var(--transition-fast);
+}
+
+.navLink::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accent-red);
+  transition: width var(--transition-base);
+}
+
+.navLink:hover {
+  color: var(--accent-red);
+}
+
+.navLink:hover::after {
+  width: 100%;
+}
+
+/* ── CTA Button ── */
+.cta {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 12px 28px;
+  border: 1px solid var(--black);
+  border-radius: var(--radius-md);
+  color: var(--black);
+  text-decoration: none;
+  transition: all var(--transition-base);
+}
+
+.cta:hover {
+  background: var(--black);
+  color: var(--white);
+  transform: translateY(-1px);
+}
+
+/* ── Mobile Toggle ── */
+.menuToggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  gap: 7px;
+  z-index: 10;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.menuToggle span {
+  width: 24px;
+  height: 1.5px;
+  background: var(--black);
+  transition: all var(--transition-base);
+  transform-origin: center;
+}
+
+.menuToggle.open span:first-child {
+  transform: translateY(4.25px) rotate(45deg);
+}
+
+.menuToggle.open span:last-child {
+  transform: translateY(-4.25px) rotate(-45deg);
+}
+
+/* ── Mobile Overlay ── */
+.mobileOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-header) - 1);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.mobileNav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 480px;
+  background: var(--white);
+  border-left: 1px solid var(--border-primary);
+}
+
+.mobileNavInner {
+  display: flex;
+  flex-direction: column;
+  padding: 120px var(--space-8) var(--space-8);
+  height: 100%;
+}
+
+.mobileNavLink {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-6);
+  padding: var(--space-5) 0;
+  text-decoration: none;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: all var(--transition-fast);
+}
+
+.mobileNavLink:hover {
+  padding-left: var(--space-4);
+}
+
+.mobileNavIndex {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--accent-red);
+  font-variant-numeric: tabular-nums;
+}
+
+.mobileNavLabel {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.mobileCta {
+  margin-top: auto;
+  padding-top: var(--space-8);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .inner {
+    padding: var(--space-5) var(--space-8);
+  }
+}
+
+@media (max-width: 900px) {
+  .nav,
+  .cta {
+    display: none;
+  }
+
+  .menuToggle {
+    display: flex;
+  }
+}
+
+@media (max-width: 480px) {
+  .inner {
+    padding: var(--space-4) var(--margin-mobile);
+    height: 64px;
+  }
+
+  .logoName {
+    display: none;
+  }
+}

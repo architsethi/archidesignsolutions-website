@@ -1,0 +1,28 @@
+.page { padding-top: 72px; }
+.hero { padding: var(--space-14) 0 var(--space-12); border-bottom: 1px solid var(--border-primary); }
+.label { color: var(--accent-red); display: block; margin-bottom: var(--space-4); }
+.heroTitle { font-size: clamp(36px, 5vw, 64px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: var(--space-6); }
+.heroDesc { font-size: 18px; line-height: 1.7; color: var(--text-secondary); max-width: 540px; }
+
+.servicesList { padding: 0; }
+.serviceBlock { padding: var(--space-12) 0; border-bottom: 1px solid var(--border-subtle); display: grid; grid-template-columns: 1fr; gap: var(--space-8); }
+.serviceHeader { display: flex; gap: var(--space-6); align-items: flex-start; }
+.serviceNum { font-size: 14px; font-weight: 700; letter-spacing: 0.1em; color: var(--accent-red); min-width: 36px; padding-top: 6px; }
+.serviceTitle { font-size: clamp(24px, 3vw, 36px); font-weight: 600; letter-spacing: -0.02em; margin-bottom: var(--space-2); }
+.serviceTagline { font-size: 16px; color: var(--text-secondary); line-height: 1.5; }
+.serviceBody { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8); padding-left: 60px; }
+.serviceDescription { font-size: 16px; line-height: 1.8; color: var(--text-secondary); }
+.deliverables { }
+.delLabel { color: var(--text-tertiary); display: block; margin-bottom: var(--space-4); }
+.delList { display: flex; flex-direction: column; gap: var(--space-3); }
+.delItem { display: flex; align-items: baseline; gap: var(--space-3); font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+.delBullet { width: 6px; height: 6px; min-width: 6px; background: var(--accent-red); display: inline-block; margin-top: 2px; }
+
+.cta { padding: var(--space-14) 0; border-top: 1px solid var(--border-subtle); }
+.ctaTitle { font-size: clamp(28px, 4vw, 48px); font-weight: 600; letter-spacing: -0.02em; margin-bottom: var(--space-4); }
+.ctaDesc { font-size: 18px; color: var(--text-secondary); margin-bottom: var(--space-8); }
+
+@media (max-width: 768px) {
+  .serviceBody { grid-template-columns: 1fr; padding-left: 0; }
+  .serviceHeader { flex-direction: column; gap: var(--space-3); }
+}

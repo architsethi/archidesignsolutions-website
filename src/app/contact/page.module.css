@@ -1,0 +1,42 @@
+.page { padding-top: 72px; }
+.hero { padding: var(--space-14) 0 var(--space-12); border-bottom: 1px solid var(--border-primary); }
+.label { color: var(--accent-red); display: block; margin-bottom: var(--space-4); }
+.heroTitle { font-size: clamp(36px, 5vw, 64px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; }
+
+.content { padding: var(--space-12) 0 var(--space-14); }
+.grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: var(--space-10); }
+
+/* ── Form ── */
+.formSection { }
+.formTitle { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: var(--space-3); }
+.formDesc { font-size: 16px; color: var(--text-secondary); margin-bottom: var(--space-8); }
+.form { display: flex; flex-direction: column; gap: var(--space-6); }
+.formRow { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+.field { display: flex; flex-direction: column; gap: var(--space-2); }
+.fieldLabel { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-tertiary); }
+.fieldInput, .fieldTextarea { width: 100%; padding: var(--space-4) 0; border: none; border-bottom: 1px solid var(--border-subtle); font-size: 16px; color: var(--text-primary); background: transparent; transition: border-color var(--transition-fast); font-family: inherit; }
+.fieldInput:focus, .fieldTextarea:focus { border-bottom-color: var(--border-primary); outline: none; }
+.fieldInput::placeholder, .fieldTextarea::placeholder { color: var(--neutral-400); }
+.fieldTextarea { resize: vertical; min-height: 120px; }
+
+select.fieldInput { appearance: none; cursor: pointer; }
+
+/* ── Success ── */
+.success { text-align: center; padding: var(--space-12) var(--space-8); border: 1px solid var(--border-primary); }
+.successIcon { font-size: 32px; display: block; margin-bottom: var(--space-4); color: var(--accent-red); }
+.success h3 { font-size: 24px; font-weight: 600; margin-bottom: var(--space-2); }
+.success p { color: var(--text-secondary); }
+
+/* ── Info Sidebar ── */
+.info { display: flex; flex-direction: column; gap: var(--space-8); padding-left: var(--space-10); border-left: 1px solid var(--border-primary); }
+.infoBlock { display: flex; flex-direction: column; gap: var(--space-2); }
+.infoLabel { color: var(--text-tertiary); margin-bottom: var(--space-1); }
+.infoText { font-size: 15px; line-height: 1.7; color: var(--text-secondary); }
+.infoLink { font-size: 15px; color: var(--text-secondary); text-decoration: none; transition: color var(--transition-fast); }
+.infoLink:hover { color: var(--accent-red); }
+
+@media (max-width: 768px) {
+  .grid { grid-template-columns: 1fr; }
+  .formRow { grid-template-columns: 1fr; }
+  .info { padding-left: 0; border-left: none; border-top: 1px solid var(--border-primary); padding-top: var(--space-8); }
+}

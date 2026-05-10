@@ -1,0 +1,331 @@
+/* ═══════════════════════════════════════════════════════
+   ArchiDesignSolutions — Design System
+   Architectural Brutalist / Swiss Design Aesthetic
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Custom Cursor ── */
+/* * { cursor: url('/cursor.svg') 4 4, auto; } */
+
+:root {
+  /* ── Core Palette ── */
+  --white: #ffffff;
+  --black: #000000;
+  --accent-red: #C8322B;
+  --accent-red-hover: #A52820;
+  --neutral-50: #fafafa;
+  --neutral-100: #f5f5f5;
+  --neutral-200: #e5e5e5;
+  --neutral-300: #d4d4d4;
+  --neutral-400: #a3a3a3;
+  --neutral-500: #737373;
+  --neutral-600: #525252;
+  --neutral-700: #404040;
+  --neutral-800: #262626;
+  --neutral-900: #171717;
+
+  /* ── Semantic Colors ── */
+  --bg-primary: #ffffff;
+  --bg-secondary: #fafafa;
+  --bg-inverse: #000000;
+  --text-primary: #000000;
+  --text-secondary: #525252;
+  --text-tertiary: #737373;
+  --text-inverse: #ffffff;
+  --border-primary: #000000;
+  --border-subtle: #e5e5e5;
+  --border-medium: #d4d4d4;
+
+  /* ── Spacing Scale (8px base) ── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 48px;
+  --space-10: 64px;
+  --space-11: 80px;
+  --space-12: 96px;
+  --space-13: 120px;
+  --space-14: 160px;
+
+  /* ── Layout ── */
+  --container-max: 1440px;
+  --container-wide: 1280px;
+  --container-narrow: 960px;
+  --gutter: 24px;
+  --margin-desktop: 64px;
+  --margin-mobile: 20px;
+
+  /* ── Typography ── */
+  --font-primary: 'Hanken Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* ── Border Radius ── */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* ── Grid ── */
+  --grid-line: 1px solid var(--border-subtle);
+  --grid-line-dark: 1px solid var(--border-primary);
+
+  /* ── Transitions ── */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-dramatic: 600ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── Z-Index ── */
+  --z-base: 1;
+  --z-sticky: 100;
+  --z-header: 1000;
+  --z-overlay: 2000;
+  --z-modal: 3000;
+  --z-cursor: 9999;
+}
+
+/* ═══ Reset & Base ═══ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+img, video {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  border: none;
+  outline: none;
+}
+
+/* ═══ Typography Scale ═══ */
+.display-2xl {
+  font-size: clamp(60px, 8.5vw, 128px);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+}
+
+.display-lg {
+  font-size: clamp(42px, 5.5vw, 80px);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.headline-lg {
+  font-size: clamp(34px, 3.8vw, 52px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.headline-sm {
+  font-size: clamp(21px, 2.2vw, 26px);
+  font-weight: 500;
+  line-height: 1.33;
+  letter-spacing: -0.005em;
+}
+
+.body-lg {
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+
+.body-sm {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+
+.label-mono {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.33;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ═══ Layout Utilities ═══ */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--margin-desktop);
+}
+
+.container-narrow {
+  max-width: var(--container-narrow);
+}
+
+.section {
+  padding: var(--space-14) 0;
+}
+
+.section-sm {
+  padding: var(--space-12) 0;
+}
+
+/* ═══ Structural Dividers ═══ */
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--border-subtle);
+}
+
+.divider-dark {
+  background-color: var(--border-primary);
+}
+
+/* ═══ Buttons ═══ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 14px var(--space-7);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  white-space: nowrap;
+}
+
+.btn-primary {
+  border: 1px solid var(--black);
+  background: transparent;
+  color: var(--black);
+}
+
+.btn-primary:hover {
+  background: var(--black);
+  color: var(--white);
+}
+
+.btn-solid {
+  border: 1px solid var(--black);
+  background: var(--black);
+  color: var(--white);
+}
+
+.btn-solid:hover {
+  background: var(--neutral-800);
+  border-color: var(--neutral-800);
+}
+
+.btn-accent {
+  border: 1px solid var(--accent-red);
+  background: transparent;
+  color: var(--accent-red);
+}
+
+.btn-accent:hover {
+  background: var(--accent-red);
+  color: var(--white);
+}
+
+.btn-ghost {
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  padding: var(--space-2) 0;
+}
+
+.btn-ghost:hover {
+  color: var(--accent-red);
+}
+
+/* ═══ Custom Scrollbar ═══ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--neutral-300);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neutral-500);
+}
+
+/* ═══ Selection ═══ */
+::selection {
+  background: var(--accent-red);
+  color: var(--white);
+}
+
+/* ═══ Responsive ═══ */
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 var(--space-8);
+  }
+
+  .section {
+    padding: var(--space-12) 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--margin-mobile);
+  }
+
+  .section {
+    padding: var(--space-11) 0;
+  }
+
+  .section-sm {
+    padding: var(--space-10) 0;
+  }
+}
