@@ -65,6 +65,7 @@
   width: 8px;
   height: 8px;
   background: var(--accent-red);
+  border-radius: var(--radius-full);
   display: inline-block;
 }
 
@@ -120,8 +121,9 @@
 
 .indicatorBar {
   width: 60px;
-  height: 2px;
+  height: 3px;
   background: var(--neutral-300);
+  border-radius: var(--radius-full);
   position: relative;
   overflow: hidden;
 }
@@ -236,20 +238,20 @@
 .servicesGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  border-top: 1px solid var(--border-primary);
-  border-left: 1px solid var(--border-primary);
+  gap: var(--space-5);
 }
 
 .serviceCard {
   display: flex;
   flex-direction: column;
   padding: var(--space-7);
-  border-right: 1px solid var(--border-primary);
-  border-bottom: 1px solid var(--border-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
   text-decoration: none;
   transition: all var(--transition-base);
   position: relative;
   min-height: 240px;
+  overflow: hidden;
 }
 
 .serviceCard::before {
@@ -257,6 +259,7 @@
   position: absolute;
   inset: 0;
   background: var(--black);
+  border-radius: var(--radius-lg);
   opacity: 0;
   transition: opacity var(--transition-base);
   z-index: 0;
@@ -440,9 +443,10 @@
 
 .tDot {
   width: 24px;
-  height: 2px;
+  height: 3px;
   background: var(--neutral-300);
   border: none;
+  border-radius: var(--radius-full);
   cursor: pointer;
   transition: all var(--transition-base);
   padding: 0;

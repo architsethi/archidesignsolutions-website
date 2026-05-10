@@ -8,20 +8,21 @@
 .filter { padding: var(--space-6) 0; border-bottom: 1px solid var(--border-subtle); position: sticky; top: 72px; z-index: 50; background: var(--bg-primary); }
 .filterBar { display: flex; gap: var(--space-2); overflow-x: auto; scrollbar-width: none; }
 .filterBar::-webkit-scrollbar { display: none; }
-.filterBtn { font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: var(--space-3) var(--space-5); border: 1px solid transparent; background: none; color: var(--text-secondary); cursor: pointer; transition: all var(--transition-fast); white-space: nowrap; }
-.filterBtn:hover { color: var(--text-primary); }
-.filterActive { border-color: var(--border-primary); color: var(--text-primary); }
+.filterBtn { font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: var(--space-3) var(--space-5); border: 1px solid transparent; border-radius: var(--radius-md); background: none; color: var(--text-secondary); cursor: pointer; transition: all var(--transition-fast); white-space: nowrap; }
+.filterBtn:hover { color: var(--text-primary); background: var(--neutral-50); }
+.filterActive { border-color: var(--border-primary); color: var(--text-primary); background: var(--neutral-50); }
 
 /* ── Grid ── */
 .grid { padding: var(--space-10) 0 var(--space-14); }
-.projectsGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; border: 1px solid var(--border-primary); }
-.projectCard { overflow: hidden; cursor: pointer; }
+.projectsGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); }
+.projectCard { overflow: hidden; cursor: pointer; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); transition: border-color var(--transition-base), box-shadow var(--transition-base); }
+.projectCard:hover { border-color: var(--border-medium); box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
 .projectImage { width: 100%; aspect-ratio: 4/3; background-size: cover; background-position: center; position: relative; transition: transform var(--transition-slow); }
 .projectCard:hover .projectImage { transform: scale(1.03); }
 .projectOverlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.7) 100%); display: flex; align-items: flex-end; padding: var(--space-5); opacity: 0; transition: opacity var(--transition-base); }
 .projectCard:hover .projectOverlay { opacity: 1; }
-.projectCategory { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--white); background: var(--accent-red); padding: 4px 10px; }
-.projectInfo { padding: var(--space-5); border-top: 1px solid var(--border-subtle); background: var(--bg-primary); }
+.projectCategory { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--white); background: var(--accent-red); padding: 4px 10px; border-radius: var(--radius-sm); }
+.projectInfo { padding: var(--space-5); background: var(--bg-primary); }
 .projectTitle { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: var(--space-1); }
 .projectMeta { display: flex; align-items: center; gap: var(--space-2); font-size: 13px; color: var(--text-tertiary); }
 .metaDot { color: var(--neutral-300); }

@@ -5,12 +5,11 @@
 .heroDesc { font-size: 18px; line-height: 1.7; color: var(--text-secondary); max-width: 480px; }
 
 .posts { padding: var(--space-10) 0 var(--space-14); }
-.postsList { display: flex; flex-direction: column; }
-.postCard { padding: var(--space-8) 0; border-bottom: 1px solid var(--border-subtle); cursor: pointer; transition: all var(--transition-base); }
-.postCard:first-child { border-top: 1px solid var(--border-subtle); }
-.postCard:hover { padding-left: var(--space-6); }
+.postsList { display: flex; flex-direction: column; gap: var(--space-5); }
+.postCard { padding: var(--space-7); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); cursor: pointer; transition: all var(--transition-base); }
+.postCard:hover { border-color: var(--border-medium); box-shadow: 0 4px 20px rgba(0,0,0,0.06); transform: translateY(-2px); }
 .postMeta { display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-3); }
-.postCategory { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-red); border: 1px solid var(--accent-red); padding: 2px 8px; }
+.postCategory { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-red); border: 1px solid var(--accent-red); padding: 3px 10px; border-radius: var(--radius-sm); }
 .postDate { font-size: 13px; color: var(--text-tertiary); }
 .postTitle { font-size: clamp(22px, 2.5vw, 32px); font-weight: 600; letter-spacing: -0.02em; margin-bottom: var(--space-3); transition: color var(--transition-fast); }
 .postCard:hover .postTitle { color: var(--accent-red); }

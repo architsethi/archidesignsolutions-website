@@ -16,7 +16,7 @@
 .delLabel { color: var(--text-tertiary); display: block; margin-bottom: var(--space-4); }
 .delList { display: flex; flex-direction: column; gap: var(--space-3); }
 .delItem { display: flex; align-items: baseline; gap: var(--space-3); font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
-.delBullet { width: 6px; height: 6px; min-width: 6px; background: var(--accent-red); display: inline-block; margin-top: 2px; }
+.delBullet { width: 6px; height: 6px; min-width: 6px; background: var(--accent-red); border-radius: var(--radius-full); display: inline-block; margin-top: 2px; }
 
 .cta { padding: var(--space-14) 0; border-top: 1px solid var(--border-subtle); }
 .ctaTitle { font-size: clamp(28px, 4vw, 48px); font-weight: 600; letter-spacing: -0.02em; margin-bottom: var(--space-4); }
