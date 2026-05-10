@@ -269,14 +269,20 @@ export default function HomePage() {
     if (absDist > 2) {
       return {
         opacity: 0,
-        transform: `translateX(${d > 0 ? 600 : -600}px) scale(0.6)`,
+        transform: `translateX(${d > 0 ? 800 : -800}px) scale(0.5) rotateY(${d > 0 ? -45 : 45}deg)`,
         zIndex: 0,
         pointerEvents: 'none' as const,
       };
     }
+
+    const offsetX = d * (isMobile ? 140 : 280);
+    const scale = 1 - absDist * 0.12;
+    const rotateY = d * -12;
+    const opacity = 1 - absDist * 0.25;
+
     return {
-      opacity: 1 - absDist * 0.3,
-      transform: `translateX(${d * (isMobile ? 110 : 160)}px) scale(${1 - absDist * 0.15})`,
+      opacity,
+      transform: `translateX(${offsetX}px) scale(${scale}) rotateY(${rotateY}deg)`,
       zIndex: 10 - absDist,
       pointerEvents: 'auto' as const,
     };
