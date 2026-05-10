@@ -189,8 +189,13 @@
 }
 
 /* ═══════════════════════════════════════
-   SHARED SECTION STYLING — clean typographic theme
+   SHARED — accent span + section headers
    ═══════════════════════════════════════ */
+.accent {
+  color: var(--accent-red);
+  font-style: italic;
+}
+
 .sectionHeader {
   margin-bottom: var(--space-10);
   text-align: center;
@@ -220,7 +225,7 @@
 }
 
 /* ═══════════════════════════════════════
-   SERVICES — clean cards on neutral bg
+   SERVICES
    ═══════════════════════════════════════ */
 .services {
   padding: var(--space-14) 0;
@@ -242,14 +247,12 @@
   border-radius: var(--radius-lg);
   text-decoration: none;
   transition: all var(--transition-base);
-  position: relative;
   min-height: 240px;
   overflow: hidden;
 }
 
 .serviceCard:hover {
   background: var(--black);
-  border-color: transparent;
   transform: translateY(-4px);
   box-shadow: 0 16px 48px rgba(0,0,0,0.12);
 }
@@ -303,7 +306,7 @@
 }
 
 /* ═══════════════════════════════════════
-   STATS — large typographic numbers on light bg
+   STATS
    ═══════════════════════════════════════ */
 .statsSection {
   padding: var(--space-14) 0;
@@ -345,7 +348,7 @@
 }
 
 /* ═══════════════════════════════════════
-   PHILOSOPHY — centered quote
+   PHILOSOPHY
    ═══════════════════════════════════════ */
 .philosophy {
   padding: var(--space-14) 0;
@@ -359,12 +362,12 @@
 }
 
 .philosophyQuote {
-  font-size: clamp(24px, 2.8vw, 36px);
+  font-size: clamp(20px, 2.4vw, 30px);
   font-weight: 400;
-  line-height: 1.55;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
-  margin: var(--space-8) 0 var(--space-6);
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  color: var(--text-secondary);
+  margin: var(--space-4) 0 var(--space-6);
   font-style: italic;
 }
 
@@ -377,39 +380,82 @@
 }
 
 /* ═══════════════════════════════════════
-   TESTIMONIALS — centered cards
+   TESTIMONIALS — infinite scrolling cards
    ═══════════════════════════════════════ */
 .testimonials {
-  padding: var(--space-14) 0;
+  padding: var(--space-14) 0 var(--space-10);
   background: var(--neutral-50);
+  overflow: hidden;
 }
 
-.testimonialSlider {
-  max-width: 760px;
-  min-height: 220px;
-  margin: 0 auto;
+.testimonialMarquee {
+  width: 100%;
+  overflow: hidden;
+  padding: var(--space-2) 0;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 4%,
+    black 96%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 4%,
+    black 96%,
+    transparent 100%
+  );
+}
+
+.testimonialTrack {
+  display: flex;
+  gap: var(--space-5);
+  width: max-content;
+  animation: testimonialScroll 50s linear infinite;
+}
+
+.testimonialTrack:hover {
+  animation-play-state: paused;
+}
+
+@keyframes testimonialScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 .testimonialCard {
-  padding: var(--space-8);
+  flex-shrink: 0;
+  width: 420px;
+  padding: var(--space-7);
   background: var(--white);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-5);
+  transition: all var(--transition-base);
+  cursor: default;
+}
+
+.testimonialCard:hover {
+  border-color: var(--accent-red);
+  box-shadow: 0 8px 32px rgba(200, 50, 43, 0.08);
+  transform: translateY(-4px);
 }
 
 .testimonialQuote {
-  font-size: clamp(18px, 2vw, 24px);
+  font-size: 16px;
   font-weight: 400;
   line-height: 1.65;
-  letter-spacing: -0.01em;
   color: var(--text-primary);
-  margin-bottom: var(--space-6);
 }
 
 .testimonialMeta {
   display: flex;
-  gap: var(--space-4);
-  align-items: baseline;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .testimonialAuthor {
@@ -421,35 +467,12 @@
 }
 
 .testimonialProject {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-tertiary);
 }
 
-.testimonialDots {
-  display: flex;
-  gap: var(--space-2);
-  margin-top: var(--space-6);
-  justify-content: center;
-}
-
-.tDot {
-  width: 24px;
-  height: 3px;
-  background: var(--neutral-300);
-  border: none;
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  transition: all var(--transition-base);
-  padding: 0;
-}
-
-.tDotActive {
-  background: var(--accent-red);
-  width: 40px;
-}
-
 /* ═══════════════════════════════════════
-   FINAL CTA — bold typography
+   FINAL CTA
    ═══════════════════════════════════════ */
 .finalCta {
   padding: var(--space-14) 0;
@@ -469,11 +492,6 @@
   line-height: 1.02;
   color: var(--text-primary);
   margin-bottom: var(--space-7);
-}
-
-.finalCtaAccent {
-  font-style: italic;
-  color: var(--accent-red);
 }
 
 .finalCtaDesc {
@@ -503,6 +521,9 @@
   .marqueeCard {
     width: 340px;
   }
+  .testimonialCard {
+    width: 360px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -517,6 +538,9 @@
   }
   .marqueeCard {
     width: 280px;
+  }
+  .testimonialCard {
+    width: 300px;
   }
   .servicesGrid {
     grid-template-columns: 1fr;
@@ -536,6 +560,10 @@
   }
   .marqueeCard {
     width: 220px;
+  }
+  .testimonialCard {
+    width: 260px;
+    padding: var(--space-5);
   }
   .statsGrid {
     grid-template-columns: 1fr 1fr;

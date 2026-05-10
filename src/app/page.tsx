@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
 import InteractiveGrid from "@/components/InteractiveGrid";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 /* ═══ Marquee Gallery Images ═══ */
 const galleryImages = [
@@ -107,41 +106,42 @@ const stats = [
 /* ═══ Testimonials ═══ */
 const testimonials = [
   {
-    quote: "Working with ArchiDesignSolutions transformed our vision. Their attention to detail and commitment to timeless design is unmatched in the industry.",
+    quote: "Working with ArchiDesignSolutions transformed our vision. Their attention to detail and commitment to timeless design is unmatched.",
     author: "Residential Client",
     project: "Private Residence, Indore",
   },
   {
-    quote: "From concept to completion, the team delivered beyond all expectations. Our office complex has become a Bhopal landmark — we couldn't be prouder.",
+    quote: "From concept to completion, the team delivered beyond all expectations. Our office complex has become a Bhopal landmark.",
     author: "Corporate Client",
     project: "Office Complex, Bhopal",
   },
   {
-    quote: "The design team understood our lifestyle perfectly. Our home is a seamless blend of modern aesthetics and Indian sensibility — warm, beautiful, entirely ours.",
+    quote: "Our home is a seamless blend of modern aesthetics and Indian sensibility — warm, beautiful, entirely ours.",
     author: "Homeowner",
     project: "Luxury Villa, Indore",
   },
   {
-    quote: "Their green building expertise helped us achieve LEED certification while keeping costs in check. Exceptional professionals who deliver on every promise.",
+    quote: "Their green building expertise helped us achieve LEED certification while keeping costs in check. Exceptional professionals.",
     author: "Institutional Client",
     project: "Green Campus Project",
+  },
+  {
+    quote: "The master planning they delivered for our township project was visionary — infrastructure, community spaces, everything considered.",
+    author: "Developer",
+    project: "Township, Bhopal",
+  },
+  {
+    quote: "Incredible interior work. Every room tells a story. The material palette they chose is both luxurious and understated.",
+    author: "Hospitality Client",
+    project: "Boutique Hotel, Ujjain",
   },
 ];
 
 /* ═══ Homepage ═══ */
 export default function HomePage() {
-  const [testimonialIdx, setTestimonialIdx] = useState(0);
-
-  /* Auto-rotate testimonials */
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTestimonialIdx((prev) => (prev + 1) % testimonials.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, []);
-
-  /* Double the gallery for seamless infinite loop */
+  /* Double arrays for seamless infinite loops */
   const marqueeItems = [...galleryImages, ...galleryImages];
+  const testimonialItems = [...testimonials, ...testimonials];
 
   return (
     <div className={styles.page}>
@@ -204,7 +204,7 @@ export default function HomePage() {
                     alt={img.label}
                     fill
                     style={{ objectFit: "cover" }}
-                    sizes="360px"
+                    sizes="420px"
                   />
                 </div>
                 <span className={styles.marqueeLabel}>{img.label}</span>
@@ -223,7 +223,7 @@ export default function HomePage() {
                 Our Expertise
               </span>
               <h2 className={styles.sectionTitle}>
-                Eight Specialised Disciplines
+                Eight <span className={styles.accent}>Specialised</span> Disciplines
               </h2>
               <p className={styles.sectionDesc}>
                 End-to-end design solutions across every stage of your project —
@@ -250,6 +250,13 @@ export default function HomePage() {
       {/* ═══════ STATS ═══════ */}
       <section className={styles.statsSection}>
         <div className="container">
+          <ScrollReveal>
+            <div className={styles.sectionHeader}>
+              <h2 className={styles.sectionTitle}>
+                Built on <span className={styles.accent}>Experience</span>
+              </h2>
+            </div>
+          </ScrollReveal>
           <div className={styles.statsGrid}>
             {stats.map((stat, i) => (
               <ScrollReveal key={stat.label} delay={i * 0.1}>
@@ -271,12 +278,15 @@ export default function HomePage() {
               <span className={`label-mono ${styles.sectionLabel}`}>
                 Our Philosophy
               </span>
+              <h2 className={styles.sectionTitle}>
+                Simplicity is the <span className={styles.accent}>Key</span>
+              </h2>
               <blockquote className={styles.philosophyQuote}>
-                &ldquo;Our design based on simplicity. We do not believe in
-                creating complexities but we try to establish harmony between the
-                outward and the inward. Before creating anything, an architect
-                needs to observe most of the things from micro to macro — and
-                this is the simplest key to design.&rdquo;
+                &ldquo;We do not believe in creating complexities but we try to
+                establish harmony between the outward and the inward. Before
+                creating anything, an architect needs to observe most of the
+                things from micro to macro — and this is the simplest key to
+                design.&rdquo;
               </blockquote>
               <p className={styles.philosophyAuthor}>
                 — Ar. Amit Sethi, Founder
@@ -286,7 +296,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ═══════ TESTIMONIALS ═══════ */}
+      {/* ═══════ TESTIMONIALS — infinite scrolling cards ═══════ */}
       <section className={styles.testimonials}>
         <div className="container">
           <ScrollReveal>
@@ -295,45 +305,26 @@ export default function HomePage() {
                 Client Voices
               </span>
               <h2 className={styles.sectionTitle}>
-                Three Decades of Trust
+                Three Decades of <span className={styles.accent}>Trust</span>
               </h2>
             </div>
           </ScrollReveal>
+        </div>
 
-          <div className={styles.testimonialSlider}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={testimonialIdx}
-                className={styles.testimonialCard}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              >
+        {/* Marquee of testimonial cards */}
+        <div className={styles.testimonialMarquee}>
+          <div className={styles.testimonialTrack}>
+            {testimonialItems.map((t, i) => (
+              <div key={i} className={styles.testimonialCard}>
                 <p className={styles.testimonialQuote}>
-                  &ldquo;{testimonials[testimonialIdx].quote}&rdquo;
+                  &ldquo;{t.quote}&rdquo;
                 </p>
                 <div className={styles.testimonialMeta}>
-                  <span className={styles.testimonialAuthor}>
-                    {testimonials[testimonialIdx].author}
-                  </span>
-                  <span className={styles.testimonialProject}>
-                    {testimonials[testimonialIdx].project}
-                  </span>
+                  <span className={styles.testimonialAuthor}>{t.author}</span>
+                  <span className={styles.testimonialProject}>{t.project}</span>
                 </div>
-              </motion.div>
-            </AnimatePresence>
-
-            <div className={styles.testimonialDots}>
-              {testimonials.map((_, i) => (
-                <button
-                  key={i}
-                  className={`${styles.tDot} ${i === testimonialIdx ? styles.tDotActive : ""}`}
-                  onClick={() => setTestimonialIdx(i)}
-                  aria-label={`Testimonial ${i + 1}`}
-                />
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -346,7 +337,7 @@ export default function HomePage() {
               <h2 className={styles.finalCtaTitle}>
                 Ready to Build Something
                 <br />
-                <span className={styles.finalCtaAccent}>Extraordinary?</span>
+                <span className={styles.accent}>Extraordinary?</span>
               </h2>
               <p className={styles.finalCtaDesc}>
                 Let&apos;s discuss your vision. Our team of experts is ready to
