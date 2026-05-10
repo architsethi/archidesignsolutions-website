@@ -398,6 +398,7 @@
    ═══════════════════════════════════════ */
 .statsSection {
   position: relative;
+  z-index: 1;
   padding: var(--space-14) 0;
   margin-top: -60px;
   background: var(--neutral-50);
