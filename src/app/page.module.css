@@ -131,92 +131,47 @@
   transform: translateX(4px);
 }
 
-/* ── Infinite Marquee ── */
-.marqueeWrap {
+/* ── Fan-Stack Carousel ── */
+.fanStack {
   position: relative;
   z-index: 2;
   width: 100%;
-  overflow: hidden;
-  padding: var(--space-6) 0 var(--space-8);
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 4%,
-    black 96%,
-    transparent 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 4%,
-    black 96%,
-    transparent 100%
-  );
-}
-
-.marqueeTrack {
+  height: 420px;
   display: flex;
-  gap: 0;
-  width: max-content;
-  animation: marqueeScroll 45s linear infinite;
-  padding: var(--space-6) var(--space-4);
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+  overflow: visible;
+  cursor: grab;
+  user-select: none;
+}
+.fanStack:active {
+  cursor: grabbing;
 }
 
-.marqueeTrack:hover {
-  animation-play-state: paused;
-}
-
-@keyframes marqueeScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.marqueeCard {
-  flex-shrink: 0;
-  width: 400px;
-  margin-right: -30px;
-  padding: var(--space-4);
-  background: var(--white);
+.fanCard {
+  position: absolute;
+  width: 300px;
+  height: 380px;
   border-radius: var(--radius-lg);
-  border: 1px solid rgba(0,0,0,0.06);
-  box-shadow:
-    0 4px 16px rgba(0,0,0,0.06),
-    0 12px 40px rgba(0,0,0,0.04);
-  cursor: pointer;
-  transition: all var(--transition-base);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-.marqueeCard:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow:
-    0 8px 24px rgba(0,0,0,0.10),
-    0 20px 60px rgba(0,0,0,0.08);
-  z-index: 5;
-}
-
-.marqueeImageWrap {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16/10;
-  border-radius: calc(var(--radius-lg) - 4px);
   overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  cursor: pointer;
 }
 
-.marqueeLabel {
+.fanLabel {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-tertiary);
-  text-align: center;
-  padding: 0 var(--space-2) var(--space-1);
+  white-space: nowrap;
   transition: color var(--transition-fast);
-}
-.marqueeCard:hover .marqueeLabel {
-  color: var(--accent-red);
 }
 
 /* ═══════════════════════════════════════
@@ -605,8 +560,9 @@
   .statsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .marqueeCard {
-    width: 340px;
+  .fanCard {
+    width: 260px;
+    height: 330px;
   }
   .testimonialCard {
     width: 360px;
@@ -623,8 +579,12 @@
   .heroHeadline {
     padding: var(--space-8) var(--space-4) var(--space-4);
   }
-  .marqueeCard {
-    width: 280px;
+  .fanStack {
+    height: 340px;
+  }
+  .fanCard {
+    width: 220px;
+    height: 275px;
   }
   .testimonialCard {
     width: 300px;
@@ -645,8 +605,12 @@
   .heroTitle {
     font-size: 44px;
   }
-  .marqueeCard {
-    width: 220px;
+  .fanStack {
+    height: 300px;
+  }
+  .fanCard {
+    width: 180px;
+    height: 230px;
   }
   .testimonialCard {
     width: 260px;

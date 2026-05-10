@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./page.module.css";
@@ -183,8 +183,75 @@ export default function HomePage() {
   }, [displayText, isDeleting, phraseIdx]);
 
   /* Double arrays for seamless infinite loops */
-  const marqueeItems = [...galleryImages, ...galleryImages];
   const testimonialItems = [...testimonials, ...testimonials];
+
+  /* ── Fan-stack carousel state ── */
+  const [carouselIdx, setCarouselIdx] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const autoplayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const dragStartX = useRef(0);
+  const isDragging = useRef(false);
+  const n = galleryImages.length;
+
+  const goToSlide = useCallback((i: number) => {
+    setCarouselIdx(((i % n) + n) % n);
+  }, [n]);
+
+  const startAutoplay = useCallback(() => {
+    if (autoplayRef.current) clearInterval(autoplayRef.current);
+    autoplayRef.current = setInterval(() => {
+      setCarouselIdx((prev) => (prev + 1) % n);
+    }, 3000);
+  }, [n]);
+
+  const stopAutoplay = useCallback(() => {
+    if (autoplayRef.current) clearInterval(autoplayRef.current);
+  }, []);
+
+  useEffect(() => {
+    startAutoplay();
+    return () => stopAutoplay();
+  }, [startAutoplay, stopAutoplay]);
+
+  /* Drag / swipe handlers */
+  const onPointerDown = useCallback((e: React.PointerEvent) => {
+    dragStartX.current = e.clientX;
+    isDragging.current = true;
+    stopAutoplay();
+  }, [stopAutoplay]);
+
+  const onPointerUp = useCallback((e: React.PointerEvent) => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    const dx = e.clientX - dragStartX.current;
+    if (dx > 50) goToSlide(carouselIdx - 1);
+    else if (dx < -50) goToSlide(carouselIdx + 1);
+    startAutoplay();
+  }, [carouselIdx, goToSlide, startAutoplay]);
+
+  /* Calculate card styles */
+  const getCardStyle = useCallback((i: number) => {
+    let d = i - carouselIdx;
+    if (d > n / 2) d -= n;
+    if (d < -n / 2) d += n;
+    const absDist = Math.abs(d);
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
+    if (absDist > 2) {
+      return {
+        opacity: 0,
+        transform: `translateX(${d > 0 ? 600 : -600}px) scale(0.6)`,
+        zIndex: 0,
+        pointerEvents: 'none' as const,
+      };
+    }
+    return {
+      opacity: 1 - absDist * 0.3,
+      transform: `translateX(${d * (isMobile ? 110 : 160)}px) scale(${1 - absDist * 0.15})`,
+      zIndex: 10 - absDist,
+      pointerEvents: 'auto' as const,
+    };
+  }, [carouselIdx, n]);
 
   return (
     <div className={styles.page}>
@@ -231,33 +298,39 @@ export default function HomePage() {
           </motion.div>
         </div>
 
-        {/* ── Infinite Scrolling Gallery ── */}
+        {/* ── Fan-Stack Image Carousel ── */}
         <motion.div
-          className={styles.marqueeWrap}
+          className={styles.fanStack}
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          ref={carouselRef}
+          onMouseEnter={stopAutoplay}
+          onMouseLeave={startAutoplay}
+          onPointerDown={onPointerDown}
+          onPointerUp={onPointerUp}
         >
-          <div className={styles.marqueeTrack}>
-            {marqueeItems.map((img, i) => (
-              <div
-                key={i}
-                className={styles.marqueeCard}
-                onClick={() => setLightbox({ src: img.src.replace('w=800', 'w=1600'), label: img.label })}
-              >
-                <div className={styles.marqueeImageWrap}>
-                  <Image
-                    src={img.src}
-                    alt={img.label}
-                    fill
-                    style={{ objectFit: "cover" }}
-                    sizes="420px"
-                  />
-                </div>
-                <span className={styles.marqueeLabel}>{img.label}</span>
-              </div>
-            ))}
-          </div>
+          {galleryImages.map((img, i) => (
+            <div
+              key={i}
+              className={styles.fanCard}
+              style={getCardStyle(i)}
+              onClick={() => { goToSlide(i); startAutoplay(); }}
+            >
+              <Image
+                src={img.src}
+                alt={img.label}
+                fill
+                style={{ objectFit: "cover" }}
+                sizes="320px"
+                draggable={false}
+              />
+            </div>
+          ))}
+          {/* Label for active image */}
+          <span className={styles.fanLabel}>
+            {galleryImages[carouselIdx].label}
+          </span>
         </motion.div>
       </section>
 
