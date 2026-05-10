@@ -6,6 +6,8 @@
    HERO SECTION
    ═══════════════════════════════════════ */
 .hero {
+  --mx: 0px;
+  --my: 0px;
   position: relative;
   min-height: calc(100vh - 72px);
   display: flex;
@@ -37,22 +39,82 @@
   background: linear-gradient(
     to right,
     rgba(255, 255, 255, 0.88) 0%,
-    rgba(255, 255, 255, 0.72) 25%,
-    rgba(255, 255, 255, 0.45) 45%,
-    rgba(255, 255, 255, 0.15) 65%,
-    transparent 80%
+    rgba(255, 255, 255, 0.68) 30%,
+    rgba(255, 255, 255, 0.35) 50%,
+    rgba(255, 255, 255, 0.1) 70%,
+    transparent 85%
   );
   pointer-events: none;
 }
 
+/* ── Slide Counter ── */
+.heroCounter {
+  position: absolute;
+  top: var(--space-8);
+  right: var(--margin-desktop);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.heroCounterCurrent {
+  font-size: 48px;
+  font-weight: 200;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  line-height: 1;
+}
+.heroCounterDivider {
+  width: 32px;
+  height: 1px;
+  background: var(--border-medium);
+}
+.heroCounterTotal {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  letter-spacing: 0.04em;
+}
+
+/* ── Nav Arrows ── */
+.heroNav {
+  position: absolute;
+  right: var(--margin-desktop);
+  bottom: 80px;
+  z-index: 5;
+  display: flex;
+  gap: var(--space-2);
+}
+.heroNavBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-medium);
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+}
+.heroNavBtn:hover {
+  background: var(--text-primary);
+  color: var(--white);
+  border-color: var(--text-primary);
+}
+
+/* ── Hero Content ── */
 .heroContent {
   position: relative;
   z-index: 4;
   padding: var(--space-10) 0;
   padding-left: var(--space-8);
+  padding-bottom: 80px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-5);
 }
 
 .heroLabel {
@@ -69,29 +131,45 @@
   display: inline-block;
 }
 
+/* Title with mouse parallax */
+.heroTitleWrap {
+  transform: translate(var(--mx), var(--my));
+  transition: transform 0.15s ease-out;
+}
 .heroTitle {
-  font-size: clamp(42px, 6vw, 84px);
+  font-size: clamp(44px, 6.5vw, 88px);
   font-weight: 700;
-  line-height: 0.98;
+  line-height: 0.96;
   letter-spacing: -0.04em;
   color: var(--text-primary);
-  max-width: 880px;
+  max-width: 900px;
 }
 
-.heroSubtitle {
-  font-size: clamp(17px, 1.5vw, 21px);
-  line-height: 1.65;
-  color: var(--text-secondary);
-  max-width: 540px;
+/* Explore link */
+.heroExplore {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  text-decoration: none;
+  margin-top: var(--space-3);
+  transition: all var(--transition-fast);
+}
+.heroExplore svg {
+  transition: transform var(--transition-fast);
+}
+.heroExplore:hover {
+  color: var(--accent-red);
+}
+.heroExplore:hover svg {
+  transform: translateX(6px);
 }
 
-.heroCta {
-  display: flex;
-  gap: var(--space-4);
-  flex-wrap: wrap;
-}
-
-/* ── Hero Indicators ── */
+/* ── Bottom Category Bar ── */
 .heroIndicators {
   position: absolute;
   bottom: 0;
@@ -102,107 +180,52 @@
   justify-content: stretch;
   padding: 0 var(--margin-desktop);
   border-top: 1px solid var(--border-subtle);
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(8px);
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(10px);
 }
 
 .indicator {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: 0;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   background: none;
   border: none;
-  border-bottom: 2px solid transparent;
-  padding: var(--space-4) var(--space-5);
+  padding: var(--space-4) var(--space-2);
   flex: 1;
-  opacity: 0.5;
-  transition: all var(--transition-base);
+  opacity: 0.45;
+  transition: opacity var(--transition-base);
+  position: relative;
 }
-
-.indicator.active {
-  opacity: 1;
-  border-bottom-color: var(--accent-red);
-}
-
-.indicator:hover {
-  opacity: 0.8;
-}
-
-.indicatorBar {
-  display: none;
-}
-
-.indicator.active .indicatorBar {
-  display: none;
-}
-
-.indicator.active .indicatorBar::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-  background: var(--accent-red);
-  animation: indicatorFill 5s linear forwards;
-}
-
-@keyframes indicatorFill {
-  from { transform: scaleX(0); transform-origin: left; }
-  to { transform: scaleX(1); transform-origin: left; }
-}
+.indicator:hover { opacity: 0.75; }
+.indicator.active { opacity: 1; }
 
 .indicatorLabel {
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--text-secondary);
+  white-space: nowrap;
 }
+.indicator.active .indicatorLabel { color: var(--text-primary); }
 
-.indicator.active .indicatorLabel {
-  color: var(--text-primary);
-}
-
-/* ── Scroll Hint ── */
-.scrollHint {
+/* Animated progress bar under active tab */
+.indicatorProgress {
   position: absolute;
-  bottom: var(--space-8);
-  right: var(--margin-desktop);
-  z-index: 4;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-2);
-  color: var(--text-tertiary);
-}
-
-.scrollLine {
-  width: 1px;
-  height: 48px;
-  background: var(--border-subtle);
-  position: relative;
-  overflow: hidden;
-}
-
-.scrollLine::after {
-  content: "";
-  position: absolute;
-  top: -100%;
+  bottom: 0;
   left: 0;
-  width: 100%;
+  right: 0;
+  height: 2px;
+  background: var(--border-subtle);
+}
+.indicatorFill {
+  display: block;
   height: 100%;
   background: var(--accent-red);
-  animation: scrollPulse 2s ease-in-out infinite;
-}
-
-@keyframes scrollPulse {
-  0% { top: -100%; }
-  50% { top: 100%; }
-  100% { top: 100%; }
+  transform-origin: left;
 }
 
 /* ═══════════════════════════════════════

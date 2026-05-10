@@ -4,6 +4,7 @@ import { useRef, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
+import InteractiveGrid from "@/components/InteractiveGrid";
 import { motion, AnimatePresence } from "framer-motion";
 
 /* ═══ Hero Slide Data ═══ */
@@ -130,105 +131,28 @@ const testimonials = [
 ];
 
 /* ═══ Interactive Grid Background ═══ */
-function HeroGrid() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const animRef = useRef<number>(0);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const resize = () => {
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
-      ctx.scale(dpr, dpr);
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-
-    const draw = () => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      ctx.clearRect(0, 0, w, h);
-
-      const spacing = 60;
-      const mx = mouseRef.current.x;
-      const my = mouseRef.current.y;
-      const radius = 200;
-
-      /* Vertical lines */
-      for (let x = spacing; x < w; x += spacing) {
-        const dist = Math.abs(x - mx);
-        const proximity = Math.max(0, 1 - dist / radius);
-        const alpha = 0.04 + proximity * 0.12;
-
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, h);
-        ctx.strokeStyle = `rgba(0, 0, 0, ${alpha})`;
-        ctx.lineWidth = proximity > 0.3 ? 0.8 : 0.4;
-        ctx.stroke();
-      }
-
-      /* Horizontal lines */
-      for (let y = spacing; y < h; y += spacing) {
-        const dist = Math.abs(y - my);
-        const proximity = Math.max(0, 1 - dist / radius);
-        const alpha = 0.04 + proximity * 0.12;
-
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(w, y);
-        ctx.strokeStyle = `rgba(0, 0, 0, ${alpha})`;
-        ctx.lineWidth = proximity > 0.3 ? 0.8 : 0.4;
-        ctx.stroke();
-      }
-
-      /* Grid intersections near cursor — red dots */
-      for (let x = spacing; x < w; x += spacing) {
-        for (let y = spacing; y < h; y += spacing) {
-          const dx = x - mx;
-          const dy = y - my;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < radius) {
-            const proximity = 1 - dist / radius;
-            ctx.beginPath();
-            ctx.arc(x, y, 1.5 + proximity * 2, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(200, 50, 43, ${proximity * 0.6})`;
-            ctx.fill();
-          }
-        }
-      }
-
-      animRef.current = requestAnimationFrame(draw);
-    };
-    animRef.current = requestAnimationFrame(draw);
-
-    return () => {
-      window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", handleMouseMove);
-      cancelAnimationFrame(animRef.current);
-    };
-  }, []);
-
-  return <canvas ref={canvasRef} className={styles.heroCanvas} />;
-}
-
 /* ═══ Homepage Component ═══ */
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [testimonialIdx, setTestimonialIdx] = useState(0);
+  const mouseRef = useRef({ x: 0, y: 0 });
+  const heroRef = useRef<HTMLElement>(null);
+
+  /* Track mouse for parallax */
+  useEffect(() => {
+    const handleMove = (e: MouseEvent) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY };
+      if (heroRef.current) {
+        const rect = heroRef.current.getBoundingClientRect();
+        const cx = (e.clientX - rect.left) / rect.width - 0.5;
+        const cy = (e.clientY - rect.top) / rect.height - 0.5;
+        heroRef.current.style.setProperty("--mx", `${cx * 20}px`);
+        heroRef.current.style.setProperty("--my", `${cy * 12}px`);
+      }
+    };
+    window.addEventListener("mousemove", handleMove);
+    return () => window.removeEventListener("mousemove", handleMove);
+  }, []);
 
   /* Auto-rotate hero slides */
   useEffect(() => {
@@ -250,11 +174,14 @@ export default function HomePage() {
     setCurrentSlide(index);
   }, []);
 
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+
   return (
     <div className={styles.page}>
       {/* ═══════ HERO ═══════ */}
-      <section className={styles.hero}>
-        <HeroGrid />
+      <section className={styles.hero} ref={heroRef}>
+        <InteractiveGrid className={styles.heroCanvas} />
 
         {/* Background Image */}
         <AnimatePresence mode="wait">
@@ -262,77 +189,95 @@ export default function HomePage() {
             key={currentSlide}
             className={styles.heroImage}
             style={{ backgroundImage: `url(${heroSlides[currentSlide].image})` }}
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 0.7, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0, scale: 1.08 }}
+            animate={{ opacity: 0.65, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.97 }}
+            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
           />
         </AnimatePresence>
 
-        {/* White gradient overlay — solid left, fades right */}
+        {/* White gradient overlay */}
         <div className={styles.heroGradient} />
 
-        <div className={`container ${styles.heroContent}`}>
-          {/* Label */}
-          <motion.div
-            className={styles.heroLabel}
-            key={`label-${currentSlide}`}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <span className={styles.heroDot} />
-            <span className="label-mono">{heroSlides[currentSlide].label}</span>
-          </motion.div>
+        {/* ── Slide Counter (top-right) ── */}
+        <div className={styles.heroCounter}>
+          <span className={styles.heroCounterCurrent}>
+            {String(currentSlide + 1).padStart(2, "0")}
+          </span>
+          <span className={styles.heroCounterDivider} />
+          <span className={styles.heroCounterTotal}>
+            {String(heroSlides.length).padStart(2, "0")}
+          </span>
+        </div>
 
-          {/* Title */}
+        {/* ── Nav Arrows (right side) ── */}
+        <div className={styles.heroNav}>
+          <button className={styles.heroNavBtn} onClick={prevSlide} aria-label="Previous slide">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+          <button className={styles.heroNavBtn} onClick={nextSlide} aria-label="Next slide">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+
+        {/* ── Content with mouse parallax ── */}
+        <div className={`container ${styles.heroContent}`}>
+          {/* Category label */}
           <AnimatePresence mode="wait">
-            <motion.h1
-              key={`title-${currentSlide}`}
-              className={styles.heroTitle}
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -30 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            <motion.div
+              className={styles.heroLabel}
+              key={`label-${currentSlide}`}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.5 }}
             >
-              {heroSlides[currentSlide].title.split("\n").map((line, i) => (
-                <span key={i}>
-                  {line}
-                  {i === 0 && <br />}
-                </span>
-              ))}
-            </motion.h1>
+              <span className={styles.heroDot} />
+              <span className="label-mono">{heroSlides[currentSlide].label}</span>
+            </motion.div>
           </AnimatePresence>
 
-          {/* Subtitle */}
-          <motion.p
-            className={styles.heroSubtitle}
+          {/* Title — parallax shifted by mouse */}
+          <div className={styles.heroTitleWrap}>
+            <AnimatePresence mode="wait">
+              <motion.h1
+                key={`title-${currentSlide}`}
+                className={styles.heroTitle}
+                initial={{ opacity: 0, y: 60 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -40 }}
+                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+              >
+                {heroSlides[currentSlide].title.split("\n").map((line, i) => (
+                  <span key={i}>
+                    {line}
+                    {i === 0 && <br />}
+                  </span>
+                ))}
+              </motion.h1>
+            </AnimatePresence>
+          </div>
+
+          {/* Explore link */}
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.6 }}
+            transition={{ delay: 1, duration: 0.6 }}
           >
-            Award-winning architecture, interior design & urban planning
-            <br />
-            crafted for India and beyond.
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div
-            className={styles.heroCta}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.6 }}
-          >
-            <Link href="/contact" className="btn btn-solid">
-              Start Your Project
-            </Link>
-            <Link href="/projects" className="btn btn-primary">
-              View Our Work →
+            <Link href="/projects" className={styles.heroExplore}>
+              <span>Explore Projects</span>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
             </Link>
           </motion.div>
         </div>
 
-        {/* Slide Indicators — full width */}
+        {/* ── Bottom category bar ── */}
         <div className={styles.heroIndicators}>
           {heroSlides.map((slide, i) => (
             <button
@@ -341,16 +286,19 @@ export default function HomePage() {
               onClick={() => goToSlide(i)}
               aria-label={`Go to ${slide.label}`}
             >
-              <span className={styles.indicatorBar} />
               <span className={styles.indicatorLabel}>{slide.label}</span>
+              <span className={styles.indicatorProgress}>
+                {i === currentSlide && (
+                  <motion.span
+                    className={styles.indicatorFill}
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 5, ease: "linear" }}
+                  />
+                )}
+              </span>
             </button>
           ))}
-        </div>
-
-        {/* Scroll Hint */}
-        <div className={styles.scrollHint}>
-          <div className={styles.scrollLine} />
-          <span className="label-mono">Scroll</span>
         </div>
       </section>
 
