@@ -90,7 +90,7 @@
   flex-wrap: wrap;
 }
 
-/* ── Service Tabs — full-width bottom bar ── */
+/* ── Service Tabs — filleted corner cards ── */
 .heroIndicators {
   position: absolute;
   bottom: 0;
@@ -98,32 +98,37 @@
   right: 0;
   z-index: 5;
   display: flex;
-  justify-content: stretch;
-  padding: 0;
-  border-top: 1px solid var(--border-subtle);
+  gap: var(--space-2);
+  padding: var(--space-3) var(--margin-desktop);
   background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--border-subtle);
 }
 
 .indicator {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
   align-items: center;
   justify-content: center;
+  gap: var(--space-2);
   cursor: pointer;
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  padding: var(--space-3) var(--space-2);
+  background: var(--white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-3);
   flex: 1;
-  opacity: 0.5;
   transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
 }
-.indicator:hover { opacity: 0.8; }
+.indicator:hover {
+  border-color: var(--border-medium);
+  background: var(--neutral-50);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
 .indicatorActive {
-  opacity: 1;
-  border-bottom-color: var(--accent-red);
+  border-color: var(--accent-red);
+  background: rgba(200, 50, 43, 0.06);
+  box-shadow: 0 2px 12px rgba(200, 50, 43, 0.1);
 }
 
 .indicatorNum {
@@ -135,12 +140,14 @@
 .indicatorLabel {
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
   white-space: nowrap;
+  transition: color var(--transition-fast);
 }
-.indicatorActive .indicatorLabel { color: var(--text-primary); }
+.indicator:hover .indicatorLabel { color: var(--text-primary); }
+.indicatorActive .indicatorLabel { color: var(--accent-red); font-weight: 700; }
 
 /* ═══════════════════════════════════════
    SERVICES GRID

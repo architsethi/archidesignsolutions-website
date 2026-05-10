@@ -177,55 +177,66 @@
   right: 0;
   z-index: 5;
   display: flex;
-  justify-content: stretch;
-  padding: 0 var(--margin-desktop);
-  border-top: 1px solid var(--border-subtle);
-  background: rgba(255,255,255,0.88);
+  gap: var(--space-2);
+  padding: var(--space-3) var(--margin-desktop);
+  background: rgba(255,255,255,0.85);
   backdrop-filter: blur(10px);
+  border-top: 1px solid var(--border-subtle);
 }
 
 .indicator {
   display: flex;
-  flex-direction: column;
-  gap: 0;
   align-items: center;
   justify-content: center;
+  gap: var(--space-2);
   cursor: pointer;
-  background: none;
-  border: none;
-  padding: var(--space-4) var(--space-2);
+  background: var(--white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-4);
   flex: 1;
-  opacity: 0.45;
-  transition: opacity var(--transition-base);
+  transition: all var(--transition-base);
   position: relative;
+  overflow: hidden;
 }
-.indicator:hover { opacity: 0.75; }
-.indicator.active { opacity: 1; }
+.indicator:hover {
+  border-color: var(--border-medium);
+  background: var(--neutral-50);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.indicator.active {
+  border-color: var(--accent-red);
+  background: rgba(200, 50, 43, 0.06);
+  box-shadow: 0 2px 12px rgba(200, 50, 43, 0.1);
+}
 
 .indicatorLabel {
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
   white-space: nowrap;
+  transition: color var(--transition-fast);
 }
-.indicator.active .indicatorLabel { color: var(--text-primary); }
+.indicator:hover .indicatorLabel { color: var(--text-primary); }
+.indicator.active .indicatorLabel { color: var(--accent-red); font-weight: 700; }
 
-/* Animated progress bar under active tab */
+/* Animated progress bar inside active card */
 .indicatorProgress {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   height: 2px;
-  background: var(--border-subtle);
+  background: transparent;
 }
 .indicatorFill {
   display: block;
   height: 100%;
   background: var(--accent-red);
   transform-origin: left;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
 }
 
 /* ═══════════════════════════════════════
