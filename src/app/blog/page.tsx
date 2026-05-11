@@ -47,7 +47,7 @@ export default function BlogPage() {
           <h1 className={styles.heroTitle}>
             Insights &
             <br />
-            Perspectives
+            <span className={styles.accent}>Perspectives</span>
           </h1>
           <p className={styles.heroDesc}>
             Thought leadership from three decades of architectural practice.

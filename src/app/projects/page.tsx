@@ -57,7 +57,7 @@ function ProjectsContent() {
           <h1 className={styles.heroTitle}>
             Projects That
             <br />
-            Define Spaces
+            Define <span className={styles.accent}>Spaces</span>
           </h1>
           <p className={styles.heroDesc}>
             A curated selection from over 500 projects delivered across residential,

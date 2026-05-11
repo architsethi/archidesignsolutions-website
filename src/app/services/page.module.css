@@ -70,7 +70,7 @@
 
 .heroTitle {
   font-size: clamp(42px, 6vw, 84px);
-  font-weight: 700;
+  font-weight: 800;
   line-height: 0.98;
   letter-spacing: -0.04em;
   color: var(--text-primary);
@@ -157,8 +157,8 @@
 .label { color: var(--accent-red); display: block; margin-bottom: var(--space-3); }
 .sectionTitle {
   font-size: clamp(28px, 3.5vw, 48px);
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  letter-spacing: -0.03em;
   line-height: 1.15;
 }
 
@@ -179,8 +179,10 @@
   background: var(--white);
 }
 .serviceCard:hover {
-  border-color: var(--border-medium);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+  border-color: rgba(200, 50, 43, 0.2);
+  box-shadow:
+    0 12px 40px rgba(200, 50, 43, 0.08),
+    0 0 0 1px rgba(200, 50, 43, 0.1);
   transform: translateY(-6px);
 }
 

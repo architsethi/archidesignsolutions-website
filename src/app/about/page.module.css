@@ -1,64 +1,265 @@
 .page { padding-top: 72px; }
+.accent { color: var(--accent-red); font-style: italic; }
 
 /* ── Hero ── */
-.hero { padding: var(--space-14) 0 var(--space-10); border-bottom: 1px solid var(--border-subtle); }
-.heroGrid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-10); align-items: start; }
+.hero {
+  position: relative;
+  padding: var(--space-14) 0 var(--space-10);
+  background: var(--neutral-50);
+  overflow: hidden;
+}
+
+.heroCanvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.heroGrid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-10);
+  align-items: start;
+}
+
 .label { color: var(--accent-red); display: block; margin-bottom: var(--space-4); }
-.heroTitle { font-size: clamp(36px, 5vw, 64px); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: var(--space-6); }
-.heroDesc { font-size: 18px; line-height: 1.7; color: var(--text-secondary); max-width: 540px; }
+.heroTitle {
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  margin-bottom: var(--space-6);
+}
+.heroDesc {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 540px;
+}
 .heroRight { display: flex; flex-direction: column; gap: var(--space-6); }
-.heroImageWrap { position: relative; width: 100%; aspect-ratio: 4/3; border-radius: var(--radius-lg); overflow: hidden; }
+.heroImageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
 .heroStats { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
-.heroStat { padding: var(--space-5); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
-.heroStatValue { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; display: block; }
-.heroStatLabel { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-tertiary); margin-top: 2px; }
+.heroStat {
+  padding: var(--space-5);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  transition: all 0.3s ease;
+}
+.heroStat:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(200, 50, 43, 0.08);
+  border-color: rgba(200, 50, 43, 0.2);
+}
+.heroStatValue {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  display: block;
+}
+.heroStatLabel {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
 
 /* ── Image Strip ── */
 .imageStrip { padding: var(--space-8) 0; }
-.imageStripInner { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); padding: 0 var(--margin-desktop); }
-.stripImage { position: relative; aspect-ratio: 16/9; border-radius: var(--radius-lg); overflow: hidden; }
+.imageStripInner {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  padding: 0 var(--margin-desktop);
+}
+.stripImage {
+  position: relative;
+  aspect-ratio: 16/9;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
 
 /* ── Philosophy ── */
-.philosophy { padding: var(--space-14) 0; background: var(--neutral-50); }
+.philosophy {
+  padding: var(--space-14) 0;
+  background: var(--neutral-50);
+}
 .philosophyInner { display: flex; flex-direction: column; gap: var(--space-8); }
 .philosophyLabel { display: flex; flex-direction: column; gap: var(--space-4); }
-.philosophyLine { width: 2px; height: 80px; background: var(--accent-red); border-radius: var(--radius-full); }
-.philosophyContent { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-10); align-items: start; }
+.philosophyLine {
+  width: 2px;
+  height: 80px;
+  background: var(--accent-red);
+  border-radius: var(--radius-full);
+}
+.philosophyContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-10);
+  align-items: start;
+}
 .philosophyText { display: flex; flex-direction: column; gap: var(--space-6); }
 .philosophyText p { font-size: 18px; line-height: 1.8; color: var(--text-secondary); }
-.philosophyImage { position: relative; width: 100%; aspect-ratio: 4/5; border-radius: var(--radius-lg); overflow: hidden; }
+.philosophyImage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/5;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
 
 /* ── Team ── */
-.team { padding: var(--space-14) 0; }
-.sectionTitle { font-size: clamp(28px, 3.5vw, 48px); font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: var(--space-10); }
+.team { padding: var(--space-14) 0; background: var(--white); }
+.sectionTitle {
+  font-size: clamp(28px, 3.5vw, 48px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: var(--space-10);
+}
 .teamGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-6); }
-.teamCard { display: flex; flex-direction: column; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; transition: border-color var(--transition-base), box-shadow var(--transition-base); }
-.teamCard:hover { border-color: var(--border-medium); box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+.teamCard {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--white);
+  transition: all 0.3s ease;
+}
+.teamCard:hover {
+  border-color: rgba(200, 50, 43, 0.2);
+  box-shadow:
+    0 12px 32px rgba(200, 50, 43, 0.06),
+    0 0 0 1px rgba(200, 50, 43, 0.08);
+  transform: translateY(-4px);
+}
 .teamImageWrap { position: relative; width: 100%; aspect-ratio: 1/1; }
-.teamInfo { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-6); }
-.teamName { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
-.teamTitle { font-size: 14px; font-weight: 600; color: var(--text-secondary); }
-.teamQuals { font-size: 12px; color: var(--text-tertiary); letter-spacing: 0.02em; margin-bottom: var(--space-3); }
-.teamDesc { font-size: 14px; line-height: 1.6; color: var(--text-secondary); margin-top: var(--space-3); }
+.teamInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-6);
+}
+.teamName { font-size: 20px; font-weight: 800; letter-spacing: -0.01em; }
+.teamTitle { font-size: 14px; font-weight: 600; color: var(--accent-red); }
+.teamQuals {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  letter-spacing: 0.02em;
+  margin-bottom: var(--space-3);
+}
+.teamDesc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-top: var(--space-3);
+}
 
 /* ── Affiliations ── */
-.affiliations { padding: var(--space-12) 0; border-top: 1px solid var(--border-subtle); }
-.affiliationsGrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-4); margin-top: var(--space-8); }
-.affiliationCard { padding: var(--space-6); text-align: center; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); transition: border-color var(--transition-base); }
-.affiliationCard:hover { border-color: var(--border-medium); }
-.affiliationAbbr { display: block; font-size: 24px; font-weight: 700; letter-spacing: 0.04em; margin-bottom: var(--space-2); }
-.affiliationName { font-size: 12px; color: var(--text-tertiary); line-height: 1.4; }
+.affiliations {
+  padding: var(--space-12) 0;
+  background: var(--neutral-50);
+}
+.affiliationsGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+}
+.affiliationCard {
+  padding: var(--space-6);
+  text-align: center;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  transition: all 0.3s ease;
+}
+.affiliationCard:hover {
+  border-color: rgba(200, 50, 43, 0.2);
+  box-shadow: 0 6px 20px rgba(200, 50, 43, 0.06);
+  transform: translateY(-3px);
+}
+.affiliationAbbr {
+  display: block;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-2);
+  color: var(--accent-red);
+}
+.affiliationName {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  line-height: 1.4;
+}
 
 /* ── Ventures ── */
-.ventures { padding: var(--space-14) 0; border-top: 1px solid var(--border-subtle); }
+.ventures { padding: var(--space-14) 0; background: var(--white); }
 .venturesGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }
-.ventureCard { display: flex; flex-direction: column; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; text-decoration: none; transition: all var(--transition-base); }
-.ventureCard:hover { border-color: var(--border-medium); box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-4px); }
-.ventureImage { position: relative; width: 100%; aspect-ratio: 16/9; }
-.ventureBody { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-7); flex: 1; }
-.ventureName { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; color: var(--text-primary); }
-.ventureDesc { font-size: 15px; line-height: 1.6; color: var(--text-secondary); flex: 1; }
-.ventureLink { font-size: 13px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-red); margin-top: auto; }
+.ventureCard {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  text-decoration: none;
+  background: var(--white);
+  transition: all 0.3s ease;
+}
+.ventureCard:hover {
+  border-color: rgba(200, 50, 43, 0.2);
+  box-shadow:
+    0 12px 40px rgba(200, 50, 43, 0.08),
+    0 0 0 1px rgba(200, 50, 43, 0.1);
+  transform: translateY(-4px);
+}
+.ventureImage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+}
+.ventureBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-7);
+  flex: 1;
+}
+.ventureName {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+.ventureDesc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  flex: 1;
+}
+.ventureLink {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-red);
+  margin-top: auto;
+}
 
 /* ── Responsive ── */
 @media (max-width: 1024px) {

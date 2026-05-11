@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
+import InteractiveGrid from "@/components/InteractiveGrid";
 
 export const metadata: Metadata = {
   title: "About | ArchiDesignSolutions",
@@ -61,6 +62,7 @@ export default function AboutPage() {
     <div className={styles.page}>
       {/* ── Hero with Image ── */}
       <section className={styles.hero}>
+        <InteractiveGrid className={styles.heroCanvas} />
         <div className="container">
           <div className={styles.heroGrid}>
             <div className={styles.heroLeft}>
@@ -68,7 +70,7 @@ export default function AboutPage() {
               <h1 className={styles.heroTitle}>
                 Three Generations.
                 <br />
-                One Vision.
+                One <span className={styles.accent}>Vision.</span>
               </h1>
               <p className={styles.heroDesc}>
                 Since 1999, ArchiDesignSolutions has been rendering comprehensive
@@ -185,7 +187,7 @@ export default function AboutPage() {
           <ScrollReveal>
             <span className={`label-mono ${styles.label}`}>Our Team</span>
             <h2 className={styles.sectionTitle}>
-              Led by Experience, Powered by Innovation
+              Led by Experience, Powered by <span className={styles.accent}>Innovation</span>
             </h2>
           </ScrollReveal>
 
@@ -240,7 +242,7 @@ export default function AboutPage() {
           <ScrollReveal>
             <span className={`label-mono ${styles.label}`}>Our Ventures</span>
             <h2 className={styles.sectionTitle}>
-              Extending Our Reach
+              Extending Our <span className={styles.accent}>Reach</span>
             </h2>
           </ScrollReveal>
           <div className={styles.venturesGrid}>
