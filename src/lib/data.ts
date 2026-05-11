@@ -23,6 +23,12 @@ export interface ContactInfo {
   mapUrl: string;
 }
 
+export type ProjectStage = "concept" | "construction" | "completed";
+
+export interface ProjectStageData {
+  images: string[];
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -30,9 +36,28 @@ export interface Project {
   location: string;
   year: string;
   description: string;
-  image: string;
+  image: string; // cover/thumbnail image
   featured: boolean;
+  stages: {
+    concept?: ProjectStageData;
+    construction?: ProjectStageData;
+    completed?: ProjectStageData;
+  };
 }
+
+/** Returns the highest stage that has images */
+export function getProjectDisplayStage(project: Project): ProjectStage {
+  if (project.stages.completed && project.stages.completed.images.length > 0) return "completed";
+  if (project.stages.construction && project.stages.construction.images.length > 0) return "construction";
+  if (project.stages.concept && project.stages.concept.images.length > 0) return "concept";
+  return "concept";
+}
+
+export const stageLabels: Record<ProjectStage, string> = {
+  concept: "Concept",
+  construction: "Under Construction",
+  completed: "Completed",
+};
 
 export interface BlogPost {
   id: string;
@@ -109,6 +134,11 @@ export const defaultSiteData: SiteData = {
       description: "A luxury residential complex featuring modern architecture with sustainable design principles.",
       image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
       featured: true,
+      stages: {
+        concept: { images: [] },
+        construction: { images: [] },
+        completed: { images: ["https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80"] },
+      },
     },
     {
       id: "p2",
@@ -119,6 +149,11 @@ export const defaultSiteData: SiteData = {
       description: "A state-of-the-art office complex designed for modern workspaces with energy-efficient systems.",
       image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
       featured: true,
+      stages: {
+        concept: { images: [] },
+        construction: { images: ["https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80"] },
+        completed: { images: ["https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80"] },
+      },
     },
     {
       id: "p3",
@@ -129,6 +164,11 @@ export const defaultSiteData: SiteData = {
       description: "Meticulous restoration of a colonial-era villa, preserving heritage while adding modern amenities.",
       image: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=800&q=80",
       featured: false,
+      stages: {
+        concept: { images: ["https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=800&q=80"] },
+        construction: { images: [] },
+        completed: { images: [] },
+      },
     },
   ],
   blogs: [

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, createContext, useContext } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import styles from "./admin.module.css";
 
@@ -64,7 +65,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return (
       <div className={styles.loginPage}>
         <div className={styles.loginCard}>
-          <div className={styles.loginLogo}>ADS</div>
+          <div className={styles.loginLogo}>
+            <Image src="/logo.png" alt="ADS" width={40} height={40} style={{ borderRadius: '50%' }} />
+          </div>
           <h1 className={styles.loginTitle}>Admin Panel</h1>
           <p className={styles.loginSub}>ArchiDesignSolutions</p>
           <div className={styles.loginForm}>
@@ -92,7 +95,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Sidebar */}
         <aside className={styles.sidebar}>
           <div className={styles.sidebarHeader}>
-            <span className={styles.sidebarLogo}>ADS</span>
+            <span className={styles.sidebarLogo}>
+              <Image src="/logo.png" alt="ADS" width={28} height={28} style={{ borderRadius: 6 }} />
+            </span>
             <span className={styles.sidebarTitle}>Admin</span>
           </div>
           <nav className={styles.sidebarNav}>

@@ -149,5 +149,92 @@
 }
 .metaDot { color: var(--neutral-300); }
 
+/* Stage badge on image */
+.projectStageBadge {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  z-index: 2;
+}
+.projectStageBadge[data-stage="completed"] {
+  background: rgba(26, 122, 66, 0.9);
+  color: #fff;
+}
+.projectStageBadge[data-stage="construction"] {
+  background: rgba(176, 122, 26, 0.9);
+  color: #fff;
+}
+.projectStageBadge[data-stage="concept"] {
+  background: rgba(100, 100, 100, 0.85);
+  color: #fff;
+}
+
+/* Expanded card */
+.projectCardExpanded {
+  grid-column: 1 / -1;
+}
+.projectCardExpanded .projectImage {
+  aspect-ratio: 21/9;
+}
+.projectExpanded {
+  padding: var(--space-5) var(--space-5) var(--space-6);
+  border-top: 1px solid var(--border-subtle);
+}
+.projectDescription {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-5);
+  max-width: 700px;
+}
+.stageTabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 1px;
+}
+.stageTab {
+  padding: var(--space-3) var(--space-5);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+.stageTab:hover { color: var(--text-primary); }
+.stageTabActive {
+  color: var(--accent-red);
+  border-bottom-color: var(--accent-red);
+}
+.stageGallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-3);
+}
+.stageImageWrap {
+  position: relative;
+  aspect-ratio: 4/3;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+}
+
 @media (max-width: 1024px) { .projectsGrid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 640px) { .projectsGrid { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+  .projectsGrid { grid-template-columns: 1fr; }
+  .stageGallery { grid-template-columns: repeat(2, 1fr); }
+}
