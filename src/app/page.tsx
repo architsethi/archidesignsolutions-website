@@ -528,6 +528,7 @@ export default function HomePage() {
 
       {/* ═══════ TESTIMONIALS — infinite scrolling cards ═══════ */}
       <section className={styles.testimonials}>
+        <InteractiveGrid className={styles.testimonialsCanvas} />
         <div className="container">
           <ScrollReveal>
             <div className={styles.sectionHeader}>

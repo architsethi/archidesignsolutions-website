@@ -502,9 +502,16 @@
    TESTIMONIALS — infinite scrolling cards
    ═══════════════════════════════════════ */
 .testimonials {
+  position: relative;
   padding: var(--space-14) 0 var(--space-10);
   background: var(--neutral-50);
   overflow: hidden;
+}
+.testimonialsCanvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .testimonialMarquee {
