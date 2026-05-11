@@ -69,50 +69,128 @@
   margin-top: 2px;
 }
 
-/* ── Image Strip ── */
-.imageStrip { padding: var(--space-8) 0; }
-.imageStripInner {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+/* ── Image Strip (Infinite Marquee) ── */
+.imageStrip {
+  padding: var(--space-6) 0;
+  overflow: hidden;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+}
+.imageStripTrack {
+  display: flex;
   gap: var(--space-4);
-  padding: 0 var(--margin-desktop);
+  width: max-content;
+  animation: stripScroll 35s linear infinite;
+}
+.imageStripTrack:hover {
+  animation-play-state: paused;
+}
+@keyframes stripScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 .stripImage {
   position: relative;
-  aspect-ratio: 16/9;
-  border-radius: var(--radius-lg);
+  width: 220px;
+  aspect-ratio: 3/2;
+  border-radius: var(--radius-md);
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* ── Philosophy ── */
 .philosophy {
-  padding: var(--space-14) 0;
-  background: var(--neutral-50);
-}
-.philosophyInner { display: flex; flex-direction: column; gap: var(--space-8); }
-.philosophyLabel { display: flex; flex-direction: column; gap: var(--space-4); }
-.philosophyLine {
-  width: 2px;
-  height: 80px;
-  background: var(--accent-red);
-  border-radius: var(--radius-full);
-}
-.philosophyContent {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-10);
-  align-items: start;
-}
-.philosophyText { display: flex; flex-direction: column; gap: var(--space-6); }
-.philosophyText p { font-size: 18px; line-height: 1.8; color: var(--text-secondary); }
-.philosophyImage {
   position: relative;
-  width: 100%;
-  aspect-ratio: 4/5;
-  border-radius: var(--radius-lg);
+  padding: var(--space-12) 0;
+  background: var(--neutral-50);
   overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  min-height: 360px;
+}
+.philosophyCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+.philosophyGrid {
+  position: relative;
+  z-index: 1;
+}
+.philosophyLeft {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 520px;
+}
+.philosophyQuote {
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  border-left: 3px solid var(--accent-red);
+  padding-left: var(--space-5);
+  margin: 0;
+  font-style: italic;
+}
+.pillarTabs {
+  display: flex;
+  gap: var(--space-3);
+}
+.pillarTab {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+  background: var(--white);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+.pillarTab:hover {
+  border-color: rgba(200, 50, 43, 0.3);
+}
+.pillarTabActive {
+  background: var(--black);
+  border-color: var(--black);
+  color: var(--white);
+}
+.pillarTabActive .pillarNum {
+  color: var(--accent-red);
+}
+.pillarNum {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--accent-red);
+}
+.pillarTitle {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.pillarDesc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  transition: opacity 0.3s ease;
 }
 
 /* ── Team ── */
@@ -219,68 +297,121 @@
 
 /* ── Ventures ── */
 .ventures { padding: var(--space-14) 0; background: var(--white); }
-.venturesGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-6); }
+.venturesList { display: flex; flex-direction: column; gap: var(--space-10); }
 .ventureCard {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-8);
+  align-items: center;
+  padding: var(--space-8);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  overflow: hidden;
-  text-decoration: none;
   background: var(--white);
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
 }
 .ventureCard:hover {
-  border-color: rgba(200, 50, 43, 0.2);
-  box-shadow:
-    0 12px 40px rgba(200, 50, 43, 0.08),
-    0 0 0 1px rgba(200, 50, 43, 0.1);
-  transform: translateY(-4px);
+  border-color: rgba(200, 50, 43, 0.15);
+  box-shadow: 0 16px 48px rgba(200, 50, 43, 0.06);
 }
-.ventureImage {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16/9;
-}
-.ventureBody {
+.ventureReverse { direction: rtl; }
+.ventureReverse > * { direction: ltr; }
+.ventureContent {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-7);
-  flex: 1;
+  gap: var(--space-4);
+}
+.ventureBrandRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.ventureBrandIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: var(--black);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
+  flex-shrink: 0;
 }
 .ventureName {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--text-primary);
+  line-height: 1.2;
 }
-.ventureDesc {
-  font-size: 15px;
-  line-height: 1.6;
+.ventureTagline {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+.ventureTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.ventureTag {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  background: var(--neutral-50);
+  border: 1px solid var(--border-subtle);
+  font-size: 12px;
+  font-weight: 600;
   color: var(--text-secondary);
-  flex: 1;
+  letter-spacing: 0.02em;
+}
+.ventureFollowers {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+.ventureFollowerValue {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+.ventureFollowerLabel {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  font-weight: 500;
 }
 .ventureLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--accent-red);
-  margin-top: auto;
+  text-decoration: none;
+  transition: opacity 0.25s ease;
+}
+.ventureLink:hover { opacity: 0.7; }
+.ventureScreenshot {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/10;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 /* ── Responsive ── */
 @media (max-width: 1024px) {
-  .heroGrid { grid-template-columns: 1fr; }
-  .philosophyContent { grid-template-columns: 1fr; }
+  .pillarTabs { flex-wrap: wrap; }
   .teamGrid { grid-template-columns: 1fr; }
   .affiliationsGrid { grid-template-columns: repeat(3, 1fr); }
-  .imageStripInner { padding: 0 var(--space-5); }
+  .ventureCard { grid-template-columns: 1fr; }
+  .ventureReverse { direction: ltr; }
 }
 @media (max-width: 640px) {
-  .heroStats { grid-template-columns: 1fr; }
   .affiliationsGrid { grid-template-columns: repeat(2, 1fr); }
-  .venturesGrid { grid-template-columns: 1fr; }
-  .imageStripInner { grid-template-columns: 1fr; }
 }

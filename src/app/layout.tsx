@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import CustomCursor from "@/components/CustomCursor";
+import ShellWrapper from "@/components/ShellWrapper";
 
 const hankenGrotesk = Hanken_Grotesk({
   subsets: ["latin"],
@@ -26,6 +24,10 @@ export const metadata: Metadata = {
     "India",
     "ArchiDesignSolutions",
   ],
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
   openGraph: {
     title: "ArchiDesignSolutions | Architectural & Interior Design Solutions",
     description:
@@ -43,10 +45,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={hankenGrotesk.variable}>
       <body style={{ fontFamily: "var(--font-hanken), var(--font-primary)" }}>
-        <CustomCursor />
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <ShellWrapper>{children}</ShellWrapper>
       </body>
     </html>
   );

@@ -358,7 +358,14 @@ export default function HomePage() {
               key={i}
               className={styles.fanCard}
               style={getCardStyle(i)}
-              onClick={() => { goToSlide(i); startAutoplay(); }}
+              onClick={() => {
+                if (i === carouselIdx) {
+                  setLightbox(img);
+                } else {
+                  goToSlide(i);
+                  startAutoplay();
+                }
+              }}
             >
               <Image
                 src={img.src}
@@ -379,7 +386,11 @@ export default function HomePage() {
 
       {/* ═══════ LIGHTBOX ═══════ */}
       <AnimatePresence>
-        {lightbox && (
+        {lightbox && (() => {
+          const currentIdx = galleryImages.findIndex(g => g.src === lightbox.src);
+          const prevIdx = (currentIdx - 1 + galleryImages.length) % galleryImages.length;
+          const nextIdx = (currentIdx + 1) % galleryImages.length;
+          return (
           <motion.div
             className={styles.lightbox}
             initial={{ opacity: 0 }}
@@ -388,7 +399,19 @@ export default function HomePage() {
             transition={{ duration: 0.3 }}
             onClick={() => setLightbox(null)}
           >
+            {/* Prev Arrow */}
+            <button
+              className={`${styles.lightboxNav} ${styles.lightboxPrev}`}
+              onClick={(e) => { e.stopPropagation(); setLightbox(galleryImages[prevIdx]); }}
+              aria-label="Previous image"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+
             <motion.div
+              key={lightbox.src}
               className={styles.lightboxInner}
               initial={{ scale: 0.85, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -405,6 +428,18 @@ export default function HomePage() {
               />
               <span className={styles.lightboxLabel}>{lightbox.label}</span>
             </motion.div>
+
+            {/* Next Arrow */}
+            <button
+              className={`${styles.lightboxNav} ${styles.lightboxNext}`}
+              onClick={(e) => { e.stopPropagation(); setLightbox(galleryImages[nextIdx]); }}
+              aria-label="Next image"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
+
             <button
               className={styles.lightboxClose}
               onClick={() => setLightbox(null)}
@@ -415,7 +450,8 @@ export default function HomePage() {
               </svg>
             </button>
           </motion.div>
-        )}
+          );
+        })()}
       </AnimatePresence>
 
       {/* ═══════ STATS ═══════ */}
@@ -494,7 +530,7 @@ export default function HomePage() {
               {/* Founder portrait */}
               <div className={styles.founderPortrait}>
                 <Image
-                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80"
+                  src="/images/team/amit-sethi.png"
                   alt="Ar. Amit Sethi, Founder"
                   width={400}
                   height={500}
