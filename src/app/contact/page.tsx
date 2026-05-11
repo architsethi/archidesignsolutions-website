@@ -112,14 +112,17 @@ export default function ContactPage() {
             {/* Contact Info + Map */}
             <ScrollReveal delay={0.2}>
               <div className={styles.infoColumn}>
-                {/* Office image */}
-                <div className={styles.officeImage}>
-                  <Image
-                    src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=85"
-                    alt="ArchiDesignSolutions workspace"
-                    fill
-                    style={{ objectFit: "cover" }}
-                    sizes="(max-width: 1024px) 100vw, 40vw"
+                {/* Google Maps */}
+                <div className={styles.mapWrap}>
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3680.2!2d75.8575!3d22.7196!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sPrakrati+Corporate%2C+Y.N.+Road%2C+Indore!5e0!3m2!1sen!2sin!4v1"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="ArchiDesignSolutions Office Location"
                   />
                 </div>
 
@@ -132,6 +135,14 @@ export default function ContactPage() {
                       Indore — 452001<br />
                       Madhya Pradesh, India
                     </p>
+                    <a
+                      href="https://www.google.com/maps/search/Prakrati+Corporate+Y.N.+Road+Indore"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.directionsLink}
+                    >
+                      Get Directions →
+                    </a>
                   </div>
 
                   <div className={styles.infoBlock}>
