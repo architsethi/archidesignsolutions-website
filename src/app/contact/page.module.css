@@ -7,6 +7,7 @@
   padding: var(--space-14) 0 var(--space-12);
   background: var(--neutral-50);
   overflow: hidden;
+  min-height: 460px;
 }
 .heroCanvas {
   position: absolute;
@@ -17,7 +18,12 @@
 .heroInner {
   position: relative;
   z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-10);
+  align-items: center;
 }
+.heroLeft { display: flex; flex-direction: column; }
 .heroLabel { color: var(--accent-red); display: block; margin-bottom: var(--space-4); }
 .heroTitle {
   font-size: clamp(36px, 5vw, 64px);
@@ -30,8 +36,108 @@
   font-size: 18px;
   line-height: 1.7;
   color: var(--text-secondary);
-  max-width: 480px;
+  max-width: 400px;
 }
+
+/* ── Floating Map Card ── */
+.mapCard {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-radius: var(--radius-xl, 20px);
+  overflow: visible;
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.14),
+    0 0 0 1px rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.mapCard:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.18),
+    0 0 0 1px rgba(200, 50, 43, 0.15);
+}
+.mapCard iframe {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-xl, 20px);
+  display: block;
+}
+
+/* Pin */
+.mapPinWrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: all;
+  z-index: 10;
+}
+.mapPin {
+  cursor: pointer;
+  filter: drop-shadow(0 4px 8px rgba(200, 50, 43, 0.5));
+  transition: transform 0.2s ease;
+  animation: pinBounce 2s ease-in-out infinite;
+}
+.mapPin:hover { transform: scale(1.2); }
+@keyframes pinBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.mapTooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(17, 17, 17, 0.92);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 6px 12px;
+  border-radius: 8px;
+  pointer-events: none;
+  animation: tooltipIn 0.15s ease;
+}
+.mapTooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(17, 17, 17, 0.92);
+}
+@keyframes tooltipIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+.mapClickLabel {
+  position: absolute;
+  bottom: var(--space-3);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(17, 17, 17, 0.75);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 6px 14px;
+  border-radius: 50px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 5;
+}
+.mapCard:hover .mapClickLabel { opacity: 1; }
 
 /* ═══ CONTENT ═══ */
 .content { padding: var(--space-12) 0 var(--space-14); }
@@ -95,6 +201,7 @@
   transition: all 0.25s ease;
   background: var(--neutral-50);
   outline: none;
+  font-family: inherit;
 }
 .fieldInput:focus {
   border-color: var(--accent-red);
@@ -136,15 +243,6 @@
   flex-direction: column;
   gap: var(--space-6);
 }
-.mapWrap {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16/10;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  border: 1px solid var(--border-subtle);
-}
 .directionsLink {
   display: inline-flex;
   align-items: center;
@@ -158,9 +256,7 @@
   margin-top: var(--space-2);
   transition: opacity 0.25s ease;
 }
-.directionsLink:hover {
-  opacity: 0.7;
-}
+.directionsLink:hover { opacity: 0.7; }
 .info {
   display: flex;
   flex-direction: column;
@@ -191,6 +287,8 @@
 
 /* ═══ Responsive ═══ */
 @media (max-width: 1024px) {
+  .heroInner { grid-template-columns: 1fr; }
+  .mapCard { max-width: 540px; }
   .grid { grid-template-columns: 1fr; }
   .formRow { grid-template-columns: 1fr; }
 }

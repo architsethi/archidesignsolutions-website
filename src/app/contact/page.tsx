@@ -1,34 +1,109 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
+import { useState, useRef } from "react";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
 import InteractiveGrid from "@/components/InteractiveGrid";
 
+const GOOGLE_MAPS_URL = "https://maps.app.goo.gl/gVBVwcbOZxvukkTr1";
+// Embed coords for Prakriti Corporate, Y.N. Road, Indore
+const MAP_EMBED = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3679.9!2d75.8570!3d22.7203!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fd0d3cb6e7c3%3A0x9b86897c8bee4a08!2sPrakriti%20Corporate!5e0!3m2!1sen!2sin!4v1715000000000";
+
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [pinHovered, setPinHovered] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const phoneRef = useRef<HTMLInputElement>(null);
+  const projectTypeRef = useRef<HTMLSelectElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    try {
+      await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: nameRef.current?.value,
+          email: emailRef.current?.value,
+          phone: phoneRef.current?.value,
+          projectType: projectTypeRef.current?.value,
+          message: messageRef.current?.value,
+        }),
+      });
+      setSubmitted(true);
+    } catch {
+      // Still show success to user
+      setSubmitted(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className={styles.page}>
-      {/* ── Hero ── */}
+      {/* ── Hero with floating map card ── */}
       <section className={styles.hero}>
         <InteractiveGrid className={styles.heroCanvas} />
         <div className={`container ${styles.heroInner}`}>
-          <span className={`label-mono ${styles.heroLabel}`}>Contact</span>
-          <h1 className={styles.heroTitle}>
-            Let&apos;s Build
-            <br />
-            <span className={styles.accent}>Together</span>
-          </h1>
-          <p className={styles.heroDesc}>
-            Tell us about your project and we&apos;ll get back to you within 24 hours.
-          </p>
+          {/* Left: text */}
+          <div className={styles.heroLeft}>
+            <span className={`label-mono ${styles.heroLabel}`}>Contact</span>
+            <h1 className={styles.heroTitle}>
+              Let&apos;s Build
+              <br />
+              <span className={styles.accent}>Together</span>
+            </h1>
+            <p className={styles.heroDesc}>
+              Tell us about your project and we&apos;ll get back to you within 24 hours.
+            </p>
+          </div>
+
+          {/* Right: floating map card */}
+          <a
+            href={GOOGLE_MAPS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.mapCard}
+            aria-label="Open ArchiDesignSolutions location in Google Maps"
+          >
+            <iframe
+              src={MAP_EMBED}
+              width="100%"
+              height="100%"
+              style={{ border: 0, pointerEvents: "none" }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="ArchiDesignSolutions Office Location"
+            />
+            {/* Pin overlay */}
+            <div className={styles.mapPinWrap}>
+              <div
+                className={styles.mapPin}
+                onMouseEnter={() => setPinHovered(true)}
+                onMouseLeave={() => setPinHovered(false)}
+              >
+                <svg width="28" height="36" viewBox="0 0 28 36" fill="none">
+                  <path d="M14 0C6.27 0 0 6.27 0 14c0 10.5 14 22 14 22s14-11.5 14-22C28 6.27 21.73 0 14 0z" fill="#c8322b"/>
+                  <circle cx="14" cy="14" r="5" fill="white"/>
+                </svg>
+              </div>
+              {/* Tooltip on hover */}
+              {pinHovered && (
+                <div className={styles.mapTooltip}>
+                  ArchiDesignSolutions Head Office
+                </div>
+              )}
+            </div>
+            {/* Click overlay label */}
+            <div className={styles.mapClickLabel}>
+              <span>Open in Maps ↗</span>
+            </div>
+          </a>
         </div>
       </section>
 
@@ -56,6 +131,7 @@ export default function ContactPage() {
                       <div className={styles.field}>
                         <label className={styles.fieldLabel}>Name</label>
                         <input
+                          ref={nameRef}
                           type="text"
                           required
                           className={styles.fieldInput}
@@ -65,6 +141,7 @@ export default function ContactPage() {
                       <div className={styles.field}>
                         <label className={styles.fieldLabel}>Email</label>
                         <input
+                          ref={emailRef}
                           type="email"
                           required
                           className={styles.fieldInput}
@@ -76,6 +153,7 @@ export default function ContactPage() {
                       <div className={styles.field}>
                         <label className={styles.fieldLabel}>Phone</label>
                         <input
+                          ref={phoneRef}
                           type="tel"
                           className={styles.fieldInput}
                           placeholder="+91 XXXXX XXXXX"
@@ -83,7 +161,7 @@ export default function ContactPage() {
                       </div>
                       <div className={styles.field}>
                         <label className={styles.fieldLabel}>Project Type</label>
-                        <select className={styles.fieldInput} defaultValue="">
+                        <select ref={projectTypeRef} className={styles.fieldInput} defaultValue="">
                           <option value="" disabled>Select type</option>
                           <option>Residential</option>
                           <option>Commercial</option>
@@ -97,37 +175,29 @@ export default function ContactPage() {
                     <div className={styles.field}>
                       <label className={styles.fieldLabel}>Message</label>
                       <textarea
+                        ref={messageRef}
                         required
                         className={styles.fieldTextarea}
                         rows={5}
                         placeholder="Tell us about your vision..."
                       />
                     </div>
-                    <button type="submit" className="btn btn-solid" style={{ width: "100%", justifyContent: "center" }}>
-                      Send Message →
+                    <button
+                      type="submit"
+                      className="btn btn-solid"
+                      style={{ width: "100%", justifyContent: "center" }}
+                      disabled={loading}
+                    >
+                      {loading ? "Sending..." : "Send Message →"}
                     </button>
                   </form>
                 )}
               </div>
             </ScrollReveal>
 
-            {/* Contact Info + Map */}
+            {/* Contact Info */}
             <ScrollReveal delay={0.2}>
               <div className={styles.infoColumn}>
-                {/* Google Maps */}
-                <div className={styles.mapWrap}>
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3680.2!2d75.8575!3d22.7196!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sPrakrati+Corporate%2C+Y.N.+Road%2C+Indore!5e0!3m2!1sen!2sin!4v1"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="ArchiDesignSolutions Office Location"
-                  />
-                </div>
-
                 <div className={styles.info}>
                   <div className={styles.infoBlock}>
                     <span className={`label-mono ${styles.infoLabel}`}>Visit Us</span>
@@ -138,7 +208,7 @@ export default function ContactPage() {
                       Madhya Pradesh, India
                     </p>
                     <a
-                      href="https://www.google.com/maps/search/Prakrati+Corporate+Y.N.+Road+Indore"
+                      href={GOOGLE_MAPS_URL}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={styles.directionsLink}
@@ -149,21 +219,18 @@ export default function ContactPage() {
 
                   <div className={styles.infoBlock}>
                     <span className={`label-mono ${styles.infoLabel}`}>Email</span>
-                    <a href="mailto:solutions.archit@gmail.com" className={styles.infoLink}>
-                      solutions.archit@gmail.com
-                    </a>
-                    <a href="mailto:solutions.prakriti@gmail.com" className={styles.infoLink}>
-                      solutions.prakriti@gmail.com
+                    <a href="mailto:archidesignsolutions@gmail.com" className={styles.infoLink}>
+                      archidesignsolutions@gmail.com
                     </a>
                   </div>
 
                   <div className={styles.infoBlock}>
                     <span className={`label-mono ${styles.infoLabel}`}>Phone</span>
-                    <a href="tel:+919179797359" className={styles.infoLink}>
-                      +91 91797 97359
+                    <a href="tel:+917314045559" className={styles.infoLink}>
+                      +91-731-4045559
                     </a>
-                    <a href="tel:+919826290327" className={styles.infoLink}>
-                      +91 9826290327
+                    <a href="tel:+919302101559" className={styles.infoLink}>
+                      +91-9302101559
                     </a>
                   </div>
 
@@ -172,7 +239,7 @@ export default function ContactPage() {
                     <a href="https://www.instagram.com/archidesignsolutions/" target="_blank" rel="noopener noreferrer" className={styles.infoLink}>
                       Instagram →
                     </a>
-                    <a href="https://wa.me/919179797359" target="_blank" rel="noopener noreferrer" className={styles.infoLink}>
+                    <a href="https://wa.me/917314045559" target="_blank" rel="noopener noreferrer" className={styles.infoLink}>
                       WhatsApp →
                     </a>
                   </div>

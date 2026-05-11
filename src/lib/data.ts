@@ -76,12 +76,40 @@ export interface BlogPost {
   updatedAt: string;
 }
 
+export interface Testimonial {
+  id: string;
+  quote: string;
+  author: string;
+  project: string;
+  image: string; // thumbnail — empty string = show default avatar
+}
+
+export interface ServiceImage {
+  title: string;
+  img: string;
+}
+
+export interface ContactSubmission {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  projectType: string;
+  message: string;
+  submittedAt: string;
+  read: boolean;
+}
+
 export interface SiteData {
   gallery: GalleryImage[];
   team: TeamMember[];
   contact: ContactInfo;
   projects: Project[];
   blogs: BlogPost[];
+  testimonials: Testimonial[];
+  homeServiceImages: ServiceImage[];
+  servicesPageImages: ServiceImage[];
+  contactSubmissions: ContactSubmission[];
 }
 
 export const defaultSiteData: SiteData = {
@@ -205,6 +233,35 @@ export const defaultSiteData: SiteData = {
       updatedAt: "2025-11-20T10:00:00Z",
     },
   ],
+  testimonials: [
+    { id: "t1", quote: "Working with ArchiDesignSolutions transformed our vision. Their attention to detail and commitment to timeless design is unmatched.", author: "Rajesh Malhotra", project: "Private Residence, Indore", image: "" },
+    { id: "t2", quote: "From concept to completion, the team delivered beyond all expectations. Our office complex has become a Bhopal landmark.", author: "Priya Sharma", project: "Office Complex, Bhopal", image: "" },
+    { id: "t3", quote: "Our home is a seamless blend of modern aesthetics and Indian sensibility — warm, beautiful, entirely ours.", author: "Vikram & Anita Joshi", project: "Luxury Villa, Indore", image: "" },
+    { id: "t4", quote: "Their green building expertise helped us achieve LEED certification while keeping costs in check. Exceptional professionals.", author: "Dr. Sunil Kapoor", project: "Green Campus Project", image: "" },
+    { id: "t5", quote: "The master planning they delivered for our township project was visionary — infrastructure, community spaces, everything considered.", author: "Aditya Mehta", project: "Township, Bhopal", image: "" },
+    { id: "t6", quote: "Incredible interior work. Every room tells a story. The material palette they chose is both luxurious and understated.", author: "Kavita Deshmukh", project: "Boutique Hotel, Ujjain", image: "" },
+  ],
+  homeServiceImages: [
+    { title: "Architectural Design", img: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600&q=80" },
+    { title: "Interior Design", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80" },
+    { title: "Urban Planning", img: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80" },
+    { title: "Green Building", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" },
+    { title: "Landscape Design", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80" },
+    { title: "MEP Engineering", img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80" },
+    { title: "Town Planning", img: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=600&q=80" },
+    { title: "Heritage Conservation", img: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=600&q=80" },
+  ],
+  servicesPageImages: [
+    { title: "Architectural Design", img: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80" },
+    { title: "Interior Design", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80" },
+    { title: "Urban Planning", img: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80" },
+    { title: "Green Building", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80" },
+    { title: "Landscape Design", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80" },
+    { title: "MEP Engineering", img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80" },
+    { title: "Town Planning", img: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=800&q=80" },
+    { title: "Heritage Conservation", img: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=800&q=80" },
+  ],
+  contactSubmissions: [],
 };
 
 /* ═══ CRUD operations ═══ */

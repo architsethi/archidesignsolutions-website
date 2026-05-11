@@ -137,41 +137,18 @@ const stats = [
 
 /* ═══ Testimonials ═══ */
 const testimonials = [
-  {
-    quote: "Working with ArchiDesignSolutions transformed our vision. Their attention to detail and commitment to timeless design is unmatched.",
-    author: "Rajesh Malhotra",
-    project: "Private Residence, Indore",
-  },
-  {
-    quote: "From concept to completion, the team delivered beyond all expectations. Our office complex has become a Bhopal landmark.",
-    author: "Priya Sharma",
-    project: "Office Complex, Bhopal",
-  },
-  {
-    quote: "Our home is a seamless blend of modern aesthetics and Indian sensibility — warm, beautiful, entirely ours.",
-    author: "Vikram & Anita Joshi",
-    project: "Luxury Villa, Indore",
-  },
-  {
-    quote: "Their green building expertise helped us achieve LEED certification while keeping costs in check. Exceptional professionals.",
-    author: "Dr. Sunil Kapoor",
-    project: "Green Campus Project",
-  },
-  {
-    quote: "The master planning they delivered for our township project was visionary — infrastructure, community spaces, everything considered.",
-    author: "Aditya Mehta",
-    project: "Township, Bhopal",
-  },
-  {
-    quote: "Incredible interior work. Every room tells a story. The material palette they chose is both luxurious and understated.",
-    author: "Kavita Deshmukh",
-    project: "Boutique Hotel, Ujjain",
-  },
+  { id: "t1", quote: "Working with ArchiDesignSolutions transformed our vision. Their attention to detail and commitment to timeless design is unmatched.", author: "Rajesh Malhotra", project: "Private Residence, Indore", image: "" },
+  { id: "t2", quote: "From concept to completion, the team delivered beyond all expectations. Our office complex has become a Bhopal landmark.", author: "Priya Sharma", project: "Office Complex, Bhopal", image: "" },
+  { id: "t3", quote: "Our home is a seamless blend of modern aesthetics and Indian sensibility — warm, beautiful, entirely ours.", author: "Vikram & Anita Joshi", project: "Luxury Villa, Indore", image: "" },
+  { id: "t4", quote: "Their green building expertise helped us achieve LEED certification while keeping costs in check. Exceptional professionals.", author: "Dr. Sunil Kapoor", project: "Green Campus Project", image: "" },
+  { id: "t5", quote: "The master planning they delivered for our township project was visionary — infrastructure, community spaces, everything considered.", author: "Aditya Mehta", project: "Township, Bhopal", image: "" },
+  { id: "t6", quote: "Incredible interior work. Every room tells a story. The material palette they chose is both luxurious and understated.", author: "Kavita Deshmukh", project: "Boutique Hotel, Ujjain", image: "" },
 ];
 
 /* ═══ Homepage ═══ */
 export default function HomePage() {
   const [lightbox, setLightbox] = useState<{ src: string; label: string } | null>(null);
+  const [liveTestimonials, setLiveTestimonials] = useState(testimonials);
 
   /* ── Typewriter state ── */
   const [phraseIdx, setPhraseIdx] = useState(0);
@@ -220,7 +197,15 @@ export default function HomePage() {
   };
 
   /* Double arrays for seamless infinite loops */
-  const testimonialItems = [...testimonials, ...testimonials];
+  const testimonialItems = [...liveTestimonials, ...liveTestimonials];
+
+  /* Fetch live testimonials from API */
+  useEffect(() => {
+    fetch("/api/admin/data")
+      .then((r) => r.json())
+      .then((d) => { if (d.testimonials?.length) setLiveTestimonials(d.testimonials); })
+      .catch(() => {});
+  }, []);
 
   /* ── Fan-stack carousel state ── */
   const [carouselIdx, setCarouselIdx] = useState(0);
@@ -588,10 +573,14 @@ export default function HomePage() {
                 </p>
                 <div className={styles.testimonialMeta}>
                   <div className={styles.testimonialAvatar}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                      <circle cx="12" cy="7" r="4" />
-                    </svg>
+                    {t.image ? (
+                      <Image src={t.image} alt={t.author} width={36} height={36} style={{ borderRadius: "50%", objectFit: "cover" }} />
+                    ) : (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                      </svg>
+                    )}
                   </div>
                   <div>
                     <span className={styles.testimonialAuthor}>{t.author}</span>
