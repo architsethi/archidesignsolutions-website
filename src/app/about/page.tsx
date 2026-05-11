@@ -60,46 +60,20 @@ const ventures = [
 export default function AboutPage() {
   return (
     <div className={styles.page}>
-      {/* ── Hero with Image ── */}
+      {/* ── Hero ── */}
       <section className={styles.hero}>
-        <InteractiveGrid className={styles.heroCanvas} />
         <div className="container">
-          <div className={styles.heroGrid}>
-            <div className={styles.heroLeft}>
-              <span className={`label-mono ${styles.label}`}>About Us</span>
-              <h1 className={styles.heroTitle}>
-                Three Generations.
-                <br />
-                One <span className={styles.accent}>Vision.</span>
-              </h1>
-              <p className={styles.heroDesc}>
-                Since 1999, ArchiDesignSolutions has been rendering comprehensive
-                architectural services — from residential and institutional
-                projects to corporate interiors and luxury hospitality.
-              </p>
-            </div>
-            <div className={styles.heroRight}>
-              <div className={styles.heroImageWrap}>
-                <Image
-                  src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=85"
-                  alt="ArchiDesignSolutions architectural facade"
-                  fill
-                  style={{ objectFit: "cover" }}
-                  sizes="(max-width: 1024px) 100vw, 45vw"
-                />
-              </div>
-              <div className={styles.heroStats}>
-                <div className={styles.heroStat}>
-                  <span className={styles.heroStatValue}>1999</span>
-                  <span className={styles.heroStatLabel}>Founded</span>
-                </div>
-                <div className={styles.heroStat}>
-                  <span className={styles.heroStatValue}>500+</span>
-                  <span className={styles.heroStatLabel}>Projects Delivered</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <span className={`label-mono ${styles.label}`}>About Us</span>
+          <h1 className={styles.heroTitle}>
+            Three Generations.
+            <br />
+            One <span className={styles.accent}>Vision.</span>
+          </h1>
+          <p className={styles.heroDesc}>
+            Since 1999, ArchiDesignSolutions has been rendering comprehensive
+            architectural services — from residential and institutional
+            projects to corporate interiors and luxury hospitality.
+          </p>
         </div>
       </section>
 

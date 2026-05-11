@@ -15,24 +15,18 @@ export default function ContactPage() {
 
   return (
     <div className={styles.page}>
-      {/* ── Hero with image ── */}
+      {/* ── Hero ── */}
       <section className={styles.hero}>
-        <Image
-          src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=85"
-          alt="ArchiDesignSolutions office"
-          fill
-          priority
-          style={{ objectFit: "cover" }}
-          sizes="100vw"
-        />
-        <div className={styles.heroOverlay} />
-        <div className={`container ${styles.heroContent}`}>
+        <div className="container">
           <span className={`label-mono ${styles.heroLabel}`}>Contact</span>
           <h1 className={styles.heroTitle}>
             Let&apos;s Build
             <br />
-            Together
+            <span className={styles.accent}>Together</span>
           </h1>
+          <p className={styles.heroDesc}>
+            Tell us about your project and we&apos;ll get back to you within 24 hours.
+          </p>
         </div>
       </section>
 
