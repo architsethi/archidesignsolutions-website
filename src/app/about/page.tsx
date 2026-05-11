@@ -82,10 +82,11 @@ export default function AboutPage() {
     <div className={styles.page}>
       {/* ── Hero ── */}
       <section className={styles.hero}>
-        <div className="container">
+        <InteractiveGrid className={styles.heroCanvas} />
+        <div className={`container ${styles.heroInner}`}>
           <span className={`label-mono ${styles.label}`}>About Us</span>
           <h1 className={styles.heroTitle}>
-            Three Generations.
+            Three Decades. Two Generations.
             <br />
             One <span className={styles.accent}>Vision.</span>
           </h1>

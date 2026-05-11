@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Suspense } from "react";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
+import InteractiveGrid from "@/components/InteractiveGrid";
 
 const categories = [
   "All",
@@ -52,7 +53,8 @@ function ProjectsContent() {
   return (
     <div className={styles.page}>
       <section className={styles.hero}>
-        <div className="container">
+        <InteractiveGrid className={styles.heroCanvas} />
+        <div className={`container ${styles.heroInner}`}>
           <span className={`label-mono ${styles.label}`}>Our Work</span>
           <h1 className={styles.heroTitle}>
             Projects That

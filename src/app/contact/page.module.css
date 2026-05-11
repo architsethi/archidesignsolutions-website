@@ -3,8 +3,20 @@
 
 /* ═══ HERO ═══ */
 .hero {
+  position: relative;
   padding: var(--space-14) 0 var(--space-12);
   background: var(--neutral-50);
+  overflow: hidden;
+}
+.heroCanvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.heroInner {
+  position: relative;
+  z-index: 1;
 }
 .heroLabel { color: var(--accent-red); display: block; margin-bottom: var(--space-4); }
 .heroTitle {

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
+import InteractiveGrid from "@/components/InteractiveGrid";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -17,7 +18,8 @@ export default function ContactPage() {
     <div className={styles.page}>
       {/* ── Hero ── */}
       <section className={styles.hero}>
-        <div className="container">
+        <InteractiveGrid className={styles.heroCanvas} />
+        <div className={`container ${styles.heroInner}`}>
           <span className={`label-mono ${styles.heroLabel}`}>Contact</span>
           <h1 className={styles.heroTitle}>
             Let&apos;s Build

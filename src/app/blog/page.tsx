@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
+import InteractiveGrid from "@/components/InteractiveGrid";
 
 export const metadata: Metadata = {
   title: "Blog | ArchiDesignSolutions",
@@ -42,7 +43,8 @@ export default function BlogPage() {
   return (
     <div className={styles.page}>
       <section className={styles.hero}>
-        <div className="container">
+        <InteractiveGrid className={styles.heroCanvas} />
+        <div className={`container ${styles.heroInner}`}>
           <span className={`label-mono ${styles.label}`}>Blog</span>
           <h1 className={styles.heroTitle}>
             Insights &
