@@ -25,8 +25,12 @@ export const metadata: Metadata = {
     "ArchiDesignSolutions",
   ],
   icons: {
-    icon: "/logo.png",
+    icon: [
+      { url: "/favicon.png", type: "image/png" },
+      { url: "/logo.png", type: "image/png" },
+    ],
     apple: "/logo.png",
+    shortcut: "/favicon.png",
   },
   openGraph: {
     title: "ArchiDesignSolutions | Architectural & Interior Design Solutions",

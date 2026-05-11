@@ -29,7 +29,7 @@ const emptyPost: Omit<BlogPost, "id"> = {
   content: "",
   image: "",
   category: "Architecture",
-  author: "Ar. Archit Sethi",
+  author: "",
   status: "draft",
   seoTitle: "",
   seoDescription: "",
@@ -39,7 +39,6 @@ const emptyPost: Omit<BlogPost, "id"> = {
 };
 
 const blogCategories = ["Architecture", "Sustainability", "Technology", "Interior Design", "Urban Planning", "Industry News"];
-const authors = ["Ar. Amit Sethi", "Ar. Prakriti Sethi", "Ar. Archit Sethi"];
 
 export default function BlogPage() {
   const { password } = useAdmin();
@@ -148,10 +147,8 @@ export default function BlogPage() {
               </select>
             </div>
             <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Author</label>
-              <select className={styles.formSelect} value={editing.author} onChange={(e) => setEditing({ ...editing, author: e.target.value })}>
-                {authors.map((a) => <option key={a}>{a}</option>)}
-              </select>
+              <label className={styles.formLabel}>Author (optional)</label>
+              <input className={styles.formInput} value={editing.author} onChange={(e) => setEditing({ ...editing, author: e.target.value })} placeholder="Author name (leave blank for no author)" />
             </div>
           </div>
           <div className={styles.formGroup}>

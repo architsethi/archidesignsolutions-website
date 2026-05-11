@@ -266,28 +266,41 @@ export const defaultSiteData: SiteData = {
 
 /* ═══ CRUD operations ═══ */
 
+const getToken = () => process.env.BLOB_READ_WRITE_TOKEN || "";
+
 export async function getSiteData(): Promise<SiteData> {
   try {
-    const { blobs } = await list({ prefix: DATA_KEY });
+    const token = getToken();
+    if (!token) return defaultSiteData;
+
+    const { blobs } = await list({ prefix: DATA_KEY, token });
     if (blobs.length === 0) {
-      // Seed with default data
-      await saveSiteData(defaultSiteData);
+      // No data stored yet — return defaults but DO NOT auto-save
+      // (the first explicit save from admin panel will persist data)
       return defaultSiteData;
     }
     const response = await fetch(blobs[0].url, { cache: "no-store" });
     const data = await response.json();
-    return data as SiteData;
-  } catch {
+    // Merge with defaults so new fields added in code are available
+    return {
+      ...defaultSiteData,
+      ...data,
+      contact: { ...defaultSiteData.contact, ...(data.contact || {}) },
+    } as SiteData;
+  } catch (err) {
+    console.error("getSiteData error:", err);
+    // If blob store is unreachable, return defaults without saving
     return defaultSiteData;
   }
 }
 
 export async function saveSiteData(data: SiteData): Promise<void> {
+  const token = getToken();
   // Delete existing blob first
   try {
-    const { blobs } = await list({ prefix: DATA_KEY });
+    const { blobs } = await list({ prefix: DATA_KEY, token });
     for (const blob of blobs) {
-      await del(blob.url);
+      await del(blob.url, { token });
     }
   } catch {
     // ignore
@@ -295,6 +308,7 @@ export async function saveSiteData(data: SiteData): Promise<void> {
   await put(DATA_KEY, JSON.stringify(data, null, 2), {
     access: "public",
     contentType: "application/json",
+    token,
   });
 }
 
@@ -302,17 +316,21 @@ export async function uploadImage(
   file: File,
   folder: string
 ): Promise<string> {
+  const token = getToken();
   const filename = `${folder}/${Date.now()}-${file.name}`;
   const blob = await put(filename, file, {
     access: "public",
+    token,
   });
   return blob.url;
 }
 
 export async function deleteImage(url: string): Promise<void> {
   try {
-    await del(url);
+    const token = getToken();
+    await del(url, { token });
   } catch {
     // ignore
   }
 }
+
