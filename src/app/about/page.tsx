@@ -35,11 +35,31 @@ const team = [
 ];
 
 const affiliations = [
-  { abbr: "COA", name: "Council of Architecture, New Delhi" },
-  { abbr: "IIA", name: "Indian Institute of Architects" },
-  { abbr: "ITPI", name: "Institute of Town Planners India" },
-  { abbr: "IGBC", name: "Indian Green Building Council" },
-  { abbr: "TNCP", name: "Town & Country Planning, Indore" },
+  {
+    abbr: "COA",
+    name: "Council of Architecture, New Delhi",
+    logo: "https://upload.wikimedia.org/wikipedia/en/5/5a/Council_of_Architecture_Logo.jpg",
+  },
+  {
+    abbr: "IIA",
+    name: "Indian Institute of Architects",
+    logo: "https://upload.wikimedia.org/wikipedia/en/3/30/Indian_Institute_of_Architects_logo.jpg",
+  },
+  {
+    abbr: "ITPI",
+    name: "Institute of Town Planners India",
+    logo: "https://www.itpi.org.in/images/main-logo.png",
+  },
+  {
+    abbr: "IGBC",
+    name: "Indian Green Building Council",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/7/70/Indian_Green_Building_Council_Logo.png",
+  },
+  {
+    abbr: "TNCP",
+    name: "Town & Country Planning, Indore",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/a/ae/Emblem_of_Madhya_Pradesh.svg",
+  },
 ];
 
 const ventures = [
@@ -201,6 +221,15 @@ export default function AboutPage() {
             <div className={styles.affiliationsGrid}>
               {affiliations.map((a) => (
                 <div key={a.abbr} className={styles.affiliationCard}>
+                  <div className={styles.affiliationLogoWrap}>
+                    <Image
+                      src={a.logo}
+                      alt={`${a.abbr} Logo`}
+                      fill
+                      unoptimized
+                      style={{ objectFit: "contain" }}
+                    />
+                  </div>
                   <span className={styles.affiliationAbbr}>{a.abbr}</span>
                   <span className={styles.affiliationName}>{a.name}</span>
                 </div>
