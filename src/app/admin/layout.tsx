@@ -19,15 +19,15 @@ export function useAdmin() {
 }
 
 const navItems = [
-  { href: "/admin", label: "Dashboard", icon: "◆" },
-  { href: "/admin/gallery", label: "Gallery", icon: "◫" },
-  { href: "/admin/team", label: "Team", icon: "◉" },
-  { href: "/admin/services", label: "Services", icon: "◈" },
-  { href: "/admin/contact", label: "Contact Info", icon: "✉" },
-  { href: "/admin/inbox", label: "Inbox", icon: "⊠" },
-  { href: "/admin/testimonials", label: "Testimonials", icon: "❝" },
+  { href: "/admin", label: "Overview", icon: "◆" },
+  { href: "/admin/inbox", label: "Messages", icon: "⊠" },
   { href: "/admin/projects", label: "Projects", icon: "▦" },
   { href: "/admin/blog", label: "Blog", icon: "✎" },
+  { href: "/admin/contact", label: "Contact Info", icon: "✉" },
+  { href: "/admin/gallery", label: "Gallery", icon: "◫" },
+  { href: "/admin/services", label: "Services", icon: "◈" },
+  { href: "/admin/team", label: "Team", icon: "◉" },
+  { href: "/admin/testimonials", label: "Testimonials", icon: "❝" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

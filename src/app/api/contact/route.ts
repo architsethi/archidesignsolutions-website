@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSiteData, saveSiteData } from "@/lib/data";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -29,7 +31,9 @@ export async function POST(req: NextRequest) {
 
     await saveSiteData(updated);
     return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ error: "Failed to save submission" }, { status: 500 });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : "Unknown error";
+    console.error("Failed to save submission:", errorMsg);
+    return NextResponse.json({ error: "Failed to save submission: " + errorMsg }, { status: 500 });
   }
 }

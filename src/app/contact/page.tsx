@@ -79,7 +79,7 @@ export default function ContactPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      await fetch("/api/contact", {
+      const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -90,10 +90,12 @@ export default function ContactPage() {
           message: messageRef.current?.value,
         }),
       });
+      if (!res.ok) {
+        throw new Error("Failed to send message");
+      }
       setSubmitted(true);
-    } catch {
-      // Still show success to user
-      setSubmitted(true);
+    } catch (error) {
+      alert("There was an error sending your message. Please try again or contact us directly.");
     } finally {
       setLoading(false);
     }
