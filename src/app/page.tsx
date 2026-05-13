@@ -8,8 +8,8 @@ import ScrollReveal from "@/components/ScrollReveal";
 import InteractiveGrid from "@/components/InteractiveGrid";
 import { motion, AnimatePresence } from "framer-motion";
 
-/* ═══ Marquee Gallery Images ═══ */
-const galleryImages = [
+/* ═══ Default Marquee Gallery Images (fallback) ═══ */
+const defaultGalleryImages = [
   {
     src: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80",
     label: "Residential High-Rise",
@@ -67,8 +67,8 @@ const taglines: Segment[][] = [
   ],
 ];
 
-/* ═══ Services Data ═══ */
-const services = [
+/* ═══ Default Services Data (fallback) ═══ */
+const defaultServices = [
   {
     num: "01",
     title: "Architectural Design",
@@ -135,8 +135,8 @@ const stats = [
   { value: "3", label: "Generations of Architects" },
 ];
 
-/* ═══ Testimonials ═══ */
-const testimonials = [
+/* ═══ Default Testimonials (fallback) ═══ */
+const defaultTestimonials = [
   { id: "t1", quote: "Working with ArchiDesignSolutions transformed our vision. Their attention to detail and commitment to timeless design is unmatched.", author: "Rajesh Malhotra", project: "Private Residence, Indore", image: "" },
   { id: "t2", quote: "From concept to completion, the team delivered beyond all expectations. Our office complex has become a Bhopal landmark.", author: "Priya Sharma", project: "Office Complex, Bhopal", image: "" },
   { id: "t3", quote: "Our home is a seamless blend of modern aesthetics and Indian sensibility — warm, beautiful, entirely ours.", author: "Vikram & Anita Joshi", project: "Luxury Villa, Indore", image: "" },
@@ -148,7 +148,9 @@ const testimonials = [
 /* ═══ Homepage ═══ */
 export default function HomePage() {
   const [lightbox, setLightbox] = useState<{ src: string; label: string } | null>(null);
-  const [liveTestimonials, setLiveTestimonials] = useState(testimonials);
+  const [liveTestimonials, setLiveTestimonials] = useState(defaultTestimonials);
+  const [galleryImages, setGalleryImages] = useState(defaultGalleryImages);
+  const [services, setServices] = useState(defaultServices);
 
   /* ── Typewriter state ── */
   const [phraseIdx, setPhraseIdx] = useState(0);
@@ -199,11 +201,28 @@ export default function HomePage() {
   /* Double arrays for seamless infinite loops */
   const testimonialItems = [...liveTestimonials, ...liveTestimonials];
 
-  /* Fetch live testimonials from API */
+  /* Fetch ALL live data from persistent API */
   useEffect(() => {
     fetch("/api/admin/data")
       .then((r) => r.json())
-      .then((d) => { if (d.testimonials?.length) setLiveTestimonials(d.testimonials); })
+      .then((d) => {
+        // Gallery images
+        if (d.gallery?.length) {
+          setGalleryImages(d.gallery);
+        }
+        // Service images — merge admin-managed images with default card metadata
+        if (d.homeServiceImages?.length) {
+          setServices(prev =>
+            prev.map((svc, i) => ({
+              ...svc,
+              img: d.homeServiceImages[i]?.img || svc.img,
+              title: d.homeServiceImages[i]?.title || svc.title,
+            }))
+          );
+        }
+        // Testimonials
+        if (d.testimonials?.length) setLiveTestimonials(d.testimonials);
+      })
       .catch(() => {});
   }, []);
 

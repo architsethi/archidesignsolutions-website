@@ -21,6 +21,7 @@ export interface ContactInfo {
   emails: string[];
   address: string;
   mapUrl: string;
+  mapEmbedUrl?: string;
 }
 
 export type ProjectStage = "concept" | "construction" | "completed";

@@ -9,11 +9,12 @@ interface ContactInfo {
   emails: string[];
   address: string;
   mapUrl: string;
+  mapEmbedUrl?: string;
 }
 
 export default function ContactPage() {
   const { password } = useAdmin();
-  const [contact, setContact] = useState<ContactInfo>({ phones: [], emails: [], address: "", mapUrl: "" });
+  const [contact, setContact] = useState<ContactInfo>({ phones: [], emails: [], address: "", mapUrl: "", mapEmbedUrl: "" });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState("");
@@ -23,7 +24,7 @@ export default function ContactPage() {
   useEffect(() => {
     fetch("/api/admin/data", { headers: { "x-admin-password": password } })
       .then((r) => r.json())
-      .then((d) => { setContact(d.contact || { phones: [], emails: [], address: "", mapUrl: "" }); setLoading(false); })
+      .then((d) => { setContact(d.contact || { phones: [], emails: [], address: "", mapUrl: "", mapEmbedUrl: "" }); setLoading(false); })
       .catch(() => setLoading(false));
   }, [password]);
 
@@ -62,7 +63,7 @@ export default function ContactPage() {
     <>
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>Contact Information</h1>
-        <p className={styles.pageSubtitle}>Update phone numbers, emails, and office address</p>
+        <p className={styles.pageSubtitle}>Update phone numbers, emails, office address, and map links. Changes reflect immediately on the live site.</p>
       </div>
 
       <div className={styles.card}>
@@ -98,12 +99,25 @@ export default function ContactPage() {
           />
         </div>
         <div className={styles.formGroup}>
-          <label className={styles.formLabel}>Google Maps URL</label>
+          <label className={styles.formLabel}>Google Maps Link (for &quot;Get Directions&quot; and pin click)</label>
           <input
             className={styles.formInput}
             value={contact.mapUrl}
             onChange={(e) => setContact({ ...contact, mapUrl: e.target.value })}
+            placeholder="https://maps.app.goo.gl/..."
           />
+        </div>
+        <div className={styles.formGroup}>
+          <label className={styles.formLabel}>Google Maps Embed URL (optional — for the map card on Contact page)</label>
+          <input
+            className={styles.formInput}
+            value={contact.mapEmbedUrl || ""}
+            onChange={(e) => setContact({ ...contact, mapEmbedUrl: e.target.value })}
+            placeholder="https://www.google.com/maps/embed?pb=..."
+          />
+          <p style={{ fontSize: 12, color: "#888", marginTop: 4 }}>
+            Go to Google Maps → Share → Embed a map → Copy the src URL from the iframe code.
+          </p>
         </div>
       </div>
 

@@ -8,7 +8,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import InteractiveGrid from "@/components/InteractiveGrid";
 import { motion, AnimatePresence } from "framer-motion";
 
-const services = [
+const defaultServices = [
   {
     id: "architecture",
     num: "01",
@@ -109,6 +109,7 @@ const services = [
 
 export default function ServicesPage() {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [services, setServices] = useState(defaultServices);
   const gridRef = useRef<HTMLDivElement>(null);
 
   /* Auto-rotate */
@@ -117,6 +118,27 @@ export default function ServicesPage() {
       setActiveSlide((prev) => (prev + 1) % services.length);
     }, 5000);
     return () => clearInterval(timer);
+  }, [services.length]);
+
+  /* Fetch live service images from API */
+  useEffect(() => {
+    fetch("/api/admin/data")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.servicesPageImages?.length) {
+          setServices(prev =>
+            prev.map((svc, i) => ({
+              ...svc,
+              // Update image and heroImage to use the dynamic image from API.
+              // Also fallback to the title from the API if provided.
+              image: d.servicesPageImages[i]?.img || svc.image,
+              heroImage: d.servicesPageImages[i]?.img || svc.heroImage,
+              title: d.servicesPageImages[i]?.title || svc.title,
+            }))
+          );
+        }
+      })
+      .catch(() => {});
   }, []);
 
   const goToSlide = useCallback((index: number) => {

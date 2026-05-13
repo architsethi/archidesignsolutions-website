@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./Footer.module.css";
@@ -71,7 +74,32 @@ const socialLinks = [
   },
 ];
 
+/* ── Default contact info ── */
+const defaultContact = {
+  address: "208B, Prakriti Corporate, Y.N. Road, Indore — 452001",
+  email: "solutions.archit@gmail.com",
+  phone: "+91 91797 97359",
+};
+
 export default function Footer() {
+  const [contactInfo, setContactInfo] = useState(defaultContact);
+
+  /* Fetch live contact data from persistent API */
+  useEffect(() => {
+    fetch("/api/admin/data")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.contact) {
+          setContactInfo({
+            address: d.contact.address || defaultContact.address,
+            email: d.contact.emails?.[0] || defaultContact.email,
+            phone: d.contact.phones?.[0] || defaultContact.phone,
+          });
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <footer className={styles.footer}>
       {/* Top CTA Band */}
@@ -108,15 +136,15 @@ export default function Footer() {
           <div className={styles.contactRow}>
             <div className={styles.contactItem}>
               <span className={styles.contactLabel}>Office</span>
-              <span>208B, Prakriti Corporate, Y.N. Road, Indore — 452001</span>
+              <span>{contactInfo.address}</span>
             </div>
             <div className={styles.contactItem}>
               <span className={styles.contactLabel}>Email</span>
-              <a href="mailto:solutions.archit@gmail.com">solutions.archit@gmail.com</a>
+              <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
             </div>
             <div className={styles.contactItem}>
               <span className={styles.contactLabel}>Phone</span>
-              <a href="tel:+919179797359">+91 91797 97359</a>
+              <a href={`tel:${contactInfo.phone.replace(/[^+\d]/g, "")}`}>{contactInfo.phone}</a>
             </div>
           </div>
         </div>

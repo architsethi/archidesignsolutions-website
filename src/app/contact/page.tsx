@@ -1,18 +1,73 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
 import InteractiveGrid from "@/components/InteractiveGrid";
 
-const GOOGLE_MAPS_URL = "https://maps.app.goo.gl/gVBVwcbOZxvukkTr1";
-// Embed coords for Prakriti Corporate, Y.N. Road, Indore
-const MAP_EMBED = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3679.9!2d75.8570!3d22.7203!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fd0d3cb6e7c3%3A0x9b86897c8bee4a08!2sPrakriti%20Corporate!5e0!3m2!1sen!2sin!4v1715000000000";
+/* ── Fallback values used while loading ── */
+const FALLBACK_MAP_URL = "https://maps.app.goo.gl/gVBVwcbOZxvukkTr1";
+const FALLBACK_MAP_EMBED = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3679.9!2d75.8570!3d22.7203!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fd0d3cb6e7c3%3A0x9b86897c8bee4a08!2sPrakriti%20Corporate!5e0!3m2!1sen!2sin!4v1715000000000";
+
+interface ContactInfo {
+  phones: string[];
+  emails: string[];
+  address: string;
+  mapUrl: string;
+  mapEmbedUrl?: string;
+}
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [pinHovered, setPinHovered] = useState(false);
+
+  /* ── Live contact data from API ── */
+  const [contact, setContact] = useState<ContactInfo>({
+    phones: ["+91-731-4045559", "+91-9302101559"],
+    emails: ["archidesignsolutions@gmail.com"],
+    address: "208B, Prakriti Corporate\nY.N. Road, New Palasia\nIndore — 452001\nMadhya Pradesh, India",
+    mapUrl: FALLBACK_MAP_URL,
+  });
+
+  useEffect(() => {
+    fetch("/api/admin/data")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.contact) {
+          setContact({
+            phones: d.contact.phones || ["+91-731-4045559", "+91-9302101559"],
+            emails: d.contact.emails || ["archidesignsolutions@gmail.com"],
+            address: d.contact.address || contact.address,
+            mapUrl: d.contact.mapUrl || FALLBACK_MAP_URL,
+            mapEmbedUrl: d.contact.mapEmbedUrl || "",
+          });
+        }
+      })
+      .catch(() => {});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /* Derive Google Maps embed URL from admin-provided embed URL, or map link */
+  const mapEmbedUrl = (() => {
+    // If admin provided a dedicated embed URL, use it directly
+    if (contact.mapEmbedUrl) return contact.mapEmbedUrl;
+    try {
+      // If the mapUrl itself is an embed URL, use it directly
+      if (contact.mapUrl.includes("/maps/embed")) return contact.mapUrl;
+      // Otherwise construct an embed from the Place URL
+      const url = new URL(contact.mapUrl);
+      const pathMatch = url.pathname.match(/@([-\d.]+),([-\d.]+)/);
+      if (pathMatch) {
+        const [, lat, lng] = pathMatch;
+        return `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3679.9!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin`;
+      }
+      // For short links or Place URLs, use search embed
+      return `https://www.google.com/maps/embed/v1/place?key=&q=${encodeURIComponent(contact.address)}`;
+    } catch {
+      return FALLBACK_MAP_EMBED;
+    }
+  })();
 
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -44,6 +99,9 @@ export default function ContactPage() {
     }
   };
 
+  /* Format address for display — split on \n or commas */
+  const addressLines = contact.address.split(/\n|(?:,\s*)/);
+
   return (
     <div className={styles.page}>
       {/* ── Hero with floating map card ── */}
@@ -65,14 +123,14 @@ export default function ContactPage() {
 
           {/* Right: floating map card */}
           <a
-            href={GOOGLE_MAPS_URL}
+            href={contact.mapUrl}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.mapCard}
             aria-label="Open ArchiDesignSolutions location in Google Maps"
           >
             <iframe
-              src={MAP_EMBED}
+              src={mapEmbedUrl}
               width="100%"
               height="100%"
               style={{ border: 0, pointerEvents: "none" }}
@@ -195,20 +253,22 @@ export default function ContactPage() {
               </div>
             </ScrollReveal>
 
-            {/* Contact Info */}
+            {/* Contact Info — now dynamic */}
             <ScrollReveal delay={0.2}>
               <div className={styles.infoColumn}>
                 <div className={styles.info}>
                   <div className={styles.infoBlock}>
                     <span className={`label-mono ${styles.infoLabel}`}>Visit Us</span>
                     <p className={styles.infoText}>
-                      208B, Prakriti Corporate<br />
-                      Y.N. Road, New Palasia<br />
-                      Indore — 452001<br />
-                      Madhya Pradesh, India
+                      {addressLines.map((line, i) => (
+                        <span key={i}>
+                          {line.trim()}
+                          {i < addressLines.length - 1 && <br />}
+                        </span>
+                      ))}
                     </p>
                     <a
-                      href={GOOGLE_MAPS_URL}
+                      href={contact.mapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={styles.directionsLink}
@@ -219,19 +279,20 @@ export default function ContactPage() {
 
                   <div className={styles.infoBlock}>
                     <span className={`label-mono ${styles.infoLabel}`}>Email</span>
-                    <a href="mailto:archidesignsolutions@gmail.com" className={styles.infoLink}>
-                      archidesignsolutions@gmail.com
-                    </a>
+                    {contact.emails.map((email, i) => (
+                      <a key={i} href={`mailto:${email}`} className={styles.infoLink}>
+                        {email}
+                      </a>
+                    ))}
                   </div>
 
                   <div className={styles.infoBlock}>
                     <span className={`label-mono ${styles.infoLabel}`}>Phone</span>
-                    <a href="tel:+917314045559" className={styles.infoLink}>
-                      +91-731-4045559
-                    </a>
-                    <a href="tel:+919302101559" className={styles.infoLink}>
-                      +91-9302101559
-                    </a>
+                    {contact.phones.map((phone, i) => (
+                      <a key={i} href={`tel:${phone.replace(/[^+\d]/g, "")}`} className={styles.infoLink}>
+                        {phone}
+                      </a>
+                    ))}
                   </div>
 
                   <div className={styles.infoBlock}>
@@ -239,7 +300,7 @@ export default function ContactPage() {
                     <a href="https://www.instagram.com/archidesignsolutions/" target="_blank" rel="noopener noreferrer" className={styles.infoLink}>
                       Instagram →
                     </a>
-                    <a href="https://wa.me/917314045559" target="_blank" rel="noopener noreferrer" className={styles.infoLink}>
+                    <a href={`https://wa.me/${contact.phones[0]?.replace(/[^+\d]/g, "").replace("+", "")}`} target="_blank" rel="noopener noreferrer" className={styles.infoLink}>
                       WhatsApp →
                     </a>
                   </div>

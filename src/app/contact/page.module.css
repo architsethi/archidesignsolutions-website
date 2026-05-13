@@ -4,10 +4,13 @@
 /* ═══ HERO ═══ */
 .hero {
   position: relative;
-  padding: var(--space-14) 0 var(--space-12);
+  /* Fill the remaining viewport after the 72px header */
+  min-height: calc(100dvh - 72px);
   background: var(--neutral-50);
   overflow: hidden;
-  min-height: 460px;
+  display: flex;
+  align-items: center;
+  padding: var(--space-10) 0;
 }
 .heroCanvas {
   position: absolute;
@@ -37,6 +40,7 @@
   line-height: 1.7;
   color: var(--text-secondary);
   max-width: 400px;
+  text-align: justify;
 }
 
 /* ── Floating Map Card ── */

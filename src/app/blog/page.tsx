@@ -1,15 +1,13 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
 import InteractiveGrid from "@/components/InteractiveGrid";
 
-export const metadata: Metadata = {
-  title: "Blog | ArchiDesignSolutions",
-  description: "Insights, thought leadership, and project stories from ArchiDesignSolutions.",
-};
-
-const posts = [
+/* ── Default blog posts (fallback while loading / if API fails) ── */
+const defaultPosts = [
   {
     slug: "sustainable-architecture-india",
     title: "The Future of Sustainable Architecture in India",
@@ -39,7 +37,43 @@ const posts = [
   },
 ];
 
+interface BlogPost {
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  date: string;
+  readTime: string;
+  image: string;
+}
+
 export default function BlogPage() {
+  const [posts, setPosts] = useState<BlogPost[]>(defaultPosts);
+
+  /* Fetch live blog data from persistent API */
+  useEffect(() => {
+    fetch("/api/admin/data")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.blogs?.length) {
+          // Only show published blogs, map to the display format
+          const livePosts: BlogPost[] = d.blogs
+            .filter((b: { status: string }) => b.status === "published")
+            .map((b: { slug: string; title: string; excerpt: string; category: string; createdAt: string; image: string }) => ({
+              slug: b.slug,
+              title: b.title,
+              excerpt: b.excerpt,
+              category: b.category,
+              date: new Date(b.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" }),
+              readTime: `${Math.max(3, Math.ceil((b.excerpt?.length || 100) / 50))} min read`,
+              image: b.image,
+            }));
+          if (livePosts.length) setPosts(livePosts);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <div className={styles.page}>
       <section className={styles.hero}>
