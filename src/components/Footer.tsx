@@ -101,16 +101,6 @@ export default function Footer() {
 
   return (
     <footer className={styles.footer}>
-      {/* Top CTA Band */}
-      <div className={styles.ctaBand}>
-        <div className={`container ${styles.ctaInner}`}>
-          <h2 className={styles.ctaHeadline}>Designing Spaces That Inspire</h2>
-          <Link href="/contact" className="btn btn-accent">
-            Start Your Project →
-          </Link>
-        </div>
-      </div>
-
       {/* Main Footer */}
       <div className={`container ${styles.main}`}>
         <InteractiveGrid className={styles.footerCanvas} opacity={0.015} />

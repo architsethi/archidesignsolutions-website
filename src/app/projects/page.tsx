@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { Suspense } from "react";
@@ -50,6 +50,20 @@ function getAvailableStages(p: Project): ProjectStage[] {
   );
 }
 
+function getAllImages(p: Project): string[] {
+  const images: string[] = [];
+  for (const stage of stageOrder) {
+    const stageData = p.stages?.[stage];
+    if (stageData?.images) {
+      images.push(...stageData.images);
+    }
+  }
+  if (images.length === 0 && p.image) {
+    images.push(p.image);
+  }
+  return images;
+}
+
 const categories = [
   "All",
   "Residential",
@@ -61,12 +75,162 @@ const categories = [
   "Landscape",
 ];
 
-// Fallback projects if API unavailable
 const fallbackProjects: Project[] = [
-  { id: "1", title: "Modern Residential Complex", category: "Residential", location: "Indore", year: "2024", description: "", image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80", featured: true, stages: { concept: { images: [] }, construction: { images: [] }, completed: { images: ["https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80"] } } },
-  { id: "2", title: "Luxury Villa Interior", category: "Interior", location: "Bhopal", year: "2023", description: "", image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80", featured: false, stages: { concept: { images: [] }, construction: { images: [] }, completed: { images: ["https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80"] } } },
-  { id: "3", title: "Township Masterplan", category: "Urban Planning", location: "Indore", year: "2023", description: "", image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80", featured: false, stages: { concept: { images: ["https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80"] }, construction: { images: [] }, completed: { images: [] } } },
+  { id: "1", title: "Modern Residential Complex", category: "Residential", location: "Indore", year: "2024", description: "A contemporary residential complex featuring clean lines, open floor plans, and sustainable design principles.", image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80", featured: true, stages: { concept: { images: [] }, construction: { images: [] }, completed: { images: ["https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80"] } } },
+  { id: "2", title: "Luxury Villa Interior", category: "Interior", location: "Bhopal", year: "2023", description: "A seamless blend of modern aesthetics and Indian sensibility — warm, beautiful, entirely personal.", image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80", featured: false, stages: { concept: { images: [] }, construction: { images: [] }, completed: { images: ["https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80"] } } },
+  { id: "3", title: "Township Masterplan", category: "Urban Planning", location: "Indore", year: "2023", description: "Visionary master planning for a 200-acre township with integrated infrastructure and community spaces.", image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80", featured: false, stages: { concept: { images: ["https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80"] }, construction: { images: [] }, completed: { images: [] } } },
 ];
+
+function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [activeStage, setActiveStage] = useState<ProjectStage>("completed");
+  const availableStages = getAvailableStages(project);
+  const allImages = getAllImages(project);
+
+  useEffect(() => {
+    if (availableStages.length > 0) {
+      setActiveStage(availableStages[availableStages.length - 1]);
+    }
+  }, []);
+
+  useEffect(() => {
+    setCurrentSlide(0);
+  }, [activeStage]);
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft") prevSlide();
+      if (e.key === "ArrowRight") nextSlide();
+    };
+    document.addEventListener("keydown", handleKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", handleKey);
+      document.body.style.overflow = "";
+    };
+  }, [currentSlide, allImages.length]);
+
+  const stageImages = project.stages?.[activeStage]?.images || [];
+  const displayImages = stageImages.length > 0 ? stageImages : allImages;
+
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % displayImages.length);
+  }, [displayImages.length]);
+
+  const prevSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev - 1 + displayImages.length) % displayImages.length);
+  }, [displayImages.length]);
+
+  const displayStage = getDisplayStage(project);
+
+  return (
+    <div className={styles.modalOverlay} onClick={onClose}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <button className={styles.modalClose} onClick={onClose} aria-label="Close">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+
+        <div className={styles.modalBody}>
+          {/* Left: Image Slider */}
+          <div className={styles.modalGallery}>
+            <div className={styles.modalSlider}>
+              {displayImages.length > 0 && (
+                <Image
+                  src={displayImages[currentSlide]}
+                  alt={`${project.title} — ${currentSlide + 1}`}
+                  fill
+                  style={{ objectFit: "cover" }}
+                  sizes="(max-width: 768px) 100vw, 60vw"
+                />
+              )}
+
+              {displayImages.length > 1 && (
+                <>
+                  <button className={`${styles.sliderNav} ${styles.sliderPrev}`} onClick={prevSlide}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                  </button>
+                  <button className={`${styles.sliderNav} ${styles.sliderNext}`} onClick={nextSlide}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M9 18l6-6-6-6" />
+                    </svg>
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Slide indicators */}
+            {displayImages.length > 1 && (
+              <div className={styles.sliderDots}>
+                {displayImages.map((_, i) => (
+                  <button
+                    key={i}
+                    className={`${styles.sliderDot} ${i === currentSlide ? styles.sliderDotActive : ""}`}
+                    onClick={() => setCurrentSlide(i)}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Right: Project Details */}
+          <div className={styles.modalDetails}>
+            <div className={styles.modalStageBadge} data-stage={displayStage}>
+              {stageLabels[displayStage]}
+            </div>
+            <h2 className={styles.modalTitle}>{project.title}</h2>
+            <div className={styles.modalMeta}>
+              <span className={styles.modalMetaItem}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                {project.location}
+              </span>
+              <span className={styles.modalMetaItem}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                {project.year}
+              </span>
+              <span className={styles.modalMetaItem}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                {project.category}
+              </span>
+            </div>
+
+            {project.description && (
+              <p className={styles.modalDescription}>{project.description}</p>
+            )}
+
+            {/* Stage tabs */}
+            {availableStages.length > 1 && (
+              <div className={styles.modalStages}>
+                <span className={styles.modalStagesLabel}>View Stage:</span>
+                <div className={styles.modalStageTabs}>
+                  {availableStages.map((s) => (
+                    <button
+                      key={s}
+                      className={`${styles.modalStageTab} ${activeStage === s ? styles.modalStageTabActive : ""}`}
+                      onClick={() => setActiveStage(s)}
+                    >
+                      {stageLabels[s]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className={styles.modalImageCount}>
+              {displayImages.length > 0 && (
+                <span>{currentSlide + 1} / {displayImages.length} images</span>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function ProjectsContent() {
   const searchParams = useSearchParams();
@@ -74,8 +238,7 @@ function ProjectsContent() {
 
   const [activeCategory, setActiveCategory] = useState("All");
   const [projects, setProjects] = useState<Project[]>(fallbackProjects);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [activeStageTab, setActiveStageTab] = useState<ProjectStage>("concept");
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   useEffect(() => {
     fetch("/api/admin/data")
@@ -100,19 +263,6 @@ function ProjectsContent() {
   const filtered = activeCategory === "All"
     ? projects
     : projects.filter((p) => p.category === activeCategory);
-
-  const handleExpand = (project: Project) => {
-    if (expandedId === project.id) {
-      setExpandedId(null);
-    } else {
-      setExpandedId(project.id);
-      // Set active stage to highest available
-      const available = getAvailableStages(project);
-      if (available.length > 0) {
-        setActiveStageTab(available[available.length - 1]);
-      }
-    }
-  };
 
   return (
     <div className={styles.page}>
@@ -153,14 +303,14 @@ function ProjectsContent() {
           <div className={styles.projectsGrid}>
             {filtered.map((project, i) => {
               const displayStage = getDisplayStage(project);
-              const isExpanded = expandedId === project.id;
-              const availableStages = getAvailableStages(project);
-              const stageImages = project.stages?.[activeStageTab]?.images || [];
 
               return (
                 <ScrollReveal key={project.id} delay={i * 0.05}>
-                  <div className={`${styles.projectCard} ${isExpanded ? styles.projectCardExpanded : ""}`}>
-                    <div className={styles.projectImage} onClick={() => handleExpand(project)}>
+                  <div
+                    className={styles.projectCard}
+                    onClick={() => setSelectedProject(project)}
+                  >
+                    <div className={styles.projectImage}>
                       <Image
                         src={project.image}
                         alt={project.title}
@@ -171,7 +321,6 @@ function ProjectsContent() {
                       <div className={styles.projectOverlay}>
                         <span className={styles.projectCategory}>{project.category}</span>
                       </div>
-                      {/* Stage badge */}
                       <div className={styles.projectStageBadge} data-stage={displayStage}>
                         {stageLabels[displayStage]}
                       </div>
@@ -184,47 +333,6 @@ function ProjectsContent() {
                         <span>{project.year}</span>
                       </div>
                     </div>
-
-                    {/* Expanded detail view */}
-                    {isExpanded && (
-                      <div className={styles.projectExpanded}>
-                        {project.description && (
-                          <p className={styles.projectDescription}>{project.description}</p>
-                        )}
-
-                        {availableStages.length > 0 && (
-                          <>
-                            <div className={styles.stageTabs}>
-                              {availableStages.map((s) => (
-                                <button
-                                  key={s}
-                                  className={`${styles.stageTab} ${activeStageTab === s ? styles.stageTabActive : ""}`}
-                                  onClick={() => setActiveStageTab(s)}
-                                >
-                                  {stageLabels[s]}
-                                </button>
-                              ))}
-                            </div>
-
-                            {stageImages.length > 0 && (
-                              <div className={styles.stageGallery}>
-                                {stageImages.map((src, idx) => (
-                                  <div key={idx} className={styles.stageImageWrap}>
-                                    <Image
-                                      src={src}
-                                      alt={`${project.title} — ${stageLabels[activeStageTab]} ${idx + 1}`}
-                                      fill
-                                      style={{ objectFit: "cover" }}
-                                      sizes="(max-width: 768px) 100vw, 300px"
-                                    />
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </>
-                        )}
-                      </div>
-                    )}
                   </div>
                 </ScrollReveal>
               );
@@ -232,6 +340,14 @@ function ProjectsContent() {
           </div>
         </div>
       </section>
+
+      {/* Floating Modal */}
+      {selectedProject && (
+        <ProjectModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+      )}
     </div>
   );
 }

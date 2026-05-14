@@ -2,28 +2,6 @@
   background: var(--neutral-50);
 }
 
-/* ── CTA Band ── */
-.ctaBand {
-  padding: var(--space-12) 0;
-  background: var(--black);
-}
-
-.ctaInner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-8);
-  flex-wrap: wrap;
-}
-
-.ctaHeadline {
-  font-size: clamp(28px, 3.5vw, 46px);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: var(--white);
-  line-height: 1.08;
-}
-
 /* ── Main Footer ── */
 .main {
   position: relative;

@@ -528,9 +528,12 @@
    ═══════════════════════════════════════ */
 .testimonials {
   position: relative;
-  padding: var(--space-14) 0 var(--space-10);
+  padding: var(--space-12) 0;
   background: var(--neutral-50);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .testimonialsCanvas {
   position: absolute;
