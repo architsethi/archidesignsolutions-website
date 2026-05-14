@@ -340,10 +340,10 @@
 .ventureScreenshot {
   position: relative;
   width: 100%;
-  aspect-ratio: 16/10;
+  aspect-ratio: 16/9;
   border-radius: var(--radius-md);
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  background: #222;
 }
 .ventureName {
   font-size: 28px;
