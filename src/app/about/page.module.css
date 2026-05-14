@@ -319,6 +319,13 @@
   transform: translateY(-4px);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
+.ventureGrid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: var(--radius-lg);
+}
 .ventureBrandLetter {
   position: absolute;
   top: -20px;
@@ -407,9 +414,14 @@
 /* ── Responsive ── */
 @media (max-width: 1024px) {
   .pillarTabs { flex-wrap: wrap; }
-  .teamGrid { grid-template-columns: 1fr; }
+  .teamGrid { grid-template-columns: repeat(2, 1fr); gap: var(--space-5); }
+  .teamImageWrap { aspect-ratio: 4/5; }
   .affiliationsGrid { grid-template-columns: repeat(3, 1fr); }
   .ventureCard { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .teamGrid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
 }
 
 @media (max-width: 768px) {

@@ -5,9 +5,10 @@ import { useRef, useEffect, useState } from "react";
 interface InteractiveGridProps {
   className?: string;
   opacity?: number;
+  color?: "dark" | "red";
 }
 
-export default function InteractiveGrid({ className, opacity = 0.05 }: InteractiveGridProps) {
+export default function InteractiveGrid({ className, opacity = 0.05, color = "dark" }: InteractiveGridProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -999, y: -999 });
   const animRef = useRef<number>(0);
@@ -22,6 +23,9 @@ export default function InteractiveGrid({ className, opacity = 0.05 }: Interacti
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
+    const lineColor = color === "red" ? "200, 50, 43" : "0, 0, 0";
+    const dotColor = "200, 50, 43";
 
     const resize = () => {
       const parent = canvas.parentElement;
@@ -64,7 +68,7 @@ export default function InteractiveGrid({ className, opacity = 0.05 }: Interacti
           ctx.beginPath();
           ctx.moveTo(x, 0);
           ctx.lineTo(x, h);
-          ctx.strokeStyle = `rgba(0, 0, 0, ${alpha})`;
+          ctx.strokeStyle = `rgba(${lineColor}, ${alpha})`;
           ctx.lineWidth = proximity > 0.3 ? 0.8 : 0.3;
           ctx.stroke();
         }
@@ -76,7 +80,7 @@ export default function InteractiveGrid({ className, opacity = 0.05 }: Interacti
           ctx.beginPath();
           ctx.moveTo(0, y);
           ctx.lineTo(w, y);
-          ctx.strokeStyle = `rgba(0, 0, 0, ${alpha})`;
+          ctx.strokeStyle = `rgba(${lineColor}, ${alpha})`;
           ctx.lineWidth = proximity > 0.3 ? 0.8 : 0.3;
           ctx.stroke();
         }
@@ -90,7 +94,7 @@ export default function InteractiveGrid({ className, opacity = 0.05 }: Interacti
               const proximity = 1 - dist / radius;
               ctx.beginPath();
               ctx.arc(x, y, 1.5 + proximity * 2.5, 0, Math.PI * 2);
-              ctx.fillStyle = `rgba(200, 50, 43, ${proximity * 0.5})`;
+              ctx.fillStyle = `rgba(${dotColor}, ${proximity * (color === "red" ? 0.7 : 0.5)})`;
               ctx.fill();
             }
           }
@@ -106,7 +110,6 @@ export default function InteractiveGrid({ className, opacity = 0.05 }: Interacti
         cancelAnimationFrame(animRef.current);
       };
     } else {
-      // Mobile: scroll-driven animation — the "cursor" sweeps across as user scrolls
       const handleScroll = () => {
         scrollPosRef.current = window.scrollY;
       };
@@ -123,12 +126,10 @@ export default function InteractiveGrid({ className, opacity = 0.05 }: Interacti
         const spacing = 40;
         const radius = 180;
 
-        // Calculate how far through the viewport this section is
         const sectionTop = rect.top;
         const viewH = window.innerHeight;
         const progress = Math.max(0, Math.min(1, 1 - (sectionTop / viewH)));
 
-        // The "focus point" sweeps diagonally across the section as user scrolls
         const mx = progress * w * 0.8 + w * 0.1;
         const my = progress * h * 0.7 + h * 0.15;
 
@@ -139,7 +140,7 @@ export default function InteractiveGrid({ className, opacity = 0.05 }: Interacti
           ctx.beginPath();
           ctx.moveTo(x, 0);
           ctx.lineTo(x, h);
-          ctx.strokeStyle = `rgba(0, 0, 0, ${alpha})`;
+          ctx.strokeStyle = `rgba(${lineColor}, ${alpha})`;
           ctx.lineWidth = proximity > 0.3 ? 0.7 : 0.3;
           ctx.stroke();
         }
@@ -151,7 +152,7 @@ export default function InteractiveGrid({ className, opacity = 0.05 }: Interacti
           ctx.beginPath();
           ctx.moveTo(0, y);
           ctx.lineTo(w, y);
-          ctx.strokeStyle = `rgba(0, 0, 0, ${alpha})`;
+          ctx.strokeStyle = `rgba(${lineColor}, ${alpha})`;
           ctx.lineWidth = proximity > 0.3 ? 0.7 : 0.3;
           ctx.stroke();
         }
@@ -165,7 +166,7 @@ export default function InteractiveGrid({ className, opacity = 0.05 }: Interacti
               const proximity = 1 - dist / radius;
               ctx.beginPath();
               ctx.arc(x, y, 1.2 + proximity * 2, 0, Math.PI * 2);
-              ctx.fillStyle = `rgba(200, 50, 43, ${proximity * 0.4})`;
+              ctx.fillStyle = `rgba(${dotColor}, ${proximity * (color === "red" ? 0.6 : 0.4)})`;
               ctx.fill();
             }
           }
@@ -181,7 +182,7 @@ export default function InteractiveGrid({ className, opacity = 0.05 }: Interacti
         cancelAnimationFrame(animRef.current);
       };
     }
-  }, [opacity]);
+  }, [opacity, color]);
 
   return <canvas ref={canvasRef} className={className} />;
 }

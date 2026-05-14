@@ -322,8 +322,10 @@
 
 /* ═══ Responsive ═══ */
 @media (max-width: 1024px) {
-  .heroInner { grid-template-columns: 1fr; }
-  .mapCard { max-width: 540px; }
+  .heroInner { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+  .heroTitle { font-size: clamp(28px, 4vw, 48px); }
+  .heroDesc { font-size: 15px; }
+  .mapCard { aspect-ratio: 1/1; }
   .grid { grid-template-columns: 1fr; }
   .formRow { grid-template-columns: 1fr; }
 }
@@ -331,9 +333,10 @@
 @media (max-width: 768px) {
   .page { padding-top: 64px; }
   .hero { min-height: auto; padding: var(--space-8) 0; }
+  .heroInner { grid-template-columns: 1fr; }
   .heroTitle { font-size: clamp(28px, 8vw, 44px); }
   .heroDesc { font-size: 15px; max-width: 100%; }
-  .mapCard { aspect-ratio: 16/10; border-radius: var(--radius-lg); }
+  .mapCard { max-width: 100%; aspect-ratio: 16/10; border-radius: var(--radius-lg); }
   .mapCard iframe { border-radius: var(--radius-lg); }
   .content { padding: var(--space-8) 0 var(--space-10); }
   .formSection { padding: var(--space-6); }

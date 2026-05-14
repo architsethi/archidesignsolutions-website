@@ -323,6 +323,7 @@ const pillars = [
             {ventures.map((v, i) => (
               <ScrollReveal key={v.name} delay={i * 0.2}>
                 <div className={styles.ventureCard}>
+                  <InteractiveGrid className={styles.ventureGrid} opacity={0.06} color="red" />
                   <div className={styles.ventureBrandLetter}>{v.brandLetter}</div>
                   <div className={styles.ventureContent}>
                     <h3 className={styles.ventureName}>{v.name}</h3>
