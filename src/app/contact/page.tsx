@@ -6,14 +6,13 @@ import ScrollReveal from "@/components/ScrollReveal";
 import InteractiveGrid from "@/components/InteractiveGrid";
 
 /* ── Fallback values used while loading ── */
-const FALLBACK_MAP_URL = "https://maps.app.goo.gl/egAGXwTRdpawGKER6";
+const MAP_URL = "https://maps.app.goo.gl/PUn1kAzeHA76aMq88";
 const FALLBACK_MAP_EMBED = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3679.9!2d75.8570!3d22.7203!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fd0d3cb6e7c3%3A0x9b86897c8bee4a08!2sPrakriti%20Corporate!5e0!3m2!1sen!2sin!4v1715000000000";
 
 interface ContactInfo {
   phones: string[];
   emails: string[];
   address: string;
-  mapUrl: string;
   mapEmbedUrl?: string;
 }
 
@@ -27,7 +26,6 @@ export default function ContactPage() {
     phones: ["+91-731-4045559", "+91-9302101559"],
     emails: ["archidesignsolutions@gmail.com"],
     address: "208B, Prakriti Corporate\nY.N. Road, New Palasia\nIndore — 452001\nMadhya Pradesh, India",
-    mapUrl: FALLBACK_MAP_URL,
   });
 
   useEffect(() => {
@@ -39,7 +37,6 @@ export default function ContactPage() {
             phones: d.contact.phones || ["+91-731-4045559", "+91-9302101559"],
             emails: d.contact.emails || ["archidesignsolutions@gmail.com"],
             address: d.contact.address || contact.address,
-            mapUrl: d.contact.mapUrl || FALLBACK_MAP_URL,
             mapEmbedUrl: d.contact.mapEmbedUrl || "",
           });
         }
@@ -48,26 +45,8 @@ export default function ContactPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /* Derive Google Maps embed URL from admin-provided embed URL, or map link */
-  const mapEmbedUrl = (() => {
-    // If admin provided a dedicated embed URL, use it directly
-    if (contact.mapEmbedUrl) return contact.mapEmbedUrl;
-    try {
-      // If the mapUrl itself is an embed URL, use it directly
-      if (contact.mapUrl.includes("/maps/embed")) return contact.mapUrl;
-      // Otherwise construct an embed from the Place URL
-      const url = new URL(contact.mapUrl);
-      const pathMatch = url.pathname.match(/@([-\d.]+),([-\d.]+)/);
-      if (pathMatch) {
-        const [, lat, lng] = pathMatch;
-        return `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3679.9!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin`;
-      }
-      // For short links or Place URLs, use search embed
-      return `https://www.google.com/maps/embed/v1/place?key=&q=${encodeURIComponent(contact.address)}`;
-    } catch {
-      return FALLBACK_MAP_EMBED;
-    }
-  })();
+  /* Derive Google Maps embed URL */
+  const mapEmbedUrl = contact.mapEmbedUrl || FALLBACK_MAP_EMBED;
 
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
@@ -125,7 +104,7 @@ export default function ContactPage() {
 
           {/* Right: floating map card */}
           <a
-            href={contact.mapUrl}
+            href={MAP_URL}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.mapCard}
@@ -270,7 +249,7 @@ export default function ContactPage() {
                       ))}
                     </p>
                     <a
-                      href={contact.mapUrl}
+                      href={MAP_URL}
                       target="_blank"
                       rel="noopener noreferrer"
                       className={styles.directionsBtn}

@@ -20,7 +20,6 @@ export interface ContactInfo {
   phones: string[];
   emails: string[];
   address: string;
-  mapUrl: string;
   mapEmbedUrl?: string;
 }
 
@@ -150,7 +149,6 @@ export const defaultSiteData: SiteData = {
     phones: ["+91-731-4045559", "+91-9302101559"],
     emails: ["archidesignsolutions@gmail.com"],
     address: "301, Prakriti Corporate, 3rd Floor, Y.N. Road, Indore, Madhya Pradesh 452001",
-    mapUrl: "https://www.google.com/maps/place/Prakriti+Corporate/@22.7195,75.8582,17z",
   },
   projects: [
     {

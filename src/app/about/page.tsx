@@ -71,21 +71,21 @@ const affiliations = [
 const ventures = [
   {
     name: "Archzig",
-    brandLetter: "Z",
+    brandLetter: "AZ",
     url: "https://www.archzig.com",
     tagline: "Design the Future with Archzig",
     followers: "140K+",
     tags: ["500+ Freelancers", "AI-Integrated", "Global Delivery", "Scalable Services"],
-    screenshot: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=900&q=80",
+    screenshot: "/images/archzig-screenshot.png",
   },
   {
     name: "Architerrax",
-    brandLetter: "X",
+    brandLetter: "ATX",
     url: "https://www.instagram.com/architerrax",
     tagline: "The world's leading architecture community",
     followers: "50K+",
     tags: ["Education Platform", "Skill Development", "Community Driven", "Future-Ready"],
-    screenshot: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=900&q=80",
+    screenshot: "/images/architerrax-screenshot.png",
   },
 ];
 
@@ -343,6 +343,15 @@ const pillars = [
                     >
                       Visit Platform →
                     </a>
+                  </div>
+                  <div className={styles.ventureScreenshot}>
+                    <Image
+                      src={v.screenshot}
+                      alt={`${v.name} platform`}
+                      fill
+                      style={{ objectFit: "cover" }}
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
                   </div>
                 </div>
               </ScrollReveal>

@@ -298,9 +298,9 @@
 /* ── Ventures ── */
 .ventures { padding: var(--space-14) 0; background: var(--white); }
 .venturesList {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
 }
 .ventureCard {
   position: relative;
@@ -310,6 +310,10 @@
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
   color: var(--white);
   transition: transform 0.4s ease, box-shadow 0.4s ease;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-8);
+  align-items: center;
 }
 .ventureCard:hover {
   transform: translateY(-4px);
@@ -318,8 +322,8 @@
 .ventureBrandLetter {
   position: absolute;
   top: -20px;
-  right: -10px;
-  font-size: 160px;
+  left: var(--space-6);
+  font-size: 120px;
   font-weight: 900;
   line-height: 1;
   color: rgba(200, 50, 43, 0.12);
@@ -332,6 +336,14 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+}
+.ventureScreenshot {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/10;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 .ventureName {
   font-size: 28px;
@@ -397,7 +409,7 @@
   .pillarTabs { flex-wrap: wrap; }
   .teamGrid { grid-template-columns: 1fr; }
   .affiliationsGrid { grid-template-columns: repeat(3, 1fr); }
-  .venturesList { grid-template-columns: 1fr; }
+  .ventureCard { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
   .affiliationsGrid { grid-template-columns: repeat(2, 1fr); }

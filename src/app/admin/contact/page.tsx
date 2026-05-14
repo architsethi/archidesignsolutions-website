@@ -8,13 +8,12 @@ interface ContactInfo {
   phones: string[];
   emails: string[];
   address: string;
-  mapUrl: string;
   mapEmbedUrl?: string;
 }
 
 export default function ContactPage() {
   const { password } = useAdmin();
-  const [contact, setContact] = useState<ContactInfo>({ phones: [], emails: [], address: "", mapUrl: "", mapEmbedUrl: "" });
+  const [contact, setContact] = useState<ContactInfo>({ phones: [], emails: [], address: "", mapEmbedUrl: "" });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState("");
@@ -24,7 +23,7 @@ export default function ContactPage() {
   useEffect(() => {
     fetch("/api/admin/data", { headers: { "x-admin-password": password } })
       .then((r) => r.json())
-      .then((d) => { setContact(d.contact || { phones: [], emails: [], address: "", mapUrl: "", mapEmbedUrl: "" }); setLoading(false); })
+      .then((d) => { setContact(d.contact || { phones: [], emails: [], address: "", mapEmbedUrl: "" }); setLoading(false); })
       .catch(() => setLoading(false));
   }, [password]);
 
@@ -96,15 +95,6 @@ export default function ContactPage() {
             className={styles.formTextarea}
             value={contact.address}
             onChange={(e) => setContact({ ...contact, address: e.target.value })}
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label className={styles.formLabel}>Google Maps Link (for &quot;Get Directions&quot; and pin click)</label>
-          <input
-            className={styles.formInput}
-            value={contact.mapUrl}
-            onChange={(e) => setContact({ ...contact, mapUrl: e.target.value })}
-            placeholder="https://maps.app.goo.gl/..."
           />
         </div>
         <div className={styles.formGroup}>
