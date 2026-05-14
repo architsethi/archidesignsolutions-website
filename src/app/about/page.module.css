@@ -297,59 +297,54 @@
 
 /* ── Ventures ── */
 .ventures { padding: var(--space-14) 0; background: var(--white); }
-.venturesList { display: flex; flex-direction: column; gap: var(--space-10); }
-.ventureCard {
+.venturesList {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-8);
-  align-items: center;
+  gap: var(--space-6);
+}
+.ventureCard {
+  position: relative;
+  overflow: hidden;
   padding: var(--space-8);
-  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  background: var(--white);
-  transition: all 0.4s ease;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  color: var(--white);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 .ventureCard:hover {
-  border-color: rgba(200, 50, 43, 0.15);
-  box-shadow: 0 16px 48px rgba(200, 50, 43, 0.06);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
-.ventureReverse { direction: rtl; }
-.ventureReverse > * { direction: ltr; }
+.ventureBrandLetter {
+  position: absolute;
+  top: -20px;
+  right: -10px;
+  font-size: 160px;
+  font-weight: 900;
+  line-height: 1;
+  color: rgba(200, 50, 43, 0.12);
+  pointer-events: none;
+  user-select: none;
+}
 .ventureContent {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
 }
-.ventureBrandRow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-}
-.ventureBrandIcon {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-full);
-  background: var(--black);
-  color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 800;
-  flex-shrink: 0;
-}
 .ventureName {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 800;
   letter-spacing: -0.02em;
-  color: var(--text-primary);
+  color: var(--white);
   line-height: 1.2;
 }
 .ventureTagline {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-tertiary);
-  margin-top: 2px;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
 }
 .ventureTags {
   display: flex;
@@ -357,13 +352,13 @@
   gap: var(--space-2);
 }
 .ventureTag {
-  padding: var(--space-2) var(--space-4);
+  padding: 6px 12px;
   border-radius: var(--radius-full);
-  background: var(--neutral-50);
-  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   font-size: 12px;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.8);
   letter-spacing: 0.02em;
 }
 .ventureFollowers {
@@ -372,14 +367,14 @@
   gap: var(--space-2);
 }
 .ventureFollowerValue {
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 800;
   letter-spacing: -0.03em;
-  color: var(--text-primary);
+  color: var(--white);
 }
 .ventureFollowerLabel {
   font-size: 14px;
-  color: var(--text-tertiary);
+  color: rgba(255, 255, 255, 0.5);
   font-weight: 500;
 }
 .ventureLink {
@@ -393,24 +388,16 @@
   color: var(--accent-red);
   text-decoration: none;
   transition: opacity 0.25s ease;
+  margin-top: var(--space-2);
 }
 .ventureLink:hover { opacity: 0.7; }
-.ventureScreenshot {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16/10;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
 
 /* ── Responsive ── */
 @media (max-width: 1024px) {
   .pillarTabs { flex-wrap: wrap; }
   .teamGrid { grid-template-columns: 1fr; }
   .affiliationsGrid { grid-template-columns: repeat(3, 1fr); }
-  .ventureCard { grid-template-columns: 1fr; }
-  .ventureReverse { direction: ltr; }
+  .venturesList { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
   .affiliationsGrid { grid-template-columns: repeat(2, 1fr); }

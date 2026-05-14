@@ -321,26 +321,19 @@ const pillars = [
           <div className={styles.venturesList}>
             {ventures.map((v, i) => (
               <ScrollReveal key={v.name} delay={i * 0.2}>
-                <div className={`${styles.ventureCard} ${i % 2 !== 0 ? styles.ventureReverse : ''}`}>
-                  {/* Text Side */}
+                <div className={styles.ventureCard}>
+                  <div className={styles.ventureBrandLetter}>{v.brandLetter}</div>
                   <div className={styles.ventureContent}>
-                    <div className={styles.ventureBrandRow}>
-                      <div className={styles.ventureBrandIcon}>
-                        <span>{v.brandLetter}</span>
-                      </div>
-                      <div>
-                        <h3 className={styles.ventureName}>{v.name}</h3>
-                        <p className={styles.ventureTagline}>{v.tagline}</p>
-                      </div>
+                    <h3 className={styles.ventureName}>{v.name}</h3>
+                    <p className={styles.ventureTagline}>{v.tagline}</p>
+                    <div className={styles.ventureFollowers}>
+                      <span className={styles.ventureFollowerValue}>{v.followers}</span>
+                      <span className={styles.ventureFollowerLabel}>followers</span>
                     </div>
                     <div className={styles.ventureTags}>
                       {v.tags.map((tag) => (
                         <span key={tag} className={styles.ventureTag}>{tag}</span>
                       ))}
-                    </div>
-                    <div className={styles.ventureFollowers}>
-                      <span className={styles.ventureFollowerValue}>{v.followers}</span>
-                      <span className={styles.ventureFollowerLabel}>followers</span>
                     </div>
                     <a
                       href={v.url}
@@ -350,17 +343,6 @@ const pillars = [
                     >
                       Visit Platform →
                     </a>
-                  </div>
-
-                  {/* Screenshot Side */}
-                  <div className={styles.ventureScreenshot}>
-                    <Image
-                      src={v.screenshot}
-                      alt={`${v.name} platform`}
-                      fill
-                      style={{ objectFit: "cover" }}
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
                   </div>
                 </div>
               </ScrollReveal>

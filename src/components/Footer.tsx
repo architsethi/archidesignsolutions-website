@@ -9,20 +9,19 @@ import InteractiveGrid from "./InteractiveGrid";
 const mainLinks = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
-  { label: "Services", href: "/services" },
   { label: "Projects", href: "/projects" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
 ];
 
 const serviceLinks = [
-  { label: "Architectural Design", href: "/services#architecture" },
-  { label: "Interior Design", href: "/services#interior" },
-  { label: "Master Planning", href: "/services#masterplanning" },
-  { label: "Green Building", href: "/services#greenbuilding" },
-  { label: "Landscape Design", href: "/services#landscape" },
-  { label: "MEP Services", href: "/services#mep" },
-  { label: "Project Management", href: "/services#projectmgmt" },
+  { label: "Architectural Design", href: "/#architecture" },
+  { label: "Interior Design", href: "/#interior" },
+  { label: "Master Planning", href: "/#masterplanning" },
+  { label: "Green Building", href: "/#greenbuilding" },
+  { label: "Landscape Design", href: "/#landscape" },
+  { label: "MEP Services", href: "/#mep" },
+  { label: "Project Management", href: "/#projectmgmt" },
 ];
 
 const legalLinks = [
