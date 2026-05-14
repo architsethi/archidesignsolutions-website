@@ -127,11 +127,12 @@ export default function InteractiveGrid({ className, opacity = 0.05, color = "da
         const radius = 180;
 
         const sectionTop = rect.top;
+        const sectionBottom = rect.bottom;
         const viewH = window.innerHeight;
-        const progress = Math.max(0, Math.min(1, 1 - (sectionTop / viewH)));
+        const progress = Math.max(0, Math.min(1, (viewH - sectionTop) / (viewH + h)));
 
-        const mx = progress * w * 0.8 + w * 0.1;
-        const my = progress * h * 0.7 + h * 0.15;
+        const mx = progress * w;
+        const my = h * 0.5;
 
         for (let x = spacing; x < w; x += spacing) {
           const dist = Math.abs(x - mx);
