@@ -17,6 +17,7 @@ interface ProjectStageData {
 interface Project {
   id: string;
   title: string;
+  subtitle?: string;
   category: string;
   location: string;
   year: string;
@@ -183,6 +184,9 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
               {stageLabels[displayStage]}
             </div>
             <h2 className={styles.modalTitle}>{project.title}</h2>
+            {project.subtitle && (
+              <p className={styles.modalSubtitle}>{project.subtitle}</p>
+            )}
             <div className={styles.modalMeta}>
               <span className={styles.modalMetaItem}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>

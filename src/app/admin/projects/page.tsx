@@ -14,6 +14,7 @@ interface ProjectStageData {
 interface Project {
   id: string;
   title: string;
+  subtitle?: string;
   category: string;
   location: string;
   year: string;
@@ -29,6 +30,7 @@ interface Project {
 
 const emptyProject: Omit<Project, "id"> = {
   title: "",
+  subtitle: "",
   category: "Residential",
   location: "",
   year: new Date().getFullYear().toString(),
@@ -194,6 +196,10 @@ export default function ProjectsPage() {
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>Title</label>
             <input className={styles.formInput} value={editing.title} onChange={(e) => setEditing({ ...editing, title: e.target.value })} />
+          </div>
+          <div className={styles.formGroup}>
+            <label className={styles.formLabel}>Subtitle (optional)</label>
+            <input className={styles.formInput} value={editing.subtitle || ""} onChange={(e) => setEditing({ ...editing, subtitle: e.target.value })} placeholder="e.g. A modern take on sustainable living" />
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
             <div className={styles.formGroup}>

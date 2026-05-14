@@ -32,6 +32,7 @@ export interface ProjectStageData {
 export interface Project {
   id: string;
   title: string;
+  subtitle?: string;
   category: string;
   location: string;
   year: string;
