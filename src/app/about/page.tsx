@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -98,127 +98,49 @@ const pillars = [
   ];
 
   const [activePillar, setActivePillar] = useState("function");
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animRef = useRef<number>(0);
-
-  const drawPhilosophy = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    canvas.width = canvas.offsetWidth * 2;
-    canvas.height = canvas.offsetHeight * 2;
-    ctx.scale(2, 2);
-    const W = canvas.offsetWidth;
-    const H = canvas.offsetHeight;
-
-    const shapes: { x: number; y: number; size: number; speed: number; angle: number; opacity: number }[] = [];
-    const count = activePillar === "function" ? 10 : activePillar === "harmony" ? 16 : 24;
-
-    for (let i = 0; i < count; i++) {
-      // Weight shapes to right side (60-100% of width)
-      shapes.push({
-        x: W * 0.4 + Math.random() * W * 0.6,
-        y: Math.random() * H,
-        size: activePillar === "function" ? 25 + Math.random() * 40 : activePillar === "harmony" ? 15 + Math.random() * 30 : 8 + Math.random() * 20,
-        speed: 0.2 + Math.random() * 0.6,
-        angle: Math.random() * Math.PI * 2,
-        opacity: 0.04 + Math.random() * 0.06,
-      });
-    }
-
-    let time = 0;
-    const animate = () => {
-      ctx.clearRect(0, 0, W, H);
-      time += 0.008;
-
-      shapes.forEach((s) => {
-        const offsetX = Math.sin(time * s.speed + s.angle) * 20;
-        const offsetY = Math.cos(time * s.speed * 0.7 + s.angle) * 15;
-        const px = s.x + offsetX;
-        const py = s.y + offsetY;
-
-        ctx.save();
-        ctx.translate(px, py);
-        ctx.globalAlpha = s.opacity;
-        ctx.strokeStyle = "rgba(200, 50, 43, 0.3)";
-        ctx.lineWidth = 1;
-
-        if (activePillar === "function") {
-          // Blueprint grid — precise intersecting lines
-          ctx.beginPath();
-          ctx.moveTo(-s.size, 0); ctx.lineTo(s.size, 0);
-          ctx.moveTo(0, -s.size); ctx.lineTo(0, s.size);
-          ctx.stroke();
-        } else if (activePillar === "harmony") {
-          // Balanced squares rotated
-          ctx.rotate(time * s.speed * 0.3);
-          ctx.beginPath();
-          ctx.rect(-s.size / 2, -s.size / 2, s.size, s.size);
-          ctx.stroke();
-        } else {
-          // Lifestyle — organic flowing curves
-          ctx.rotate(time * s.speed * 0.2);
-          ctx.beginPath();
-          ctx.arc(0, 0, s.size, 0, Math.PI * 1.5);
-          ctx.stroke();
-        }
-        ctx.restore();
-      });
-
-      animRef.current = requestAnimationFrame(animate);
-    };
-
-    cancelAnimationFrame(animRef.current);
-    animate();
-  }, [activePillar]);
-
-  useEffect(() => {
-    drawPhilosophy();
-    return () => cancelAnimationFrame(animRef.current);
-  }, [drawPhilosophy]);
 
   return (
     <div className={styles.page}>
-      {/* ── Hero ── */}
-      <section className={styles.hero}>
+      {/* ── Hero + Image Strip + Philosophy (shared grid background) ── */}
+      <section className={styles.heroBlock}>
         <InteractiveGrid className={styles.heroCanvas} />
-        <div className={`container ${styles.heroInner}`}>
-          <span className={`label-mono ${styles.label}`}>About Us</span>
-          <h1 className={styles.heroTitle}>
-            Three Decades. Two Generations.
-            <br />
-            One <TypewriterAccent words={["Vision.", "Legacy.", "Standard."]} />
-          </h1>
-          <p className={styles.heroDesc}>
-            Since 1999, ArchiDesignSolutions has been rendering comprehensive
-            architectural services — from residential and institutional
-            projects to corporate interiors and luxury hospitality.
-          </p>
-        </div>
-      </section>
 
-      {/* ── Scrolling Image Strip ── */}
-      <section className={styles.imageStrip}>
-        <div className={styles.imageStripTrack}>
-          {[...stripImages, ...stripImages].map((img, i) => (
-            <div key={i} className={styles.stripImage}>
-              <Image
-                src={img.src}
-                alt={img.alt}
-                fill
-                style={{ objectFit: "cover" }}
-                sizes="240px"
-              />
-            </div>
-          ))}
+        {/* Hero */}
+        <div className={styles.hero}>
+          <div className={`container ${styles.heroInner}`}>
+            <span className={`label-mono ${styles.label}`}>About Us</span>
+            <h1 className={styles.heroTitle}>
+              Three Decades. Two Generations.
+              <br />
+              One <TypewriterAccent words={["Vision.", "Legacy.", "Standard."]} />
+            </h1>
+            <p className={styles.heroDesc}>
+              Since 1999, ArchiDesignSolutions has been rendering comprehensive
+              architectural services — from residential and institutional
+              projects to corporate interiors and luxury hospitality.
+            </p>
+          </div>
         </div>
-      </section>
 
-      {/* ── Philosophy ── */}
-      <section className={styles.philosophy}>
-        <canvas ref={canvasRef} className={styles.philosophyCanvas} />
+        {/* Scrolling Image Strip */}
+        <div className={styles.imageStrip}>
+          <div className={styles.imageStripTrack}>
+            {[...stripImages, ...stripImages].map((img, i) => (
+              <div key={i} className={styles.stripImage}>
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  fill
+                  style={{ objectFit: "cover" }}
+                  sizes="240px"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Philosophy / Perception of Design */}
+        <div className={styles.philosophy}>
         <div className={`container ${styles.philosophyGrid}`}>
           <div className={styles.philosophyLeft}>
             <span className={`label-mono ${styles.label}`}>Perception of Design</span>
@@ -242,6 +164,7 @@ const pillars = [
               {pillars.find((p) => p.id === activePillar)?.desc}
             </p>
           </div>
+        </div>
         </div>
       </section>
 
