@@ -93,7 +93,7 @@ export const metadata: Metadata = {
     canonical: siteUrl,
   },
   verification: {
-    google: "GOOGLE_SITE_VERIFICATION_CODE",
+    google: "google508cf597c4714e5f",
   },
 };
 
