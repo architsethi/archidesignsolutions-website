@@ -411,6 +411,64 @@
   .affiliationsGrid { grid-template-columns: repeat(3, 1fr); }
   .ventureCard { grid-template-columns: 1fr; }
 }
-@media (max-width: 640px) {
-  .affiliationsGrid { grid-template-columns: repeat(2, 1fr); }
+
+@media (max-width: 768px) {
+  .page { padding-top: 64px; }
+  .hero { padding: var(--space-10) 0 var(--space-8); }
+  .heroTitle { font-size: clamp(28px, 7vw, 48px); }
+  .heroDesc { font-size: 15px; }
+  .heroStats { grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+  .heroStat { padding: var(--space-4); }
+  .heroStatValue { font-size: 24px; }
+  .heroStatLabel { font-size: 10px; }
+
+  .imageStrip { padding: var(--space-4) 0; }
+  .stripImage { width: 160px; }
+
+  .philosophy { padding: var(--space-8) 0; min-height: auto; }
+  .philosophyQuote { font-size: 16px; padding-left: var(--space-4); }
+  .pillarTabs { gap: var(--space-2); }
+  .pillarTab { padding: var(--space-2) var(--space-4); font-size: 12px; }
+  .pillarTitle { font-size: 12px; }
+  .pillarDesc { font-size: 14px; }
+
+  .team { padding: var(--space-10) 0; }
+  .sectionTitle { font-size: clamp(24px, 6vw, 36px); margin-bottom: var(--space-7); }
+  .teamCard:hover { transform: none; box-shadow: none; }
+  .teamInfo { padding: var(--space-5); }
+  .teamName { font-size: 18px; }
+  .teamDesc { font-size: 13px; }
+
+  .affiliations { padding: var(--space-8) 0; }
+  .affiliationsGrid { grid-template-columns: repeat(2, 1fr); gap: var(--space-3); }
+  .affiliationCard { padding: var(--space-4); }
+  .affiliationCard:hover { transform: none; }
+  .affiliationLogoWrap { width: 48px; height: 48px; margin-bottom: var(--space-3); }
+  .affiliationAbbr { font-size: 20px; }
+  .affiliationName { font-size: 11px; }
+
+  .ventures { padding: var(--space-10) 0; }
+  .ventureCard { padding: var(--space-6); gap: var(--space-5); }
+  .ventureCard:hover { transform: none; }
+  .ventureBrandLetter { font-size: 80px; top: -12px; }
+  .ventureName { font-size: 22px; }
+  .ventureTagline { font-size: 13px; }
+  .ventureTag { padding: 4px 10px; font-size: 11px; }
+  .ventureFollowerValue { font-size: 28px; }
+  .ventureFollowerLabel { font-size: 12px; }
+}
+
+@media (max-width: 480px) {
+  .heroTitle { font-size: 28px; }
+  .heroDesc { font-size: 14px; }
+  .heroStats { grid-template-columns: 1fr; }
+  .stripImage { width: 140px; }
+  .pillarTab { padding: var(--space-2) var(--space-3); }
+  .pillarNum { font-size: 10px; }
+  .pillarTitle { font-size: 11px; }
+  .sectionTitle { font-size: 24px; }
+  .ventureCard { padding: var(--space-5); }
+  .ventureBrandLetter { font-size: 60px; }
+  .ventureName { font-size: 20px; }
+  .ventureScreenshot { aspect-ratio: 16/10; }
 }

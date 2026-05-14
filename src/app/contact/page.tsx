@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
 import InteractiveGrid from "@/components/InteractiveGrid";
+import TypewriterAccent from "@/components/TypewriterAccent";
 
 /* ── Fallback values used while loading ── */
 const MAP_URL = "https://maps.app.goo.gl/PUn1kAzeHA76aMq88";
@@ -95,7 +96,7 @@ export default function ContactPage() {
             <h1 className={styles.heroTitle}>
               Let&apos;s Build
               <br />
-              <span className={styles.accent}>Together</span>
+              <TypewriterAccent words={["Together", "Something Great", "Your Vision"]} />
             </h1>
             <p className={styles.heroDesc}>
               Tell us about your project and we&apos;ll get back to you within 24 hours.

@@ -381,6 +381,20 @@
   opacity: 0;
 }
 
+/* Mobile: show image when card is scrolled into center */
+.serviceCardActive {
+  background: var(--black);
+}
+.serviceCardActive .serviceImageWrap {
+  opacity: 1;
+}
+.serviceCardActive .serviceImageWrap img {
+  transform: scale(1.08);
+}
+.serviceCardActive .serviceBody {
+  opacity: 0;
+}
+
 .serviceNum {
   font-size: 12px;
   font-weight: 700;
@@ -706,11 +720,11 @@
     padding: var(--space-8) var(--space-4) var(--space-4);
   }
   .fanStack {
-    height: 300px;
+    height: 280px;
   }
   .fanCard {
-    width: 280px;
-    height: 180px;
+    width: 260px;
+    height: 170px;
   }
   .testimonialCard {
     width: 300px;
@@ -722,8 +736,16 @@
     min-height: auto;
     padding: var(--space-6);
   }
+  .statsSection {
+    margin-top: 0;
+    padding: var(--space-10) 0;
+  }
   .statsGrid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .philosophy {
+    margin-top: 0;
+    padding: var(--space-10) 0;
   }
   .philosophyLayout {
     grid-template-columns: 1fr;
@@ -739,26 +761,78 @@
   .philosophyContent {
     text-align: center;
   }
+  .testimonials {
+    padding: var(--space-10) 0;
+  }
+  .finalCta {
+    padding: var(--space-10) 0;
+  }
+  .services {
+    padding: var(--space-10) 0;
+  }
+  .sectionHeader {
+    margin-bottom: var(--space-7);
+  }
 }
 
 @media (max-width: 480px) {
   .heroTitle {
-    font-size: 44px;
+    font-size: 40px;
+    letter-spacing: -0.04em;
+  }
+  .heroSub p {
+    font-size: 14px;
+    line-height: 1.6;
   }
   .fanStack {
-    height: 240px;
+    height: 220px;
   }
   .fanCard {
-    width: 220px;
-    height: 145px;
-    padding: 6px;
+    width: 200px;
+    height: 130px;
+    padding: 5px;
+    border-radius: 12px;
+  }
+  .fanCard img {
+    border-radius: 8px;
+  }
+  .fanLabel {
+    font-size: 10px;
+    bottom: -4px;
   }
   .testimonialCard {
     width: 260px;
     padding: var(--space-5);
   }
+  .testimonialQuote {
+    font-size: 14px;
+    line-height: 1.55;
+  }
   .statsGrid {
     grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+  .stat {
+    padding: var(--space-5) var(--space-3);
+  }
+  .statValue {
+    font-size: 36px;
+  }
+  .statLabel {
+    font-size: 10px;
+    margin-top: var(--space-2);
+  }
+  .sectionTitle {
+    font-size: 28px;
+  }
+  .sectionDesc {
+    font-size: 15px;
+  }
+  .finalCtaTitle {
+    font-size: 32px;
+  }
+  .finalCtaDesc {
+    font-size: 15px;
   }
   .finalCtaButtons {
     flex-direction: column;
@@ -766,5 +840,26 @@
   .finalCtaButtons .btn {
     width: 100%;
     justify-content: center;
+  }
+  .philosophyQuote {
+    font-size: 16px;
+  }
+  .founderPortrait {
+    max-width: 240px;
+    height: 280px;
+  }
+  .serviceCard {
+    padding: var(--space-5);
+    min-height: auto;
+  }
+  .serviceTitle {
+    font-size: 17px;
+  }
+  .serviceDesc {
+    font-size: 13px;
+  }
+  .heroCta {
+    font-size: 12px;
+    padding: var(--space-3) var(--space-5);
   }
 }

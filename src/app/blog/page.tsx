@@ -5,6 +5,7 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
 import InteractiveGrid from "@/components/InteractiveGrid";
+import TypewriterAccent from "@/components/TypewriterAccent";
 
 /* ── Default blog posts (fallback while loading / if API fails) ── */
 const defaultPosts = [
@@ -81,9 +82,9 @@ export default function BlogPage() {
         <div className={`container ${styles.heroInner}`}>
           <span className={`label-mono ${styles.label}`}>Blog</span>
           <h1 className={styles.heroTitle}>
-            Insights &
+            Design
             <br />
-            <span className={styles.accent}>Perspectives</span>
+            <TypewriterAccent words={["Perspectives", "Dialogues", "Thinking"]} />
           </h1>
           <p className={styles.heroDesc}>
             Thought leadership from three decades of architectural practice.

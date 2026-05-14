@@ -34,25 +34,11 @@
   z-index: 10;
 }
 
-.logoText {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.1;
-}
-
 .logoName {
   font-size: 20px;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--text-primary);
-}
-
-.logoSub {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
 }
 
 /* ── Navigation ── */
@@ -113,7 +99,7 @@
   transform: translateY(-1px);
 }
 
-/* ── Mobile Toggle ── */
+/* ── Mobile Toggle — 3 lines ── */
 .menuToggle {
   display: none;
   flex-direction: column;
@@ -121,7 +107,7 @@
   align-items: center;
   width: 40px;
   height: 40px;
-  gap: 7px;
+  gap: 5px;
   z-index: 10;
   cursor: pointer;
   background: none;
@@ -129,63 +115,75 @@
 }
 
 .menuToggle span {
-  width: 24px;
+  width: 22px;
   height: 1.5px;
   background: var(--black);
   transition: all var(--transition-base);
   transform-origin: center;
+  display: block;
 }
 
-.menuToggle.open span:first-child {
-  transform: translateY(4.25px) rotate(45deg);
+/* When open: top and bottom rotate into X, middle fades */
+.menuToggle.open span:nth-child(1) {
+  transform: translateY(6.5px) rotate(45deg);
 }
 
-.menuToggle.open span:last-child {
-  transform: translateY(-4.25px) rotate(-45deg);
+.menuToggle.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
 }
 
-/* ── Mobile Overlay ── */
-.mobileOverlay {
+.menuToggle.open span:nth-child(3) {
+  transform: translateY(-6.5px) rotate(-45deg);
+}
+
+/* ── Mobile Backdrop (semi-transparent, page visible behind) ── */
+.mobileBackdrop {
   position: fixed;
   inset: 0;
-  z-index: calc(var(--z-header) - 1);
-  background: rgba(0, 0, 0, 0.3);
+  z-index: calc(var(--z-header) - 2);
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 }
 
+/* ── Mobile Nav Panel (partial width — page still visible) ── */
 .mobileNav {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
-  width: 100%;
-  max-width: 480px;
+  width: 280px;
+  max-width: 75vw;
+  z-index: calc(var(--z-header) - 1);
   background: var(--white);
-  border-left: 1px solid var(--border-primary);
+  border-left: 1px solid var(--border-subtle);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.08);
 }
 
 .mobileNavInner {
   display: flex;
   flex-direction: column;
-  padding: 120px var(--space-8) var(--space-8);
+  padding: 100px var(--space-6) var(--space-6);
   height: 100%;
 }
 
 .mobileNavLink {
   display: flex;
   align-items: baseline;
-  gap: var(--space-6);
-  padding: var(--space-5) 0;
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
   text-decoration: none;
   border-bottom: 1px solid var(--border-subtle);
   transition: all var(--transition-fast);
 }
 
 .mobileNavLink:hover {
-  padding-left: var(--space-4);
+  padding-left: var(--space-3);
 }
 
 .mobileNavIndex {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.1em;
   color: var(--accent-red);
@@ -193,7 +191,7 @@
 }
 
 .mobileNavLabel {
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--text-primary);
@@ -201,7 +199,27 @@
 
 .mobileCta {
   margin-top: auto;
-  padding-top: var(--space-8);
+  padding-top: var(--space-6);
+}
+
+.mobileCtaBtn {
+  display: block;
+  width: 100%;
+  padding: 14px 0;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--white);
+  background: var(--accent-red);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: background var(--transition-fast);
+}
+
+.mobileCtaBtn:hover {
+  background: var(--accent-red-hover);
 }
 
 /* ── Responsive ── */
@@ -229,6 +247,10 @@
   }
 
   .logoName {
-    display: none;
+    font-size: 14px;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }

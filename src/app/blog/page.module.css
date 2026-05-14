@@ -113,6 +113,15 @@
 .postCard:hover .postRead { color: var(--accent-red); }
 
 @media (max-width: 768px) {
+  .page { padding-top: 64px; }
+  .hero { padding: var(--space-8) 0 var(--space-6); }
+  .heroTitle { font-size: clamp(28px, 7vw, 44px); }
+  .heroDesc { font-size: 15px; }
+  .posts { padding: var(--space-7) 0 var(--space-10); }
   .postCard { grid-template-columns: 1fr; }
+  .postCard:hover { transform: none; }
   .postImageWrap { aspect-ratio: 16/9; min-height: unset; }
+  .postContent { padding: var(--space-5); }
+  .postTitle { font-size: 20px; }
+  .postExcerpt { font-size: 14px; }
 }

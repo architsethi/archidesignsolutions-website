@@ -5,6 +5,7 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
 import InteractiveGrid from "@/components/InteractiveGrid";
+import TypewriterAccent from "@/components/TypewriterAccent";
 
 const stripImages = [
   { src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&q=80", alt: "Modern residential architecture" },
@@ -188,7 +189,7 @@ const pillars = [
           <h1 className={styles.heroTitle}>
             Three Decades. Two Generations.
             <br />
-            One <span className={styles.accent}>Vision.</span>
+            One <TypewriterAccent words={["Vision.", "Legacy.", "Standard."]} />
           </h1>
           <p className={styles.heroDesc}>
             Since 1999, ArchiDesignSolutions has been rendering comprehensive

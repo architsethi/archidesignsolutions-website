@@ -71,7 +71,7 @@ export default function Header() {
             Start a Project
           </Link>
 
-          {/* Mobile Toggle */}
+          {/* Mobile Toggle — 3 lines */}
           <button
             className={`${styles.menuToggle} ${mobileOpen ? styles.open : ""}`}
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -79,34 +79,39 @@ export default function Header() {
           >
             <span />
             <span />
+            <span />
           </button>
         </div>
       </header>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu — side panel (doesn't cover full screen) */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            className={styles.mobileOverlay}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
+          <>
+            {/* Semi-transparent backdrop — page still visible */}
+            <motion.div
+              className={styles.mobileBackdrop}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onClick={() => setMobileOpen(false)}
+            />
+            {/* Slide-in panel from right (not full width) */}
             <motion.nav
               className={styles.mobileNav}
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             >
               <div className={styles.mobileNavInner}>
                 {navLinks.map((link, i) => (
                   <motion.div
                     key={link.href}
-                    initial={{ opacity: 0, x: 40 }}
+                    initial={{ opacity: 0, x: 30 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 + i * 0.06, duration: 0.4 }}
+                    transition={{ delay: 0.08 + i * 0.05, duration: 0.35 }}
                   >
                     <Link
                       href={link.href}
@@ -125,12 +130,12 @@ export default function Header() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5, duration: 0.4 }}
+                  transition={{ delay: 0.45, duration: 0.35 }}
                   className={styles.mobileCta}
                 >
                   <Link
                     href="/contact"
-                    className="btn btn-accent"
+                    className={styles.mobileCtaBtn}
                     onClick={() => setMobileOpen(false)}
                   >
                     Start a Project →
@@ -138,7 +143,7 @@ export default function Header() {
                 </motion.div>
               </div>
             </motion.nav>
-          </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>

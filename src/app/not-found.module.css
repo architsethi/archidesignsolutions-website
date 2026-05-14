@@ -1,0 +1,118 @@
+.page {
+  padding-top: 72px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--neutral-50);
+}
+
+.content {
+  text-align: center;
+  padding: var(--space-10) var(--margin-desktop);
+  max-width: 1100px;
+  width: 100%;
+}
+
+.code {
+  display: block;
+  font-size: clamp(80px, 15vw, 160px);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  color: var(--neutral-200);
+  margin-bottom: var(--space-4);
+}
+
+.title {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--text-primary);
+  margin-bottom: var(--space-4);
+}
+
+.accent {
+  color: var(--accent-red);
+  font-style: italic;
+}
+
+.desc {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 460px;
+  margin: 0 auto var(--space-10);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  background: var(--white);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: rgba(200, 50, 43, 0.25);
+  transform: translateY(-4px);
+  box-shadow:
+    0 12px 32px rgba(200, 50, 43, 0.08),
+    0 0 0 1px rgba(200, 50, 43, 0.1);
+}
+
+.cardImage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/10;
+}
+
+.cardLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-5) var(--space-5);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.card:hover .cardLabel {
+  color: var(--accent-red);
+}
+
+.cardLabel svg {
+  transition: transform 0.25s ease;
+}
+
+.card:hover .cardLabel svg {
+  transform: translateX(4px);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .page { padding-top: 64px; }
+  .cards {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  .card:hover {
+    transform: none;
+  }
+  .desc {
+    font-size: 15px;
+    margin-bottom: var(--space-7);
+  }
+}

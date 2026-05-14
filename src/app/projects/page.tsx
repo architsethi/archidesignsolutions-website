@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
 import InteractiveGrid from "@/components/InteractiveGrid";
+import TypewriterAccent from "@/components/TypewriterAccent";
 
 type ProjectStage = "concept" | "construction" | "completed";
 
@@ -67,19 +68,20 @@ function getAllImages(p: Project): string[] {
 
 const categories = [
   "All",
-  "Residential",
-  "Commercial",
-  "Heritage",
-  "Institutional",
-  "Interior",
-  "Urban Planning",
-  "Landscape",
+  "Architectural Design",
+  "Interior Design",
+  "Landscape Design",
+  "Green Building",
+  "Town Planning",
+  "MEP Engineering",
+  "Branding & Content",
+  "Project Management",
 ];
 
 const fallbackProjects: Project[] = [
-  { id: "1", title: "Modern Residential Complex", category: "Residential", location: "Indore", year: "2024", description: "A contemporary residential complex featuring clean lines, open floor plans, and sustainable design principles.", image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80", featured: true, stages: { concept: { images: [] }, construction: { images: [] }, completed: { images: ["https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80"] } } },
-  { id: "2", title: "Luxury Villa Interior", category: "Interior", location: "Bhopal", year: "2023", description: "A seamless blend of modern aesthetics and Indian sensibility — warm, beautiful, entirely personal.", image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80", featured: false, stages: { concept: { images: [] }, construction: { images: [] }, completed: { images: ["https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80"] } } },
-  { id: "3", title: "Township Masterplan", category: "Urban Planning", location: "Indore", year: "2023", description: "Visionary master planning for a 200-acre township with integrated infrastructure and community spaces.", image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80", featured: false, stages: { concept: { images: ["https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80"] }, construction: { images: [] }, completed: { images: [] } } },
+  { id: "1", title: "Modern Residential Complex", category: "Architectural Design", location: "Indore", year: "2024", description: "A contemporary residential complex featuring clean lines, open floor plans, and sustainable design principles.", image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80", featured: true, stages: { concept: { images: [] }, construction: { images: [] }, completed: { images: ["https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80"] } } },
+  { id: "2", title: "Luxury Villa Interior", category: "Interior Design", location: "Bhopal", year: "2023", description: "A seamless blend of modern aesthetics and Indian sensibility — warm, beautiful, entirely personal.", image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80", featured: false, stages: { concept: { images: [] }, construction: { images: [] }, completed: { images: ["https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&q=80"] } } },
+  { id: "3", title: "Township Masterplan", category: "Town Planning", location: "Indore", year: "2023", description: "Visionary master planning for a 200-acre township with integrated infrastructure and community spaces.", image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80", featured: false, stages: { concept: { images: ["https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80"] }, construction: { images: [] }, completed: { images: [] } } },
 ];
 
 function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
@@ -259,8 +261,10 @@ function ProjectsContent() {
   }, []);
 
   useEffect(() => {
-    if (filterParam && categories.includes(filterParam)) {
-      setActiveCategory(filterParam);
+    if (filterParam) {
+      const decoded = decodeURIComponent(filterParam);
+      const match = categories.find((c) => c === decoded);
+      if (match) setActiveCategory(match);
     }
   }, [filterParam]);
 
@@ -277,7 +281,7 @@ function ProjectsContent() {
           <h1 className={styles.heroTitle}>
             Projects That
             <br />
-            Define <span className={styles.accent}>Spaces</span>
+            Define <TypewriterAccent words={["Spaces", "Skylines", "Generations"]} />
           </h1>
           <p className={styles.heroDesc}>
             A curated selection from over 500 projects delivered across residential,

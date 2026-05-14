@@ -299,6 +299,12 @@ input, textarea, select {
   background: var(--neutral-500);
 }
 
+/* ═══ Cursor blink (used by typewriter effects) ═══ */
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 /* ═══ Selection ═══ */
 ::selection {
   background: var(--accent-red);
@@ -327,5 +333,21 @@ input, textarea, select {
 
   .section-sm {
     padding: var(--space-10) 0;
+  }
+
+  .btn {
+    padding: 12px var(--space-6);
+    font-size: 12px;
+  }
+}
+
+/* ── Mobile touch optimization ── */
+@media (hover: none) and (pointer: coarse) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Disable hover transforms on touch devices */
+  .btn:hover {
+    transform: none !important;
   }
 }

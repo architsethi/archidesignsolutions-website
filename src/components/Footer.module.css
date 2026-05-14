@@ -1,11 +1,13 @@
 .footer {
   background: var(--neutral-50);
+  border-top: 1px solid var(--border-subtle);
 }
 
-/* ── Main Footer ── */
-.main {
+.footerInner {
   position: relative;
-  padding: var(--space-12) var(--margin-desktop);
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-10) var(--margin-desktop);
   overflow: hidden;
 }
 
@@ -16,150 +18,181 @@
   pointer-events: none;
 }
 
-/* ── Top Tier: Brand + Contact ── */
-.topTier {
+/* ── Brand Section (top) ── */
+.brandSection {
   position: relative;
   z-index: 1;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: var(--space-8);
-  flex-wrap: wrap;
+  gap: var(--space-6);
 }
 
-.brandLogo {
+.brandLeft {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
-  flex-shrink: 0;
+  gap: var(--space-5);
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .brandName {
-  font-size: 16px;
+  font-size: 22px;
   font-weight: 800;
-  line-height: 1.35;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   color: var(--text-primary);
+  line-height: 1.2;
 }
 
-.brandEst {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.brandTagline {
+  font-size: 13px;
+  font-weight: 500;
   color: var(--text-tertiary);
-  margin-top: 2px;
+  letter-spacing: 0.01em;
 }
 
-/* Contact as horizontal row */
-.contactRow {
+.footerCta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 12px 24px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--white);
+  background: var(--black);
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  transition: all var(--transition-base);
+  white-space: nowrap;
+}
+
+.footerCta:hover {
+  background: var(--accent-red);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(200, 50, 43, 0.2);
+}
+
+.footerCta svg {
+  transition: transform var(--transition-fast);
+}
+
+.footerCta:hover svg {
+  transform: translateX(3px);
+}
+
+/* ── Spacing between sections ── */
+
+/* ── Middle Section ── */
+.middleSection {
+  position: relative;
+  z-index: 1;
   display: flex;
-  gap: var(--space-8);
+  flex-direction: column;
+  gap: var(--space-7);
+  margin-top: var(--space-8);
+}
+
+.navRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-7);
   flex-wrap: wrap;
 }
 
-.contactItem {
+.navLink {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: color var(--transition-fast);
+  position: relative;
+}
+
+.navLink::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--accent-red);
+  transition: width var(--transition-base);
+}
+
+.navLink:hover {
+  color: var(--accent-red);
+}
+
+.navLink:hover::after {
+  width: 100%;
+}
+
+.contactGrid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: var(--space-6);
+}
+
+.contactBlock {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--text-secondary);
 }
 
 .contactLabel {
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text-tertiary);
+  color: var(--accent-red);
 }
 
-.contactItem a {
+.contactValue {
+  font-size: 14px;
+  line-height: 1.5;
   color: var(--text-secondary);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
-.contactItem a:hover {
+a.contactValue:hover {
   color: var(--accent-red);
 }
 
-/* ── Divider ── */
-.midDivider {
+/* ── Bottom Section ── */
+.bottomSection {
   position: relative;
   z-index: 1;
-  height: 0;
-  margin: var(--space-8) 0;
-}
-
-/* ── Bottom Tier: Link columns ── */
-.bottomTier {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-8);
-  align-items: start;
-}
-
-/* ── Link Columns ── */
-.col {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+  margin-top: var(--space-8);
 }
 
-.colTitle {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-  padding-bottom: var(--space-1);
-}
-
-.colList {
+.socialRow {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.colLink {
-  font-size: 14px;
-  color: var(--text-secondary);
-  text-decoration: none;
-  transition: all var(--transition-fast);
-  line-height: 1.4;
-}
-
-.colLink:hover {
-  color: var(--accent-red);
-  transform: translateX(4px);
-}
-
-/* ── Social Column ── */
-.socialCol {
-  display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: var(--space-4);
 }
 
-.social {
-  display: flex;
-  gap: var(--space-2);
-  flex-wrap: wrap;
-}
-
 .socialLink {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
+  gap: var(--space-2);
+  padding: 8px 14px;
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-full);
   color: var(--text-tertiary);
+  text-decoration: none;
   background: var(--white);
   transition: all var(--transition-base);
 }
@@ -167,72 +200,127 @@
 .socialLink:hover {
   border-color: var(--accent-red);
   color: var(--accent-red);
-  background: rgba(200, 50, 43, 0.06);
+  background: rgba(200, 50, 43, 0.04);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(200, 50, 43, 0.1);
+  box-shadow: 0 4px 12px rgba(200, 50, 43, 0.08);
 }
 
-/* ── Bottom Bar ── */
-.bottom {
-  border-top: 1px solid var(--border-subtle);
-  padding: var(--space-5) 0;
-  background: var(--white);
+.socialLabel {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
-.bottomInner {
+.legalRow {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: var(--space-3);
   flex-wrap: wrap;
-  gap: var(--space-4);
 }
 
 .copyright {
   font-size: 12px;
   color: var(--text-tertiary);
-  letter-spacing: 0.01em;
+  font-weight: 500;
 }
 
 .affiliations {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: var(--text-tertiary);
-  text-transform: uppercase;
 }
 
-/* ── Responsive ── */
+.legalSep {
+  color: var(--neutral-300);
+  font-size: 12px;
+}
+
+.legalLink {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.legalLink:hover {
+  color: var(--accent-red);
+}
+
+/* ═══ Responsive ═══ */
 @media (max-width: 1024px) {
-  .bottomTier {
-    grid-template-columns: repeat(2, 1fr);
+  .footerInner {
+    padding: var(--space-8) var(--space-8);
   }
-  .main {
-    padding: var(--space-10) var(--space-8);
+  .contactGrid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
-@media (max-width: 640px) {
-  .topTier {
+@media (max-width: 768px) {
+  .footerInner {
+    padding: var(--space-7) var(--margin-mobile);
+  }
+  .brandSection {
     flex-direction: column;
-    gap: var(--space-6);
+    align-items: flex-start;
+    gap: var(--space-5);
   }
-  .contactRow {
+  .brandName {
+    font-size: 18px;
+  }
+  .footerCta {
+    width: 100%;
+    justify-content: center;
+  }
+  .navRow {
+    gap: var(--space-4) var(--space-5);
+  }
+  .navLink {
+    font-size: 15px;
+  }
+  .contactGrid {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+  .bottomSection {
     flex-direction: column;
-    gap: var(--space-4);
+    align-items: flex-start;
+    gap: var(--space-5);
   }
-  .bottomTier {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-6);
+  .socialRow {
+    flex-wrap: wrap;
+    gap: var(--space-3);
   }
-  .ctaInner {
-    flex-direction: column;
-    text-align: center;
+  .socialLink {
+    padding: 10px 16px;
   }
-  .main {
-    padding: var(--space-8) var(--margin-mobile);
+  .socialLabel {
+    font-size: 13px;
   }
-  .bottomInner {
-    flex-direction: column;
-    text-align: center;
+  .legalRow {
+    gap: var(--space-2);
+  }
+}
+
+@media (max-width: 480px) {
+  .brandLeft {
+    gap: var(--space-3);
+  }
+  .brandLeft img {
+    width: 40px;
+    height: 40px;
+  }
+  .brandName {
+    font-size: 16px;
+  }
+  .brandTagline {
+    font-size: 12px;
+  }
+  .navRow {
+    gap: var(--space-3) var(--space-4);
+  }
+  .navLink {
+    font-size: 14px;
   }
 }
