@@ -79,7 +79,7 @@ const affiliations = [
   },
 ];
 
-const ventures = [
+const defaultVentures = [
   {
     name: "Archzig",
     brandLetter: "AZ",
@@ -109,12 +109,21 @@ const pillars = [
 
   const [activePillar, setActivePillar] = useState("function");
   const [team, setTeam] = useState<TeamMember[]>(fallbackTeam);
+  const [ventures, setVentures] = useState(defaultVentures);
 
   useEffect(() => {
     fetch("/api/admin/data")
       .then((r) => r.json())
       .then((d) => {
         if (d.team && d.team.length > 0) setTeam(d.team);
+        if (d.contact) {
+          if (d.contact.archzigUrl) {
+            setVentures((prev) => prev.map((v) => v.name === "Archzig" ? { ...v, url: d.contact.archzigUrl } : v));
+          }
+          if (d.contact.architerraxUrl) {
+            setVentures((prev) => prev.map((v) => v.name === "Architerrax" ? { ...v, url: d.contact.architerraxUrl } : v));
+          }
+        }
       })
       .catch(() => {});
   }, []);
@@ -308,12 +317,18 @@ const pillars = [
                       href={v.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={styles.ventureLink}
+                      className={styles.ventureBtn}
                     >
-                      Visit Platform →
+                      Visit Platform
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                     </a>
                   </div>
-                  <div className={styles.ventureScreenshot}>
+                  <a
+                    href={v.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.ventureScreenshot}
+                  >
                     <Image
                       src={v.screenshot}
                       alt={`${v.name} platform`}
@@ -321,7 +336,7 @@ const pillars = [
                       style={{ objectFit: "contain" }}
                       sizes="(max-width: 768px) 100vw, 50vw"
                     />
-                  </div>
+                  </a>
                 </div>
               </ScrollReveal>
             ))}

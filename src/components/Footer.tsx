@@ -24,8 +24,8 @@ interface SocialLinks {
 
 const defaultContact = {
   address: "301, Prakriti Corporate, 3rd Floor, Y.N. Road, Indore, Madhya Pradesh 452001",
-  email: "archidesignsolutions@gmail.com",
-  phone: "+91-731-4045559",
+  emails: ["archidesignsolutions@gmail.com"],
+  phones: ["+91-731-4045559", "+91-9302101559"],
 };
 
 const defaultSocials: SocialLinks = {
@@ -46,8 +46,8 @@ export default function Footer() {
         if (d.contact) {
           setContactInfo({
             address: d.contact.address || defaultContact.address,
-            email: d.contact.emails?.[0] || defaultContact.email,
-            phone: d.contact.phones?.[0] || defaultContact.phone,
+            emails: d.contact.emails?.length ? d.contact.emails.slice(0, 2) : defaultContact.emails,
+            phones: d.contact.phones?.length ? d.contact.phones.slice(0, 2) : defaultContact.phones,
           });
           if (d.contact.socials) {
             setSocials({ ...defaultSocials, ...d.contact.socials });
@@ -153,15 +153,19 @@ export default function Footer() {
             </div>
             <div className={styles.contactBlock}>
               <span className={styles.contactLabel}>Email</span>
-              <a href={`mailto:${displayContact.email}`} className={styles.contactValue}>
-                {displayContact.email}
-              </a>
+              {displayContact.emails.map((email, i) => (
+                <a key={i} href={`mailto:${email}`} className={styles.contactValue}>
+                  {email}
+                </a>
+              ))}
             </div>
             <div className={styles.contactBlock}>
               <span className={styles.contactLabel}>Phone</span>
-              <a href={`tel:${displayContact.phone.replace(/[^+\d]/g, "")}`} className={styles.contactValue}>
-                {displayContact.phone}
-              </a>
+              {displayContact.phones.map((phone, i) => (
+                <a key={i} href={`tel:${phone.replace(/[^+\d]/g, "")}`} className={styles.contactValue}>
+                  {phone}
+                </a>
+              ))}
             </div>
           </div>
         </div>

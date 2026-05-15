@@ -17,11 +17,13 @@ interface ContactInfo {
   address: string;
   mapEmbedUrl?: string;
   socials?: SocialLinks;
+  archzigUrl?: string;
+  architerraxUrl?: string;
 }
 
 export default function ContactPage() {
   const { password } = useAdmin();
-  const [contact, setContact] = useState<ContactInfo>({ phones: [], emails: [], address: "", mapEmbedUrl: "", socials: {} });
+  const [contact, setContact] = useState<ContactInfo>({ phones: [], emails: [], address: "", mapEmbedUrl: "", socials: {}, archzigUrl: "", architerraxUrl: "" });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState("");
@@ -76,8 +78,8 @@ export default function ContactPage() {
   return (
     <>
       <div className={styles.pageHeader}>
-        <h1 className={styles.pageTitle}>Contact Information</h1>
-        <p className={styles.pageSubtitle}>Update phone numbers, emails, office address, social links. Changes reflect instantly on the Contact page and Footer.</p>
+        <h1 className={styles.pageTitle}>Business Information</h1>
+        <p className={styles.pageSubtitle}>Update phone numbers, emails, office address, social links, and venture URLs. Changes reflect on the Contact page, Footer, and About page.</p>
       </div>
 
       <div className={styles.card}>
@@ -165,6 +167,31 @@ export default function ContactPage() {
             value={contact.socials?.linkedin || ""}
             onChange={(e) => updateSocial("linkedin", e.target.value)}
             placeholder="https://linkedin.com/company/archidesignsolutions"
+          />
+        </div>
+      </div>
+
+      <div className={styles.card}>
+        <h2 className={styles.cardTitle}>Venture Platforms</h2>
+        <p style={{ fontSize: 13, color: "#666", marginBottom: 16 }}>
+          Links for Archzig and Architerrax cards on the About page. Clicking the card image or &quot;Visit Platform&quot; button redirects to these URLs.
+        </p>
+        <div className={styles.formGroup}>
+          <label className={styles.formLabel}>Archzig URL</label>
+          <input
+            className={styles.formInput}
+            value={contact.archzigUrl || ""}
+            onChange={(e) => setContact({ ...contact, archzigUrl: e.target.value })}
+            placeholder="https://www.archzig.com"
+          />
+        </div>
+        <div className={styles.formGroup}>
+          <label className={styles.formLabel}>Architerrax URL</label>
+          <input
+            className={styles.formInput}
+            value={contact.architerraxUrl || ""}
+            onChange={(e) => setContact({ ...contact, architerraxUrl: e.target.value })}
+            placeholder="https://www.architerrax.com"
           />
         </div>
       </div>

@@ -16,6 +16,7 @@ interface Project {
   title: string;
   subtitle?: string;
   category: string;
+  categories?: string[];
   location: string;
   year: string;
   description: string;
@@ -28,10 +29,16 @@ interface Project {
   };
 }
 
+function getProjectCategories(p: Project): string[] {
+  if (p.categories && p.categories.length > 0) return p.categories;
+  return p.category ? [p.category] : [];
+}
+
 const emptyProject: Omit<Project, "id"> = {
   title: "",
   subtitle: "",
-  category: "Architectural Design",
+  category: "",
+  categories: [],
   location: "",
   year: new Date().getFullYear().toString(),
   description: "",
@@ -81,8 +88,12 @@ export default function ProjectsPage() {
   const stageRef = useRef<HTMLInputElement>(null);
 
   const categories = (() => {
-    const projectCats = [...new Set(projects.map((p) => p.category))];
-    const all = [...new Set([...defaultCategories, ...projectCats, ...customCategories])];
+    const projectCats = new Set<string>();
+    projects.forEach((p) => {
+      getProjectCategories(p).forEach((c) => projectCats.add(c));
+    });
+    const existing = [...projectCats];
+    const all = [...new Set([...defaultCategories, ...existing, ...customCategories])];
     return all;
   })();
 
@@ -235,29 +246,51 @@ export default function ProjectsPage() {
             <label className={styles.formLabel}>Subtitle (optional)</label>
             <input className={styles.formInput} value={editing.subtitle || ""} onChange={(e) => setEditing({ ...editing, subtitle: e.target.value })} placeholder="e.g. A modern take on sustainable living" />
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
-            <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Category</label>
-              <select
-                className={styles.formSelect}
-                value={editing.category}
-                onChange={(e) => {
-                  if (e.target.value === "__new__") {
-                    const newCat = prompt("Enter new category name:");
-                    if (newCat && newCat.trim()) {
-                      const trimmed = newCat.trim();
-                      setCustomCategories((prev) => [...prev, trimmed]);
-                      setEditing({ ...editing, category: trimmed });
-                    }
-                  } else {
-                    setEditing({ ...editing, category: e.target.value });
-                  }
-                }}
-              >
-                {categories.map((c) => <option key={c} value={c}>{c}</option>)}
-                <option value="__new__">+ Add New Category</option>
-              </select>
+          <div className={styles.formGroup}>
+            <label className={styles.formLabel}>Categories (select one or more)</label>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
+              {categories.map((c) => {
+                const selected = (editing.categories || (editing.category ? [editing.category] : []));
+                const isChecked = selected.includes(c);
+                return (
+                  <label key={c} style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 13, cursor: "pointer", padding: "4px 10px", borderRadius: 6, border: isChecked ? "1px solid #c8322b" : "1px solid #ddd", background: isChecked ? "rgba(200,50,43,0.05)" : "transparent" }}>
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={(e) => {
+                        let updated: string[];
+                        if (e.target.checked) {
+                          updated = [...selected, c];
+                        } else {
+                          updated = selected.filter((x) => x !== c);
+                        }
+                        setEditing({ ...editing, categories: updated, category: updated[0] || "" });
+                      }}
+                      style={{ accentColor: "#c8322b" }}
+                    />
+                    {c}
+                  </label>
+                );
+              })}
             </div>
+            <button
+              type="button"
+              className={styles.btnSecondary}
+              style={{ padding: "4px 12px", fontSize: 12 }}
+              onClick={() => {
+                const newCat = prompt("Enter new category name:");
+                if (newCat && newCat.trim()) {
+                  const trimmed = newCat.trim();
+                  setCustomCategories((prev) => [...prev, trimmed]);
+                  const selected = editing.categories || (editing.category ? [editing.category] : []);
+                  setEditing({ ...editing, categories: [...selected, trimmed], category: selected[0] || trimmed });
+                }
+              }}
+            >
+              + Add New Category
+            </button>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Location</label>
               <input className={styles.formInput} value={editing.location} onChange={(e) => setEditing({ ...editing, location: e.target.value })} />
@@ -385,7 +418,7 @@ export default function ProjectsPage() {
                     </div>
                   </td>
                   <td style={{ fontWeight: 600 }}>{p.title}</td>
-                  <td>{p.category}</td>
+                  <td>{getProjectCategories(p).join(", ")}</td>
                   <td>
                     <span className={`${styles.statusBadge} ${stage === "completed" ? styles.statusPublished : styles.statusDraft}`}>
                       {stageLabels[stage]}

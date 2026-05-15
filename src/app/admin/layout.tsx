@@ -23,7 +23,7 @@ const navItems = [
   { href: "/admin/inbox", label: "Messages", icon: "⊠" },
   { href: "/admin/projects", label: "Projects", icon: "▦" },
   { href: "/admin/blog", label: "Blog", icon: "✎" },
-  { href: "/admin/contact", label: "Contact Info", icon: "✉" },
+  { href: "/admin/contact", label: "Business Info", icon: "✉" },
   { href: "/admin/gallery", label: "Gallery", icon: "◫" },
   { href: "/admin/team", label: "Team", icon: "◉" },
   { href: "/admin/testimonials", label: "Testimonials", icon: "❝" },

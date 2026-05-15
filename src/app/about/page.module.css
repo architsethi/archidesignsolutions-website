@@ -421,6 +421,23 @@
   margin-top: var(--space-2);
 }
 .ventureLink:hover { opacity: 0.7; }
+.ventureBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--accent-red);
+  color: var(--white);
+  text-decoration: none;
+  transition: all 0.25s ease;
+  margin-top: var(--space-3);
+  width: fit-content;
+}
+.ventureBtn:hover { opacity: 0.85; transform: translateY(-1px); }
 
 /* ── Responsive ── */
 @media (max-width: 1024px) {

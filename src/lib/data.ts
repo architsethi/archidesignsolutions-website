@@ -31,6 +31,8 @@ export interface ContactInfo {
   address: string;
   mapEmbedUrl?: string;
   socials?: SocialLinks;
+  archzigUrl?: string;
+  architerraxUrl?: string;
 }
 
 export type ProjectStage = "concept" | "construction" | "completed";
@@ -44,6 +46,7 @@ export interface Project {
   title: string;
   subtitle?: string;
   category: string;
+  categories?: string[];
   location: string;
   year: string;
   description: string;

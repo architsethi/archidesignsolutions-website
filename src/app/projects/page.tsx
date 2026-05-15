@@ -20,6 +20,7 @@ interface Project {
   title: string;
   subtitle?: string;
   category: string;
+  categories?: string[];
   location: string;
   year: string;
   description: string;
@@ -30,6 +31,11 @@ interface Project {
     construction?: ProjectStageData;
     completed?: ProjectStageData;
   };
+}
+
+function getProjectCategories(p: Project): string[] {
+  if (p.categories && p.categories.length > 0) return p.categories;
+  return p.category ? [p.category] : [];
 }
 
 const stageLabels: Record<ProjectStage, string> = {
@@ -246,9 +252,10 @@ function ProjectsContent() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const categories = (() => {
-    const projectCats = [...new Set(projects.map((p) => p.category))];
-    const ordered = defaultCategories.filter((c) => projectCats.includes(c));
-    const extra = projectCats.filter((c) => !defaultCategories.includes(c));
+    const projectCats = new Set<string>();
+    projects.forEach((p) => getProjectCategories(p).forEach((c) => projectCats.add(c)));
+    const ordered = defaultCategories.filter((c) => projectCats.has(c));
+    const extra = [...projectCats].filter((c) => !defaultCategories.includes(c));
     return ["All", ...ordered, ...extra];
   })();
 
@@ -276,7 +283,7 @@ function ProjectsContent() {
 
   const filtered = activeCategory === "All"
     ? projects
-    : projects.filter((p) => p.category === activeCategory);
+    : projects.filter((p) => getProjectCategories(p).includes(activeCategory));
 
   return (
     <div className={styles.page}>
