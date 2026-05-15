@@ -31,7 +31,7 @@ interface Project {
 const emptyProject: Omit<Project, "id"> = {
   title: "",
   subtitle: "",
-  category: "Residential",
+  category: "Architectural Design",
   location: "",
   year: new Date().getFullYear().toString(),
   description: "",
@@ -44,7 +44,16 @@ const emptyProject: Omit<Project, "id"> = {
   },
 };
 
-const categories = ["Residential", "Commercial", "Heritage", "Institutional", "Interior", "Urban Planning", "Landscape"];
+const defaultCategories = [
+  "Architectural Design",
+  "Interior Design",
+  "Landscape Design",
+  "Green Building",
+  "Town Planning",
+  "MEP Engineering",
+  "Architectural Branding",
+  "Project Management",
+];
 const stageKeys: ProjectStage[] = ["concept", "construction", "completed"];
 const stageLabels: Record<ProjectStage, string> = {
   concept: "Concept",
@@ -67,8 +76,15 @@ export default function ProjectsPage() {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState("");
   const [activeStageTab, setActiveStageTab] = useState<ProjectStage>("concept");
+  const [customCategories, setCustomCategories] = useState<string[]>([]);
   const coverRef = useRef<HTMLInputElement>(null);
   const stageRef = useRef<HTMLInputElement>(null);
+
+  const categories = (() => {
+    const projectCats = [...new Set(projects.map((p) => p.category))];
+    const all = [...new Set([...defaultCategories, ...projectCats, ...customCategories])];
+    return all;
+  })();
 
   const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(""), 3000); };
 
@@ -132,6 +148,11 @@ export default function ProjectsPage() {
       headers: { "x-admin-password": password },
       body: formData,
     });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: "Upload failed" }));
+      showToast(`Upload error: ${err.error}`);
+      throw new Error(err.error);
+    }
     const { url } = await res.json();
     return url;
   };
@@ -139,29 +160,42 @@ export default function ProjectsPage() {
   const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !editing) return;
-    const url = await uploadToFolder(file, "projects");
-    setEditing({ ...editing, image: url });
+    try {
+      showToast("Uploading cover image...");
+      const url = await uploadToFolder(file, "projects");
+      setEditing({ ...editing, image: url });
+      showToast("Cover image uploaded!");
+    } catch {
+      // error already shown by uploadToFolder
+    }
+    if (coverRef.current) coverRef.current.value = "";
   };
 
   const handleStageImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0 || !editing) return;
 
-    const urls: string[] = [];
-    for (let i = 0; i < files.length; i++) {
-      const url = await uploadToFolder(files[i], `projects/${activeStageTab}`);
-      urls.push(url);
-    }
+    try {
+      showToast(`Uploading ${files.length} image(s)...`);
+      const urls: string[] = [];
+      for (let i = 0; i < files.length; i++) {
+        const url = await uploadToFolder(files[i], `projects/${activeStageTab}`);
+        urls.push(url);
+      }
 
-    const stageData = editing.stages[activeStageTab] || { images: [] };
-    const updated = {
-      ...editing,
-      stages: {
-        ...editing.stages,
-        [activeStageTab]: { images: [...stageData.images, ...urls] },
-      },
-    };
-    setEditing(updated);
+      const stageData = editing.stages[activeStageTab] || { images: [] };
+      const updated = {
+        ...editing,
+        stages: {
+          ...editing.stages,
+          [activeStageTab]: { images: [...stageData.images, ...urls] },
+        },
+      };
+      setEditing(updated);
+      showToast(`${urls.length} image(s) uploaded!`);
+    } catch {
+      // error already shown by uploadToFolder
+    }
     if (stageRef.current) stageRef.current.value = "";
   };
 
@@ -204,8 +238,24 @@ export default function ProjectsPage() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Category</label>
-              <select className={styles.formSelect} value={editing.category} onChange={(e) => setEditing({ ...editing, category: e.target.value })}>
-                {categories.map((c) => <option key={c}>{c}</option>)}
+              <select
+                className={styles.formSelect}
+                value={editing.category}
+                onChange={(e) => {
+                  if (e.target.value === "__new__") {
+                    const newCat = prompt("Enter new category name:");
+                    if (newCat && newCat.trim()) {
+                      const trimmed = newCat.trim();
+                      setCustomCategories((prev) => [...prev, trimmed]);
+                      setEditing({ ...editing, category: trimmed });
+                    }
+                  } else {
+                    setEditing({ ...editing, category: e.target.value });
+                  }
+                }}
+              >
+                {categories.map((c) => <option key={c} value={c}>{c}</option>)}
+                <option value="__new__">+ Add New Category</option>
               </select>
             </div>
             <div className={styles.formGroup}>

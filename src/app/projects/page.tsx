@@ -66,8 +66,7 @@ function getAllImages(p: Project): string[] {
   return images;
 }
 
-const categories = [
-  "All",
+const defaultCategories = [
   "Architectural Design",
   "Interior Design",
   "Landscape Design",
@@ -246,6 +245,13 @@ function ProjectsContent() {
   const [projects, setProjects] = useState<Project[]>(fallbackProjects);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
+  const categories = (() => {
+    const projectCats = [...new Set(projects.map((p) => p.category))];
+    const ordered = defaultCategories.filter((c) => projectCats.includes(c));
+    const extra = projectCats.filter((c) => !defaultCategories.includes(c));
+    return ["All", ...ordered, ...extra];
+  })();
+
   useEffect(() => {
     fetch("/api/admin/data")
       .then((r) => r.json())
@@ -266,7 +272,7 @@ function ProjectsContent() {
       const match = categories.find((c) => c === decoded);
       if (match) setActiveCategory(match);
     }
-  }, [filterParam]);
+  }, [filterParam, categories]);
 
   const filtered = activeCategory === "All"
     ? projects
@@ -302,6 +308,17 @@ function ProjectsContent() {
                 {cat}
               </button>
             ))}
+          </div>
+          <div className={styles.filterDropdown}>
+            <select
+              className={styles.filterDropdownSelect}
+              value={activeCategory}
+              onChange={(e) => setActiveCategory(e.target.value)}
+            >
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
           </div>
         </div>
       </section>
