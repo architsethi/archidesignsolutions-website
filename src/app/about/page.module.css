@@ -204,6 +204,7 @@
 .teamCard {
   display: flex;
   flex-direction: column;
+  height: 100%;
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -238,7 +239,7 @@
   transition: all 0.2s ease;
 }
 .teamSocialLink:hover { color: var(--accent-red); }
-.teamTitle { font-size: 14px; font-weight: 600; color: var(--accent-red); }
+.teamTitle { font-size: 14px; font-weight: 600; color: var(--accent-red); margin-top: calc(var(--space-2) * -0.5); }
 .teamQuals {
   font-size: 12px;
   color: var(--text-tertiary);
