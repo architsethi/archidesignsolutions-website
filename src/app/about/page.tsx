@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -17,7 +17,17 @@ const stripImages = [
   { src: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=500&q=80", alt: "Urban planning" },
 ];
 
-const team = [
+interface TeamMember {
+  name: string;
+  title: string;
+  quals: string;
+  desc: string;
+  image: string;
+  linkedin?: string;
+  instagram?: string;
+}
+
+const fallbackTeam: TeamMember[] = [
   {
     name: "Ar. Amit Sethi",
     title: "Founder & Principal Architect",
@@ -98,6 +108,16 @@ const pillars = [
   ];
 
   const [activePillar, setActivePillar] = useState("function");
+  const [team, setTeam] = useState<TeamMember[]>(fallbackTeam);
+
+  useEffect(() => {
+    fetch("/api/admin/data")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.team && d.team.length > 0) setTeam(d.team);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className={styles.page}>
@@ -192,7 +212,31 @@ const pillars = [
                     />
                   </div>
                   <div className={styles.teamInfo}>
-                    <h3 className={styles.teamName}>{member.name}</h3>
+                    <div className={styles.teamNameRow}>
+                      <h3 className={styles.teamName}>{member.name}</h3>
+                      {(member.linkedin || member.instagram) && (
+                        <div className={styles.teamSocials}>
+                          {member.linkedin && (
+                            <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className={styles.teamSocialLink} aria-label={`${member.name} LinkedIn`}>
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                                <rect x="2" y="9" width="4" height="12" />
+                                <circle cx="4" cy="4" r="2" />
+                              </svg>
+                            </a>
+                          )}
+                          {member.instagram && (
+                            <a href={member.instagram} target="_blank" rel="noopener noreferrer" className={styles.teamSocialLink} aria-label={`${member.name} Instagram`}>
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                                <circle cx="12" cy="12" r="5" />
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                              </svg>
+                            </a>
+                          )}
+                        </div>
+                      )}
+                    </div>
                     <p className={styles.teamTitle}>{member.title}</p>
                     <p className={styles.teamQuals}>{member.quals}</p>
                     <p className={styles.teamDesc}>{member.desc}</p>

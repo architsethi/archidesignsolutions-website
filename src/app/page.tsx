@@ -151,6 +151,7 @@ export default function HomePage() {
   const [liveTestimonials, setLiveTestimonials] = useState(defaultTestimonials);
   const [galleryImages, setGalleryImages] = useState(defaultGalleryImages);
   const [services, setServices] = useState(defaultServices);
+  const [founderImage, setFounderImage] = useState("/images/team/amit-sethi.png");
   const [activeServiceIdx, setActiveServiceIdx] = useState<number>(-1);
   const [isMobile, setIsMobile] = useState(false);
   const serviceCardsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -224,6 +225,8 @@ export default function HomePage() {
         }
         // Testimonials
         if (d.testimonials?.length) setLiveTestimonials(d.testimonials);
+        // Founder image (first team member)
+        if (d.team?.[0]?.image) setFounderImage(d.team[0].image);
       })
       .catch(() => {});
   }, []);
@@ -570,7 +573,7 @@ export default function HomePage() {
               {/* Founder portrait */}
               <div className={styles.founderPortrait}>
                 <Image
-                  src="/images/team/amit-sethi.png"
+                  src={founderImage}
                   alt="Ar. Amit Sethi, Founder"
                   width={400}
                   height={500}

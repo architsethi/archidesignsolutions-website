@@ -36,7 +36,7 @@ const defaultSocials: SocialLinks = {
 };
 
 export default function Footer() {
-  const [contactInfo, setContactInfo] = useState(defaultContact);
+  const [contactInfo, setContactInfo] = useState<typeof defaultContact | null>(null);
   const [socials, setSocials] = useState<SocialLinks>(defaultSocials);
 
   useEffect(() => {
@@ -52,10 +52,16 @@ export default function Footer() {
           if (d.contact.socials) {
             setSocials({ ...defaultSocials, ...d.contact.socials });
           }
+        } else {
+          setContactInfo(defaultContact);
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        setContactInfo(defaultContact);
+      });
   }, []);
+
+  const displayContact = contactInfo || defaultContact;
 
   const socialLinks = [
     {
@@ -140,21 +146,21 @@ export default function Footer() {
             ))}
           </nav>
 
-          <div className={styles.contactGrid}>
+          <div className={styles.contactGrid} style={{ opacity: contactInfo ? 1 : 0, transition: "opacity 0.3s ease" }}>
             <div className={styles.contactBlock}>
               <span className={styles.contactLabel}>Office</span>
-              <span className={styles.contactValue}>{contactInfo.address}</span>
+              <span className={styles.contactValue}>{displayContact.address}</span>
             </div>
             <div className={styles.contactBlock}>
               <span className={styles.contactLabel}>Email</span>
-              <a href={`mailto:${contactInfo.email}`} className={styles.contactValue}>
-                {contactInfo.email}
+              <a href={`mailto:${displayContact.email}`} className={styles.contactValue}>
+                {displayContact.email}
               </a>
             </div>
             <div className={styles.contactBlock}>
               <span className={styles.contactLabel}>Phone</span>
-              <a href={`tel:${contactInfo.phone.replace(/[^+\d]/g, "")}`} className={styles.contactValue}>
-                {contactInfo.phone}
+              <a href={`tel:${displayContact.phone.replace(/[^+\d]/g, "")}`} className={styles.contactValue}>
+                {displayContact.phone}
               </a>
             </div>
           </div>

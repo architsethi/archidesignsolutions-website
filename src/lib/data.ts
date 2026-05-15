@@ -14,6 +14,8 @@ export interface TeamMember {
   quals: string;
   desc: string;
   image: string;
+  linkedin?: string;
+  instagram?: string;
 }
 
 export interface SocialLinks {
