@@ -138,7 +138,7 @@ export default function RootLayout({
       "Green Building Consulting",
       "Town Planning",
       "MEP Engineering",
-      "Branding & Promotion",
+      "Architectural Branding",
       "Project Management",
     ],
     sameAs: [],

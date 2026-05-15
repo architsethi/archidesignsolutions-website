@@ -74,7 +74,7 @@ const categories = [
   "Green Building",
   "Town Planning",
   "MEP Engineering",
-  "Branding & Promotion",
+  "Architectural Branding",
   "Project Management",
 ];
 
