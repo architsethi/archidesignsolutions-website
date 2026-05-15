@@ -313,7 +313,7 @@ export async function saveSiteData(data: SiteData): Promise<void> {
     // ignore
   }
   await put(DATA_KEY, JSON.stringify(data, null, 2), {
-    access: "private",
+    access: "public",
     contentType: "application/json",
     token,
   });
@@ -326,7 +326,7 @@ export async function uploadImage(
   const token = getToken();
   const filename = `${folder}/${Date.now()}-${file.name}`;
   const blob = await put(filename, file, {
-    access: "private",
+    access: "public",
     token,
   });
   return blob.url;
