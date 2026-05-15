@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
 
     const filename = `${folder}/${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
     const blob = await put(filename, file, {
-      access: "public",
+      access: "private",
       token: process.env.BLOB_READ_WRITE_TOKEN,
     });
 
