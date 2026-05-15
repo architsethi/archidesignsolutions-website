@@ -16,11 +16,19 @@ export interface TeamMember {
   image: string;
 }
 
+export interface SocialLinks {
+  instagram?: string;
+  whatsapp?: string;
+  facebook?: string;
+  linkedin?: string;
+}
+
 export interface ContactInfo {
   phones: string[];
   emails: string[];
   address: string;
   mapEmbedUrl?: string;
+  socials?: SocialLinks;
 }
 
 export type ProjectStage = "concept" | "construction" | "completed";
@@ -150,6 +158,12 @@ export const defaultSiteData: SiteData = {
     phones: ["+91-731-4045559", "+91-9302101559"],
     emails: ["archidesignsolutions@gmail.com"],
     address: "301, Prakriti Corporate, 3rd Floor, Y.N. Road, Indore, Madhya Pradesh 452001",
+    socials: {
+      instagram: "https://www.instagram.com/archidesignsolutions/",
+      whatsapp: "https://wa.me/919179797359",
+      facebook: "https://facebook.com/archidesignsolutions",
+      linkedin: "https://linkedin.com/company/archidesignsolutions",
+    },
   },
   projects: [
     {
@@ -274,7 +288,11 @@ export async function getSiteData(): Promise<SiteData> {
     return {
       ...defaultSiteData,
       ...data,
-      contact: { ...defaultSiteData.contact, ...(data.contact || {}) },
+      contact: {
+        ...defaultSiteData.contact,
+        ...(data.contact || {}),
+        socials: { ...defaultSiteData.contact.socials, ...(data.contact?.socials || {}) },
+      },
     } as SiteData;
   } catch (err) {
     console.error("getSiteData error:", err);

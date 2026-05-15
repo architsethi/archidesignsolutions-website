@@ -113,9 +113,9 @@ const defaultServices = [
   },
   {
     num: "07",
-    title: "Branding & Content",
+    title: "Branding & Promotion",
     desc: "Creative marketing and positioning of real estate projects through branded architectural content.",
-    href: "/projects?filter=Branding+%26+Content",
+    href: "/projects?filter=Branding+%26+Promotion",
     img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80",
   },
   {

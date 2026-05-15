@@ -4,16 +4,24 @@ import { useEffect, useState } from "react";
 import { useAdmin } from "../layout";
 import styles from "../admin.module.css";
 
+interface SocialLinks {
+  instagram?: string;
+  whatsapp?: string;
+  facebook?: string;
+  linkedin?: string;
+}
+
 interface ContactInfo {
   phones: string[];
   emails: string[];
   address: string;
   mapEmbedUrl?: string;
+  socials?: SocialLinks;
 }
 
 export default function ContactPage() {
   const { password } = useAdmin();
-  const [contact, setContact] = useState<ContactInfo>({ phones: [], emails: [], address: "", mapEmbedUrl: "" });
+  const [contact, setContact] = useState<ContactInfo>({ phones: [], emails: [], address: "", mapEmbedUrl: "", socials: {} });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState("");
@@ -23,7 +31,10 @@ export default function ContactPage() {
   useEffect(() => {
     fetch("/api/admin/data", { headers: { "x-admin-password": password } })
       .then((r) => r.json())
-      .then((d) => { setContact(d.contact || { phones: [], emails: [], address: "", mapEmbedUrl: "" }); setLoading(false); })
+      .then((d) => {
+        setContact(d.contact || { phones: [], emails: [], address: "", mapEmbedUrl: "", socials: {} });
+        setLoading(false);
+      })
       .catch(() => setLoading(false));
   }, [password]);
 
@@ -56,13 +67,17 @@ export default function ContactPage() {
   const addEmail = () => setContact({ ...contact, emails: [...contact.emails, ""] });
   const removeEmail = (i: number) => setContact({ ...contact, emails: contact.emails.filter((_, idx) => idx !== i) });
 
+  const updateSocial = (key: keyof SocialLinks, value: string) => {
+    setContact({ ...contact, socials: { ...contact.socials, [key]: value } });
+  };
+
   if (loading) return <p>Loading...</p>;
 
   return (
     <>
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>Contact Information</h1>
-        <p className={styles.pageSubtitle}>Update phone numbers, emails, office address, and map links. Changes reflect immediately on the live site.</p>
+        <p className={styles.pageSubtitle}>Update phone numbers, emails, office address, social links. Changes reflect instantly on the Contact page and Footer.</p>
       </div>
 
       <div className={styles.card}>
@@ -108,6 +123,49 @@ export default function ContactPage() {
           <p style={{ fontSize: 12, color: "#888", marginTop: 4 }}>
             Go to Google Maps → Share → Embed a map → Copy the src URL from the iframe code.
           </p>
+        </div>
+      </div>
+
+      <div className={styles.card}>
+        <h2 className={styles.cardTitle}>Social Media Links</h2>
+        <p style={{ fontSize: 13, color: "#666", marginBottom: 16 }}>
+          These links are used in the Footer and Contact page social buttons.
+        </p>
+        <div className={styles.formGroup}>
+          <label className={styles.formLabel}>Instagram URL</label>
+          <input
+            className={styles.formInput}
+            value={contact.socials?.instagram || ""}
+            onChange={(e) => updateSocial("instagram", e.target.value)}
+            placeholder="https://www.instagram.com/archidesignsolutions/"
+          />
+        </div>
+        <div className={styles.formGroup}>
+          <label className={styles.formLabel}>WhatsApp URL</label>
+          <input
+            className={styles.formInput}
+            value={contact.socials?.whatsapp || ""}
+            onChange={(e) => updateSocial("whatsapp", e.target.value)}
+            placeholder="https://wa.me/919179797359"
+          />
+        </div>
+        <div className={styles.formGroup}>
+          <label className={styles.formLabel}>Facebook URL</label>
+          <input
+            className={styles.formInput}
+            value={contact.socials?.facebook || ""}
+            onChange={(e) => updateSocial("facebook", e.target.value)}
+            placeholder="https://facebook.com/archidesignsolutions"
+          />
+        </div>
+        <div className={styles.formGroup}>
+          <label className={styles.formLabel}>LinkedIn URL</label>
+          <input
+            className={styles.formInput}
+            value={contact.socials?.linkedin || ""}
+            onChange={(e) => updateSocial("linkedin", e.target.value)}
+            placeholder="https://linkedin.com/company/archidesignsolutions"
+          />
         </div>
       </div>
 
