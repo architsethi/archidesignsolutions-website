@@ -23,9 +23,9 @@ interface SocialLinks {
 }
 
 const defaultContact = {
-  address: "208B, Prakriti Corporate, Y.N. Road, Indore — 452001",
-  email: "solutions.archit@gmail.com",
-  phone: "+91 91797 97359",
+  address: "301, Prakriti Corporate, 3rd Floor, Y.N. Road, Indore, Madhya Pradesh 452001",
+  email: "archidesignsolutions@gmail.com",
+  phone: "+91-731-4045559",
 };
 
 const defaultSocials: SocialLinks = {
@@ -40,7 +40,7 @@ export default function Footer() {
   const [socials, setSocials] = useState<SocialLinks>(defaultSocials);
 
   useEffect(() => {
-    fetch("/api/admin/data")
+    fetch("/api/admin/data", { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d.contact) {

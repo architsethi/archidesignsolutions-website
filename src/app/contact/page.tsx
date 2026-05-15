@@ -44,7 +44,7 @@ export default function ContactPage() {
   });
 
   useEffect(() => {
-    fetch("/api/admin/data")
+    fetch("/api/admin/data", { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d.contact) {

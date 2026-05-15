@@ -257,12 +257,12 @@ export const defaultSiteData: SiteData = {
   homeServiceImages: [
     { title: "Architectural Design", img: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600&q=80" },
     { title: "Interior Design", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80" },
-    { title: "Urban Planning", img: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80" },
-    { title: "Green Building", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" },
     { title: "Landscape Design", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80" },
-    { title: "MEP Engineering", img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80" },
+    { title: "Green Building", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" },
     { title: "Town Planning", img: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=600&q=80" },
-    { title: "Heritage Conservation", img: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=600&q=80" },
+    { title: "MEP Engineering", img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80" },
+    { title: "Branding & Promotion", img: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80" },
+    { title: "Project Management", img: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80" },
   ],
   contactSubmissions: [],
 };

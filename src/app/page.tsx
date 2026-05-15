@@ -206,20 +206,19 @@ export default function HomePage() {
 
   /* Fetch ALL live data from persistent API */
   useEffect(() => {
-    fetch("/api/admin/data")
+    fetch("/api/admin/data", { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         // Gallery images
         if (d.gallery?.length) {
           setGalleryImages(d.gallery);
         }
-        // Service images — merge admin-managed images with default card metadata
+        // Service images — only pull images from API, titles/hrefs stay from code
         if (d.homeServiceImages?.length) {
           setServices(prev =>
             prev.map((svc, i) => ({
               ...svc,
               img: d.homeServiceImages[i]?.img || svc.img,
-              title: d.homeServiceImages[i]?.title || svc.title,
             }))
           );
         }
