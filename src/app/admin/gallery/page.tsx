@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { useAdmin } from "../layout";
 import styles from "../admin.module.css";
@@ -29,6 +29,15 @@ export default function GalleryPage() {
   const fileRef = useRef<HTMLInputElement>(null);
   const disciplineFileRefs = useRef<(HTMLInputElement | null)[]>([]);
 
+  // Label editing state
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingLabel, setEditingLabel] = useState("");
+  const editInputRef = useRef<HTMLInputElement>(null);
+
+  // Drag and drop state
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+
   const showToast = (msg: string) => {
     setToast(msg);
     setTimeout(() => setToast(""), 3000);
@@ -44,6 +53,14 @@ export default function GalleryPage() {
       })
       .catch(() => setLoading(false));
   }, [password]);
+
+  // Focus input when editing starts
+  useEffect(() => {
+    if (editingIndex !== null && editInputRef.current) {
+      editInputRef.current.focus();
+      editInputRef.current.select();
+    }
+  }, [editingIndex]);
 
   const saveGallery = async (updated: GalleryImage[]) => {
     setSaving(true);
@@ -96,9 +113,74 @@ export default function GalleryPage() {
     await saveGallery(updated);
   };
 
-  const handleLabelChange = (index: number, label: string) => {
-    const updated = images.map((img, i) => (i === index ? { ...img, label } : img));
-    setImages(updated);
+  // ── Label editing handlers ──
+  const startEditing = (index: number) => {
+    setEditingIndex(index);
+    setEditingLabel(images[index].label);
+  };
+
+  const commitEdit = useCallback(async () => {
+    if (editingIndex === null) return;
+    const trimmed = editingLabel.trim();
+    if (trimmed && trimmed !== images[editingIndex].label) {
+      const updated = images.map((img, i) =>
+        i === editingIndex ? { ...img, label: trimmed } : img
+      );
+      await saveGallery(updated);
+    }
+    setEditingIndex(null);
+    setEditingLabel("");
+  }, [editingIndex, editingLabel, images]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const cancelEdit = () => {
+    setEditingIndex(null);
+    setEditingLabel("");
+  };
+
+  const handleEditKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      commitEdit();
+    } else if (e.key === "Escape") {
+      cancelEdit();
+    }
+  };
+
+  // ── Drag and drop handlers ──
+  const handleDragStart = (index: number) => {
+    setDragIndex(index);
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    if (dragIndex === null || dragIndex === index) return;
+    setDragOverIndex(index);
+  };
+
+  const handleDragLeave = () => {
+    setDragOverIndex(null);
+  };
+
+  const handleDrop = async (e: React.DragEvent, dropIndex: number) => {
+    e.preventDefault();
+    if (dragIndex === null || dragIndex === dropIndex) {
+      setDragIndex(null);
+      setDragOverIndex(null);
+      return;
+    }
+
+    const updated = [...images];
+    const [draggedItem] = updated.splice(dragIndex, 1);
+    updated.splice(dropIndex, 0, draggedItem);
+
+    setDragIndex(null);
+    setDragOverIndex(null);
+    await saveGallery(updated);
+  };
+
+  const handleDragEnd = () => {
+    setDragIndex(null);
+    setDragOverIndex(null);
   };
 
   const handleDisciplineUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -174,22 +256,73 @@ export default function GalleryPage() {
           {/* Image Grid */}
           <div className={styles.card}>
             <h2 className={styles.cardTitle}>Current Images ({images.length})</h2>
+            <p style={{ fontSize: 13, color: "#888", marginBottom: 16 }}>
+              Drag images to reorder · Click ✏️ to edit labels · Hover for delete
+            </p>
             <div className={styles.imageGrid}>
-              {images.map((img, i) => (
-                <div key={i} className={styles.imageCard}>
-                  <Image src={img.src} alt={img.label} fill style={{ objectFit: "cover" }} sizes="200px" />
-                  <div className={styles.imageCardOverlay}>
-                    <input
-                      className={styles.imageCardLabel}
-                      value={img.label}
-                      onChange={(e) => handleLabelChange(i, e.target.value)}
-                      onBlur={() => saveGallery(images)}
-                      style={{ background: "transparent", border: "none", color: "#fff", outline: "none", width: "100%" }}
-                    />
-                    <button className={styles.imageCardDelete} onClick={() => handleDelete(i)} title="Delete">×</button>
+              {images.map((img, i) => {
+                const isDragging = dragIndex === i;
+                const isDragOver = dragOverIndex === i;
+
+                return (
+                  <div
+                    key={`${img.src}-${i}`}
+                    className={`${styles.imageCardWrapper} ${isDragging ? styles.imageDragging : ""} ${isDragOver ? styles.imageDragOver : ""}`}
+                    draggable
+                    onDragStart={() => handleDragStart(i)}
+                    onDragOver={(e) => handleDragOver(e, i)}
+                    onDragLeave={handleDragLeave}
+                    onDrop={(e) => handleDrop(e, i)}
+                    onDragEnd={handleDragEnd}
+                  >
+                    {/* Image area */}
+                    <div className={styles.imageCardInner}>
+                      <Image src={img.src} alt={img.label} fill style={{ objectFit: "cover" }} sizes="200px" />
+
+                      {/* Drag handle */}
+                      <span className={styles.dragHandle} title="Drag to reorder">⠿</span>
+
+                      {/* Order badge */}
+                      <span className={styles.orderBadge}>{i + 1}</span>
+
+                      {/* Delete overlay */}
+                      <div className={styles.imageCardOverlay}>
+                        <span style={{ flex: 1 }} />
+                        <button className={styles.imageCardDelete} onClick={() => handleDelete(i)} title="Delete">×</button>
+                      </div>
+                    </div>
+
+                    {/* Label area below image */}
+                    <div className={styles.imageCardBottom}>
+                      {editingIndex === i ? (
+                        <>
+                          <input
+                            ref={editInputRef}
+                            className={styles.imageCardLabelInput}
+                            value={editingLabel}
+                            onChange={(e) => setEditingLabel(e.target.value)}
+                            onBlur={commitEdit}
+                            onKeyDown={handleEditKeyDown}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <span className={styles.imageCardLabelText} title={img.label}>
+                            {img.label}
+                          </span>
+                          <button
+                            className={styles.imageCardEditBtn}
+                            onClick={() => startEditing(i)}
+                            title="Edit label"
+                          >
+                            ✏️
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </>
