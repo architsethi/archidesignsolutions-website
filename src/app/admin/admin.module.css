@@ -373,6 +373,36 @@
   font-weight: 700;
 }
 
+/* ── Content Editor Toolbar ── */
+.contentToolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #eee;
+}
+.contentToolbar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.bodyImagePreview {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.bodyImageThumb {
+  position: relative;
+  width: 80px;
+  height: 56px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+  flex-shrink: 0;
+}
+
 /* ── Image Grid ── */
 .imageGrid {
   display: grid;

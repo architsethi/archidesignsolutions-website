@@ -52,6 +52,11 @@ export default function BlogPage() {
   const [seoOpen, setSeoOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
+  // Body image insertion
+  const contentRef = useRef<HTMLTextAreaElement>(null);
+  const bodyImageFileRef = useRef<HTMLInputElement>(null);
+  const [bodyImageUploading, setBodyImageUploading] = useState(false);
+
   const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(""), 3000); };
 
   useEffect(() => {
@@ -120,6 +125,58 @@ export default function BlogPage() {
     setEditing({ ...editing, image: url });
   };
 
+  // ── Body image insertion handler ──
+  const handleBodyImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !editing) return;
+
+    setBodyImageUploading(true);
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("folder", "blog");
+
+    try {
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        headers: { "x-admin-password": password },
+        body: formData,
+      });
+      const { url } = await res.json();
+
+      // Get cursor position from the textarea
+      const textarea = contentRef.current;
+      const cursorPos = textarea?.selectionStart ?? editing.content.length;
+
+      // Build the markdown image tag
+      const altText = file.name.replace(/\.\w+$/, "").replace(/[-_]/g, " ");
+      const imageTag = `\n![${altText}](${url})\n`;
+
+      // Insert at cursor position
+      const before = editing.content.slice(0, cursorPos);
+      const after = editing.content.slice(cursorPos);
+      const newContent = before + imageTag + after;
+
+      setEditing({ ...editing, content: newContent });
+      showToast("Image inserted!");
+
+      // Reset cursor position after React re-render
+      setTimeout(() => {
+        if (textarea) {
+          const newPos = cursorPos + imageTag.length;
+          textarea.selectionStart = newPos;
+          textarea.selectionEnd = newPos;
+          textarea.focus();
+        }
+      }, 50);
+    } catch {
+      showToast("Image upload failed");
+    }
+
+    setBodyImageUploading(false);
+    if (bodyImageFileRef.current) bodyImageFileRef.current.value = "";
+  };
+
   if (loading) return <p>Loading...</p>;
 
   // Edit / Create form
@@ -157,7 +214,36 @@ export default function BlogPage() {
           </div>
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>Content</label>
-            <textarea className={styles.formTextarea} value={editing.content} onChange={(e) => setEditing({ ...editing, content: e.target.value })} placeholder="Full blog post content (supports markdown)" style={{ minHeight: 250 }} />
+            {/* Toolbar for inserting images */}
+            <div className={styles.contentToolbar}>
+              <button
+                type="button"
+                className={styles.btnSecondary}
+                style={{ padding: "6px 14px", fontSize: 13 }}
+                disabled={bodyImageUploading}
+                onClick={() => bodyImageFileRef.current?.click()}
+              >
+                {bodyImageUploading ? "⏳ Uploading..." : "🖼️ Insert Image"}
+              </button>
+              <span style={{ fontSize: 12, color: "#999" }}>
+                Click to add an image at the cursor position
+              </span>
+            </div>
+            <textarea
+              ref={contentRef}
+              className={styles.formTextarea}
+              value={editing.content}
+              onChange={(e) => setEditing({ ...editing, content: e.target.value })}
+              placeholder={"Full blog post content (supports markdown)\n\nUse the Insert Image button above to add images within your content."}
+              style={{ minHeight: 250 }}
+            />
+            <input
+              ref={bodyImageFileRef}
+              type="file"
+              accept="image/*"
+              hidden
+              onChange={handleBodyImageUpload}
+            />
           </div>
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>Featured Image</label>
