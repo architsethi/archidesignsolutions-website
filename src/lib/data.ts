@@ -6,6 +6,7 @@ const DATA_KEY = "site-data.json";
 export interface GalleryImage {
   src: string;
   label: string;
+  link?: string;
 }
 
 export interface TeamMember {

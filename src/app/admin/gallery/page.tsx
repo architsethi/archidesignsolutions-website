@@ -8,6 +8,7 @@ import styles from "../admin.module.css";
 interface GalleryImage {
   src: string;
   label: string;
+  link?: string;
 }
 
 interface ServiceImage {
@@ -26,6 +27,7 @@ export default function GalleryPage() {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState("");
   const [newLabel, setNewLabel] = useState("");
+  const [newLink, setNewLink] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
   const disciplineFileRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -33,6 +35,11 @@ export default function GalleryPage() {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editingLabel, setEditingLabel] = useState("");
   const editInputRef = useRef<HTMLInputElement>(null);
+
+  // Link editing state
+  const [editingLinkIndex, setEditingLinkIndex] = useState<number | null>(null);
+  const [editingLink, setEditingLink] = useState("");
+  const editLinkInputRef = useRef<HTMLInputElement>(null);
 
   // Drag and drop state
   const [dragIndex, setDragIndex] = useState<number | null>(null);
@@ -61,6 +68,14 @@ export default function GalleryPage() {
       editInputRef.current.select();
     }
   }, [editingIndex]);
+
+  // Focus link input when editing starts
+  useEffect(() => {
+    if (editingLinkIndex !== null && editLinkInputRef.current) {
+      editLinkInputRef.current.focus();
+      editLinkInputRef.current.select();
+    }
+  }, [editingLinkIndex]);
 
   const saveGallery = async (updated: GalleryImage[]) => {
     setSaving(true);
@@ -102,9 +117,12 @@ export default function GalleryPage() {
     });
     const { url } = await res.json();
     const label = newLabel || file.name.replace(/\.\w+$/, "").replace(/[-_]/g, " ");
-    const updated = [...images, { src: url, label }];
+    const newImage: GalleryImage = { src: url, label };
+    if (newLink.trim()) newImage.link = newLink.trim();
+    const updated = [...images, newImage];
     await saveGallery(updated);
     setNewLabel("");
+    setNewLink("");
     if (fileRef.current) fileRef.current.value = "";
   };
 
@@ -117,6 +135,8 @@ export default function GalleryPage() {
   const startEditing = (index: number) => {
     setEditingIndex(index);
     setEditingLabel(images[index].label);
+    // Close link editing if open
+    setEditingLinkIndex(null);
   };
 
   const commitEdit = useCallback(async () => {
@@ -143,6 +163,42 @@ export default function GalleryPage() {
       commitEdit();
     } else if (e.key === "Escape") {
       cancelEdit();
+    }
+  };
+
+  // ── Link editing handlers ──
+  const startEditingLink = (index: number) => {
+    setEditingLinkIndex(index);
+    setEditingLink(images[index].link || "");
+    // Close label editing if open
+    setEditingIndex(null);
+  };
+
+  const commitLinkEdit = useCallback(async () => {
+    if (editingLinkIndex === null) return;
+    const trimmed = editingLink.trim();
+    const currentLink = images[editingLinkIndex].link || "";
+    if (trimmed !== currentLink) {
+      const updated = images.map((img, i) =>
+        i === editingLinkIndex ? { ...img, link: trimmed || undefined } : img
+      );
+      await saveGallery(updated);
+    }
+    setEditingLinkIndex(null);
+    setEditingLink("");
+  }, [editingLinkIndex, editingLink, images]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const cancelLinkEdit = () => {
+    setEditingLinkIndex(null);
+    setEditingLink("");
+  };
+
+  const handleLinkEditKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      commitLinkEdit();
+    } else if (e.key === "Escape") {
+      cancelLinkEdit();
     }
   };
 
@@ -241,6 +297,18 @@ export default function GalleryPage() {
                 onChange={(e) => setNewLabel(e.target.value)}
               />
             </div>
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Project Link <span style={{ color: "#999", fontWeight: 400 }}>(optional)</span></label>
+              <input
+                className={styles.formInput}
+                placeholder="e.g. https://archidesignsolutions.com/projects"
+                value={newLink}
+                onChange={(e) => setNewLink(e.target.value)}
+              />
+              <span style={{ fontSize: 11, color: "#999", marginTop: 2 }}>
+                If set, a &quot;View Project&quot; button will appear when the image is expanded
+              </span>
+            </div>
             <div
               className={styles.uploadZone}
               onClick={() => fileRef.current?.click()}
@@ -257,7 +325,7 @@ export default function GalleryPage() {
           <div className={styles.card}>
             <h2 className={styles.cardTitle}>Current Images ({images.length})</h2>
             <p style={{ fontSize: 13, color: "#888", marginBottom: 16 }}>
-              Drag images to reorder · Click ✏️ to edit labels · Hover for delete
+              Drag images to reorder · Click ✏️ to edit labels · Click 🔗 to edit project link · Hover for delete
             </p>
             <div className={styles.imageGrid}>
               {images.map((img, i) => {
@@ -285,6 +353,18 @@ export default function GalleryPage() {
                       {/* Order badge */}
                       <span className={styles.orderBadge}>{i + 1}</span>
 
+                      {/* Link indicator */}
+                      {img.link && (
+                        <span style={{
+                          position: "absolute", bottom: 8, left: 8,
+                          background: "rgba(200,50,43,0.85)", color: "#fff",
+                          fontSize: 10, fontWeight: 700, padding: "2px 6px",
+                          borderRadius: 4, zIndex: 3,
+                        }}>
+                          🔗 Linked
+                        </span>
+                      )}
+
                       {/* Delete overlay */}
                       <div className={styles.imageCardOverlay}>
                         <span style={{ flex: 1 }} />
@@ -295,16 +375,25 @@ export default function GalleryPage() {
                     {/* Label area below image */}
                     <div className={styles.imageCardBottom}>
                       {editingIndex === i ? (
-                        <>
-                          <input
-                            ref={editInputRef}
-                            className={styles.imageCardLabelInput}
-                            value={editingLabel}
-                            onChange={(e) => setEditingLabel(e.target.value)}
-                            onBlur={commitEdit}
-                            onKeyDown={handleEditKeyDown}
-                          />
-                        </>
+                        <input
+                          ref={editInputRef}
+                          className={styles.imageCardLabelInput}
+                          value={editingLabel}
+                          onChange={(e) => setEditingLabel(e.target.value)}
+                          onBlur={commitEdit}
+                          onKeyDown={handleEditKeyDown}
+                        />
+                      ) : editingLinkIndex === i ? (
+                        <input
+                          ref={editLinkInputRef}
+                          className={styles.imageCardLabelInput}
+                          value={editingLink}
+                          onChange={(e) => setEditingLink(e.target.value)}
+                          onBlur={commitLinkEdit}
+                          onKeyDown={handleLinkEditKeyDown}
+                          placeholder="https://... (leave empty to remove)"
+                          style={{ fontSize: 11 }}
+                        />
                       ) : (
                         <>
                           <span className={styles.imageCardLabelText} title={img.label}>
@@ -316,6 +405,14 @@ export default function GalleryPage() {
                             title="Edit label"
                           >
                             ✏️
+                          </button>
+                          <button
+                            className={styles.imageCardEditBtn}
+                            onClick={() => startEditingLink(i)}
+                            title={img.link ? `Edit link: ${img.link}` : "Add project link"}
+                            style={img.link ? { background: "rgba(200,50,43,0.08)", borderColor: "#c8322b" } : {}}
+                          >
+                            🔗
                           </button>
                         </>
                       )}

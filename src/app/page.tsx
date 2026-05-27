@@ -147,7 +147,7 @@ const defaultTestimonials = [
 
 /* ═══ Homepage ═══ */
 export default function HomePage() {
-  const [lightbox, setLightbox] = useState<{ src: string; label: string } | null>(null);
+  const [lightbox, setLightbox] = useState<{ src: string; label: string; link?: string } | null>(null);
   const [liveTestimonials, setLiveTestimonials] = useState(defaultTestimonials);
   const [galleryImages, setGalleryImages] = useState(defaultGalleryImages);
   const [services, setServices] = useState(defaultServices);
@@ -461,7 +461,23 @@ export default function HomePage() {
                 height={750}
                 style={{ objectFit: "cover", width: '100%', height: 'auto', borderRadius: 'var(--radius-lg)' }}
               />
-              <span className={styles.lightboxLabel}>{lightbox.label}</span>
+              <div className={styles.lightboxFooter}>
+                <span className={styles.lightboxLabel}>{lightbox.label}</span>
+                {lightbox.link && (
+                  <a
+                    href={lightbox.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.lightboxProjectLink}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    View Project
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M7 17L17 7M17 7H7M17 7v10" />
+                    </svg>
+                  </a>
+                )}
+              </div>
             </motion.div>
 
             {/* Next Arrow */}
