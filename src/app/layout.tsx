@@ -113,13 +113,14 @@ export default function RootLayout({
       "Award-winning architecture, interior design & urban planning firm in Indore, India with three decades of expertise.",
     address: {
       "@type": "PostalAddress",
-      streetAddress: "208B, Prakriti Corporate, Y.N. Road, New Palasia",
+      streetAddress: "208B, Prakriti Corporate, Y.N. Road",
       addressLocality: "Indore",
       addressRegion: "Madhya Pradesh",
       postalCode: "452001",
       addressCountry: "IN",
     },
-    telephone: "+91-731-4045559",
+    telephone: "+91-9826375507",
+    hasMap: "https://maps.app.goo.gl/4AL3qZxvKmPpRSmX6",
     email: "archidesignsolutions@gmail.com",
     foundingDate: "1999",
     founder: {

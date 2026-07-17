@@ -23,9 +23,9 @@ interface SocialLinks {
 }
 
 const defaultContact = {
-  address: "301, Prakriti Corporate, 3rd Floor, Y.N. Road, Indore, Madhya Pradesh 452001",
+  address: "208B, Prakriti Corporate, Y.N. Road, Indore 452001",
   emails: ["archidesignsolutions@gmail.com"],
-  phones: ["+91-731-4045559", "+91-9302101559"],
+  phones: ["+91-9826375507", "+91-9179797359"],
 };
 
 const defaultSocials: SocialLinks = {

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Contact Us — Get in Touch for Your Next Project",
   description:
-    "Contact ArchiDesignSolutions for architectural design, interior design, landscape, and green building services. Visit us at Prakriti Corporate, Y.N. Road, Indore or call +91-731-4045559.",
+    "Contact ArchiDesignSolutions for architectural design, interior design, landscape, and green building services. Visit us at 208B, Prakriti Corporate, Y.N. Road, Indore or call +91-9826375507.",
   keywords: [
     "contact architect Indore",
     "architecture firm contact",

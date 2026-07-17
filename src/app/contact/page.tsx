@@ -7,8 +7,8 @@ import InteractiveGrid from "@/components/InteractiveGrid";
 import TypewriterAccent from "@/components/TypewriterAccent";
 
 /* ── Fallback values used while loading ── */
-const MAP_URL = "https://maps.app.goo.gl/PUn1kAzeHA76aMq88";
-const FALLBACK_MAP_EMBED = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3679.9!2d75.8570!3d22.7203!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fd0d3cb6e7c3%3A0x9b86897c8bee4a08!2sPrakriti%20Corporate!5e0!3m2!1sen!2sin!4v1715000000000";
+const MAP_URL = "https://maps.app.goo.gl/4AL3qZxvKmPpRSmX6";
+const FALLBACK_MAP_EMBED = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3679.6!2d75.875211!3d22.732371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fd69c00f1353%3A0x4dc20144c3be165d!2sAr%20Amit%20Sethi%2C%20Architectural%20%26%20Interior%20Design%20Solutions!5e0!3m2!1sen!2sin!4v1721200000000";
 
 interface SocialLinks {
   instagram?: string;
@@ -32,9 +32,9 @@ export default function ContactPage() {
 
   /* ── Live contact data from API ── */
   const [contact, setContact] = useState<ContactInfo>({
-    phones: ["+91-731-4045559", "+91-9302101559"],
+    phones: ["+91-9826375507", "+91-9179797359"],
     emails: ["archidesignsolutions@gmail.com"],
-    address: "208B, Prakriti Corporate\nY.N. Road, New Palasia\nIndore — 452001\nMadhya Pradesh, India",
+    address: "208B, Prakriti Corporate\nY.N. Road\nIndore — 452001\nMadhya Pradesh, India",
     socials: {
       instagram: "https://www.instagram.com/archidesignsolutions/",
       whatsapp: "https://wa.me/919179797359",
@@ -49,9 +49,9 @@ export default function ContactPage() {
       .then((d) => {
         if (d.contact) {
           setContact({
-            phones: d.contact.phones || ["+91-731-4045559", "+91-9302101559"],
+            phones: d.contact.phones || ["+91-9826375507", "+91-9179797359"],
             emails: d.contact.emails || ["archidesignsolutions@gmail.com"],
-            address: d.contact.address || "208B, Prakriti Corporate\nY.N. Road, New Palasia\nIndore — 452001\nMadhya Pradesh, India",
+            address: d.contact.address || "208B, Prakriti Corporate\nY.N. Road\nIndore — 452001\nMadhya Pradesh, India",
             mapEmbedUrl: d.contact.mapEmbedUrl || "",
             socials: d.contact.socials || {},
           });
