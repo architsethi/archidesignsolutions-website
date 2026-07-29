@@ -7,14 +7,23 @@ import ScrollReveal from "@/components/ScrollReveal";
 import InteractiveGrid from "@/components/InteractiveGrid";
 import TypewriterAccent from "@/components/TypewriterAccent";
 
+/* Combined set: the home-page hero gallery + the real-project discipline images.
+   Ordered to alternate exterior / interior / aerial so no two similar subjects sit
+   adjacent as the strip scrolls. The Bicholi Hapsi high-rise appears in both source
+   sets (same render) — kept once, from the discipline set. */
 const stripImages = [
-  { src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&q=80", alt: "Modern residential architecture" },
-  { src: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=500&q=80", alt: "Interior design project" },
-  { src: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=500&q=80", alt: "Contemporary building facade" },
-  { src: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=500&q=80", alt: "Architectural high-rise" },
-  { src: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=500&q=80", alt: "Heritage restoration" },
-  { src: "https://images.unsplash.com/photo-1590490360182-c33d7d9d4864?w=500&q=80", alt: "Hotel interior" },
-  { src: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=500&q=80", alt: "Urban planning" },
+  { src: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/gallery/1779632750197-Row-Housing-Bhopal_ArchiDesignSolutions.png", alt: "Row housing, Bhopal" },
+  { src: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/disciplines/02-interior-design.jpg", alt: "Residential interior, Emaar Continental" },
+  { src: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/gallery/1779632714569-Oracle-Complex-Indore-mIxed-Use-Architecture_archidesignsolutions.png", alt: "Commercial complex, Oracle One, Indore" },
+  { src: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/disciplines/03-landscape-design.jpg", alt: "Landscape design, LEEDS Garden City" },
+  { src: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/gallery/1779641733517-ChatGPT-Image-May-24%2C-2026%2C-10_24_22-PM.png", alt: "Commercial interior, Dr. Suryawanshi's Clinic, Indore" },
+  { src: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/disciplines/01-architectural-design.jpg", alt: "Residential high-rise, Bicholi Hapsi, Indore" },
+  { src: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/gallery/1779641651979-Palm-Springs_ArchiDesgnSolutions.png", alt: "Holiday homes, Palm Springs, Bhopal" },
+  { src: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/gallery/1779642416357-Residential-Interior-Design_Surat_archiDesignSolutions.png", alt: "Residential interior design, Surat, Gujarat" },
+  { src: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/gallery/1779642707800-Shalimar-Fortleza-.png", alt: "Residential high-rise, Shalimar Fortleza, Bhopal" },
+  { src: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/disciplines/05-town-planning.jpg", alt: "Holiday homes masterplan, Palm Springs, Bhopal" },
+  { src: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/disciplines/07-architectural-branding.jpg", alt: "Architectural branding, Palm Springs brochure" },
+  { src: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/gallery/1779642195913-Urban-Design_Palm-Springs-Indore.png", alt: "Urban design, Palm Springs, Bhopal" },
 ];
 
 interface TeamMember {
