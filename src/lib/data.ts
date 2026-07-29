@@ -173,50 +173,86 @@ export const defaultSiteData: SiteData = {
   },
   projects: [
     {
-      id: "p1",
-      title: "Emerald Heights Residences",
-      category: "Residential",
-      location: "Indore, MP",
-      year: "2023",
-      description: "A luxury residential complex featuring modern architecture with sustainable design principles.",
-      image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80",
-      featured: true,
-      stages: {
-        concept: { images: [] },
-        construction: { images: [] },
-        completed: { images: ["https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80"] },
-      },
+      "id": "bicholi-hapsi-high-rise",
+      "title": "High-Rise Residential Complex",
+      "subtitle": "Twin towers on a landscaped podium",
+      "category": "Architectural Design",
+      "categories": [
+        "Architectural Design"
+      ],
+      "location": "Bicholi Hapsi, Indore",
+      "year": "2018",
+      "description": "A twin-tower residential development planned around a raised podium that lifts landscaped gardens and a swimming pool clear of the vehicular level. The scheme pairs 4BHK apartments of 2,198 sq ft with 5BHK duplexes of 4,170 sq ft, each opening to deep balconies on multiple sides. Parking is resolved across stilt and podium levels — the podium deck alone accommodating 42 cars — freeing the ground plane for landscape and approach.",
+      "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-03-street-elevation.jpg",
+      "featured": true,
+      "stages": {
+        "concept": {
+          "images": [
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/drawing-01-typical-floor-plan.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/drawing-02-podium-parking-plan.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/drawing-03-stilt-parking-plan.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/drawing-04-5bhk-lower-level-plan.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/drawing-05-5bhk-upper-level-plan.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/drawing-06-4bhk-unit-plan.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/drawing-07-3bhk-unit-plan.jpg"
+          ]
+        },
+        "construction": {
+          "images": []
+        },
+        "completed": {
+          "images": [
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-01-aerial-view.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-02-tower-detail.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-03-street-elevation.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-04-twin-towers.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-05-central-block.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-06-entrance-gate.jpg"
+          ]
+        }
+      }
     },
     {
-      id: "p2",
-      title: "Sapphire Corporate Tower",
-      category: "Commercial",
-      location: "Indore, MP",
-      year: "2022",
-      description: "A state-of-the-art office complex designed for modern workspaces with energy-efficient systems.",
-      image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80",
-      featured: true,
-      stages: {
-        concept: { images: [] },
-        construction: { images: ["https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80"] },
-        completed: { images: ["https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80"] },
-      },
-    },
-    {
-      id: "p3",
-      title: "Heritage Villa Restoration",
-      category: "Heritage",
-      location: "Indore, MP",
-      year: "2021",
-      description: "Meticulous restoration of a colonial-era villa, preserving heritage while adding modern amenities.",
-      image: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=800&q=80",
-      featured: false,
-      stages: {
-        concept: { images: ["https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=800&q=80"] },
-        construction: { images: [] },
-        completed: { images: [] },
-      },
-    },
+      "id": "shalimar-fortleza",
+      "title": "Shalimar Fortleza",
+      "subtitle": "High-rise luxury residences for Mirchandani Group",
+      "category": "Architectural Design",
+      "categories": [
+        "Architectural Design"
+      ],
+      "location": "Hoshangabad Road, Bhopal",
+      "year": "",
+      "description": "Architectural design for Mirchandani Group's Shalimar Fortleza, a high-rise luxury residential development on a four-acre site in Bhopal. Tall residential blocks are arranged around a central landscaped plaza and clubhouse, approached through a formal gated entrance, with a classical vocabulary of colonnades, cornices and pitched-roof pavilions. Our scope ran from master plan and tower elevations through to the entrance gateway, carried from concept drawings into site execution.",
+      "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-01-aerial-view.jpg",
+      "featured": true,
+      "stages": {
+        "concept": {
+          "images": [
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/drawing-01-master-plan.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/drawing-02-front-elevation.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/drawing-03-entrance-gate-elevation.jpg"
+          ]
+        },
+        "construction": {
+          "images": [
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/construction-01-tower-facade.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/construction-02-structure.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/construction-03-site-progress.jpg"
+          ]
+        },
+        "completed": {
+          "images": [
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-01-aerial-view.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-02-entrance-gateway.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-03-central-plaza.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-04-tower-elevation.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-05-entrance-tower.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-06-tower-facade.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-07-approach-view.jpg"
+          ]
+        }
+      }
+    }
   ],
   blogs: [
     {
