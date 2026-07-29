@@ -95,7 +95,7 @@ const defaultServices = [
     title: "Green Building",
     desc: "Sustainable architecture with energy-efficient systems and eco-friendly, IGBC-aligned materials.",
     href: "/projects?filter=Green+Building",
-    img: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=600&q=80",
+    img: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/disciplines/04-green-building.jpg",
   },
   {
     num: "05",
@@ -109,7 +109,7 @@ const defaultServices = [
     title: "MEP Engineering",
     desc: "Mechanical, electrical and plumbing engineering seamlessly integrated with architectural plans.",
     href: "/projects?filter=MEP+Engineering",
-    img: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&q=80",
+    img: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/disciplines/06-mep-engineering.jpg",
   },
   {
     num: "07",
@@ -123,7 +123,7 @@ const defaultServices = [
     title: "Project Management",
     desc: "End-to-end oversight ensuring timely delivery within budget and quality standards.",
     href: "/projects?filter=Project+Management",
-    img: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80",
+    img: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/disciplines/08-project-management.jpg",
   },
 ];
 
