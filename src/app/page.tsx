@@ -74,21 +74,21 @@ const defaultServices = [
     title: "Architectural Design",
     desc: "Innovative solutions balancing aesthetics, function, and structural integrity for every building type.",
     href: "/projects?filter=Architectural+Design",
-    img: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600&q=80",
+    img: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/disciplines/01-architectural-design.jpg",
   },
   {
     num: "02",
     title: "Interior Design",
     desc: "Curated interiors that reflect your personality — merging comfort with contemporary elegance.",
     href: "/projects?filter=Interior+Design",
-    img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80",
+    img: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/disciplines/02-interior-design.jpg",
   },
   {
     num: "03",
     title: "Landscape Design",
     desc: "Beautiful outdoor environments designed to complement and extend the built structure.",
     href: "/projects?filter=Landscape+Design",
-    img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80",
+    img: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/disciplines/03-landscape-design.jpg",
   },
   {
     num: "04",
@@ -102,7 +102,7 @@ const defaultServices = [
     title: "Town Planning",
     desc: "Strategic land-use planning and urban development frameworks for large-scale projects.",
     href: "/projects?filter=Town+Planning",
-    img: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=600&q=80",
+    img: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/disciplines/05-town-planning.jpg",
   },
   {
     num: "06",
@@ -116,7 +116,7 @@ const defaultServices = [
     title: "Architectural Branding",
     desc: "Creative marketing and positioning of real estate projects through branded architectural content.",
     href: "/projects?filter=Architectural+Branding",
-    img: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80",
+    img: "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/disciplines/07-architectural-branding.jpg",
   },
   {
     num: "08",
