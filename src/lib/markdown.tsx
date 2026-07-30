@@ -60,7 +60,10 @@ function renderInline(text: string, keyPrefix: string): ReactNode[] {
 
 /* ── Block parsing ───────────────────────────────────────────────────────── */
 
-const IMAGE_LINE = /^!\[([^\]]*)\]\(([^)]+)\)$/;
+/* `![alt](url)`, optionally `![alt](url =1400x788)`. The size suffix lets a
+   figure reserve its true aspect ratio on first paint instead of the 3:2
+   default, which otherwise reflows once the image loads. */
+const IMAGE_LINE = /^!\[([^\]]*)\]\(([^)\s]+)(?:\s+=(\d+)x(\d+))?\)$/;
 const HEADING = /^(#{1,6})\s+(.*)$/;
 const ORDERED = /^\d+\.\s+(.*)$/;
 const UNORDERED = /^[-*]\s+(.*)$/;
@@ -112,8 +115,8 @@ export function renderMarkdown(source: string, styles: Styles = {}): ReactNode[]
           <Image
             src={img[2]}
             alt={img[1]}
-            width={1200}
-            height={800}
+            width={img[3] ? Number(img[3]) : 1200}
+            height={img[4] ? Number(img[4]) : 800}
             className={cls("figureImage")}
             sizes="(max-width: 900px) 100vw, 800px"
           />
