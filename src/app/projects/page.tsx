@@ -164,6 +164,169 @@ const fallbackProjects: Project[] = [
         ]
       }
     }
+  },
+  {
+    "id": "leeds-garden-city-platinum-park",
+    "title": "LEEDS Garden City, Platinum & Park",
+    "subtitle": "Township landscape and entry design",
+    "category": "Town Planning",
+    "categories": [
+      "Town Planning",
+      "Landscape Design"
+    ],
+    "location": "Indore",
+    "year": "2024",
+    "description": "Landscape and entry design across three Leeds Developers townships in Indore — Garden City, Platinum and Park. The work covers gateway structures and boundary treatments, boulevard streetscapes with shaded seating decks, and the central garden and clubhouse forecourt, using layered palm planting, uplighting and hard-landscape terracing to give each development a distinct arrival identity. Our firm is credited as project consultants on the architectural drawing sets.",
+    "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/leeds-garden-city/render-01-garden-city-entrance-dusk.jpg",
+    "featured": true,
+    "stages": {
+      "concept": {
+        "images": []
+      },
+      "construction": {
+        "images": [
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/leeds-garden-city/render-01-garden-city-entrance-dusk.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/leeds-garden-city/render-02-garden-city-entrance.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/leeds-garden-city/render-03-boulevard-streetscape.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/leeds-garden-city/render-04-central-garden.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/leeds-garden-city/render-05-clubhouse-forecourt.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/leeds-garden-city/render-06-clubhouse-aerial.jpg"
+        ]
+      },
+      "completed": {
+        "images": []
+      }
+    }
+  },
+  {
+    "id": "palm-springs-bhopal",
+    "title": "Palm Springs",
+    "subtitle": "Luxury holiday homes and farms",
+    "category": "Architectural Design",
+    "categories": [
+      "Architectural Design",
+      "Landscape Design",
+      "Town Planning"
+    ],
+    "location": "Bhopal",
+    "year": "2023",
+    "description": "A plotted holiday-home and farm development set along a seasonal water stream outside Bhopal. The masterplan organises 42 plots, from 314 to 976 sq m, around a three-metre cycle track and pedestrian loop, with a restaurant, landscaped pockets and services planned into the first phase and further land held for a second. Individual A-frame villas sit lightly on the terrain, their steep roofs and exposed timber structure framing views out to the water and planting.",
+    "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-05-cluster-aerial.jpg",
+    "featured": true,
+    "stages": {
+      "concept": {
+        "images": [
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/drawing-01-masterplan.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-01-waterfront-cycle-track.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-02-cycle-track-aerial.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-03-villa-garden-aerial.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-04-pool-deck.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-05-cluster-aerial.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-06-villa-frontage.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-07-villa-elevation.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-08-street-view.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-09-waterside-aerial.jpg"
+        ]
+      },
+      "construction": {
+        "images": []
+      },
+      "completed": {
+        "images": []
+      }
+    }
+  },
+  {
+    "id": "shobha-jain-residence",
+    "title": "Shobha Jain Residence",
+    "subtitle": "Living room interior",
+    "category": "Interior Design",
+    "categories": [
+      "Interior Design"
+    ],
+    "location": "Indore",
+    "year": "2024",
+    "description": "A living room interior for a private residence, organised around a fluted timber feature wall and a layered ceiling that carries concealed lighting across the plan. Panelled walls, a muted grey upholstery palette and a mirrored dining edge extend the sense of space while keeping the room warm and unmistakably residential.",
+    "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shobha-jain-residence/living-room-01.jpg",
+    "featured": false,
+    "stages": {
+      "concept": {
+        "images": []
+      },
+      "construction": {
+        "images": []
+      },
+      "completed": {
+        "images": [
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shobha-jain-residence/living-room-01.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shobha-jain-residence/living-room-02.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shobha-jain-residence/living-room-03.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shobha-jain-residence/living-room-04.jpg"
+        ]
+      }
+    }
+  },
+  {
+    "id": "bhatnagar-residence",
+    "title": "Mr. Bhatnagar's Residence",
+    "subtitle": "Living room interior",
+    "category": "Interior Design",
+    "categories": [
+      "Interior Design"
+    ],
+    "location": "Indore",
+    "year": "",
+    "description": "Concept design for the living room of a private residence in Indore. The scheme works with generous ceiling height and full-height glazing, using a sculptural linear light, fluted screens and a soft neutral palette of plaster, oak and stone to hold the volume together. Currently under construction — completed photography to follow.",
+    "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bhatnagar-residence/concept-01-living-room.jpg",
+    "featured": false,
+    "stages": {
+      "concept": {
+        "images": [
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bhatnagar-residence/concept-01-living-room.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bhatnagar-residence/concept-02-living-room.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bhatnagar-residence/concept-03-living-room.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bhatnagar-residence/concept-04-living-room.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bhatnagar-residence/concept-05-living-room.jpg"
+        ]
+      },
+      "construction": {
+        "images": []
+      },
+      "completed": {
+        "images": []
+      }
+    }
+  },
+  {
+    "id": "rathi-residence",
+    "title": "Mr. Rathi's Residence",
+    "subtitle": "Living room interior, Emaar Indore Greens",
+    "category": "Interior Design",
+    "categories": [
+      "Interior Design"
+    ],
+    "location": "Emaar Indore Greens, Indore",
+    "year": "",
+    "description": "A living room interior within a residence at Emaar Indore Greens. Double-height ceilings are articulated with exposed timber beams, set against a teal panelled accent wall in glass and metal that screens the stair beyond. A bespoke mandir, brass detailing and a restrained grey seating palette balance the scale of the volume against the intimacy the family wanted.",
+    "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/rathi-residence/living-room-01.jpg",
+    "featured": false,
+    "stages": {
+      "concept": {
+        "images": []
+      },
+      "construction": {
+        "images": []
+      },
+      "completed": {
+        "images": [
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/rathi-residence/living-room-01.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/rathi-residence/living-room-02.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/rathi-residence/living-room-03.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/rathi-residence/living-room-04.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/rathi-residence/living-room-05.jpg"
+        ]
+      }
+    }
   }
 ];
 
