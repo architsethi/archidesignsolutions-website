@@ -501,10 +501,13 @@ export async function getSiteData(): Promise<SiteData> {
 export async function saveSiteData(data: SiteData): Promise<void> {
   const token = getToken();
   // Overwrite in place: one blob operation instead of list + delete + put.
-  // The pathname is fixed and addRandomSuffix is off, so this always replaces
-  // the same object rather than accumulating copies.
-  // cacheControlMaxAge keeps the CDN copy short-lived — the default is months,
-  // which left stale site data being served from the edge after an admin save.
+  // The delete was measured NOT to purge the CDN, so it bought nothing — the
+  // edge serves the previous copy for up to max-age either way.
+  //
+  // cacheControlMaxAge is set to the lowest value Vercel Blob honours: it clamps
+  // anything below 60s up to 60s. So an admin save can take up to a minute to
+  // appear on the public site. That is a platform floor, not something the code
+  // can shorten.
   await put(DATA_KEY, JSON.stringify(data, null, 2), {
     access: "public",
     contentType: "application/json",
