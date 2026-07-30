@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { Suspense } from "react";
@@ -281,18 +281,31 @@ const fallbackProjects: Project[] = [
 ];
 
 function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
-  const [currentSlide, setCurrentSlide] = useState(0);
   const groups = getProjectGroups(project);
-  const [activeGroupId, setActiveGroupId] = useState<string>(groups[0]?.id ?? "");
   const allImages = getAllImages(project);
+  const [activeGroupId, setActiveGroupId] = useState<string>(groups[0]?.id ?? "");
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-  useEffect(() => {
-    if (groups.length > 0) setActiveGroupId(groups[0].id);
-  }, []);
+  const activeGroup = groups.find((g) => g.id === activeGroupId) || groups[0];
+  const displayImages = activeGroup && activeGroup.images.length > 0 ? activeGroup.images : allImages;
 
-  useEffect(() => {
+  // Clamp during render, not in an effect. Switching to a group with fewer
+  // images renders once with the old index before any effect could fix it, and
+  // an out-of-range index hands `undefined` to next/image, which throws.
+  const count = displayImages.length;
+  const slide = count > 0 ? Math.min(currentSlide, count - 1) : 0;
+
+  const goToSlide = (i: number) => {
+    if (count === 0) return;
+    setCurrentSlide(((i % count) + count) % count);
+  };
+  const nextSlide = () => goToSlide(slide + 1);
+  const prevSlide = () => goToSlide(slide - 1);
+
+  const selectGroup = (id: string) => {
+    setActiveGroupId(id);
     setCurrentSlide(0);
-  }, [activeGroupId]);
+  };
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -306,20 +319,10 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
       document.removeEventListener("keydown", handleKey);
       document.body.style.overflow = "";
     };
-  }, [currentSlide, allImages.length]);
-
-  const activeGroup = groups.find((g) => g.id === activeGroupId) || groups[0];
-  const displayImages = activeGroup && activeGroup.images.length > 0 ? activeGroup.images : allImages;
-
-  const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev + 1) % displayImages.length);
-  }, [displayImages.length]);
-
-  const prevSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev - 1 + displayImages.length) % displayImages.length);
-  }, [displayImages.length]);
+  }, [onClose, nextSlide, prevSlide]);
 
   const displayStage = getProjectStatus(project);
+  const projectCategories = getProjectCategories(project);
 
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
@@ -334,10 +337,10 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           {/* Left: Image Slider */}
           <div className={styles.modalGallery}>
             <div className={styles.modalSlider}>
-              {displayImages.length > 0 && (
+              {count > 0 && (
                 <Image
-                  src={displayImages[currentSlide]}
-                  alt={`${project.title} — ${currentSlide + 1}`}
+                  src={displayImages[slide]}
+                  alt={`${project.title} — ${slide + 1}`}
                   fill
                   style={{ objectFit: "cover" }}
                   sizes="(max-width: 768px) 100vw, 60vw"
@@ -366,8 +369,8 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                 {displayImages.map((_, i) => (
                   <button
                     key={i}
-                    className={`${styles.sliderDot} ${i === currentSlide ? styles.sliderDotActive : ""}`}
-                    onClick={() => setCurrentSlide(i)}
+                    className={`${styles.sliderDot} ${i === slide ? styles.sliderDotActive : ""}`}
+                    onClick={() => goToSlide(i)}
                   />
                 ))}
               </div>
@@ -396,7 +399,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
               )}
               <span className={styles.modalMetaItem}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                {project.category}
+                {projectCategories.join(" · ")}
               </span>
             </div>
 
@@ -412,8 +415,8 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                   {groups.map((g) => (
                     <button
                       key={g.id}
-                      className={`${styles.modalStageTab} ${activeGroupId === g.id ? styles.modalStageTabActive : ""}`}
-                      onClick={() => setActiveGroupId(g.id)}
+                      className={`${styles.modalStageTab} ${activeGroup?.id === g.id ? styles.modalStageTabActive : ""}`}
+                      onClick={() => selectGroup(g.id)}
                     >
                       {g.label} <span style={{ opacity: 0.55 }}>({g.images.length})</span>
                     </button>
@@ -423,9 +426,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
             )}
 
             <div className={styles.modalImageCount}>
-              {displayImages.length > 0 && (
-                <span>{currentSlide + 1} / {displayImages.length} images</span>
-              )}
+              {count > 0 && <span>{slide + 1} / {count} images</span>}
             </div>
           </div>
         </div>
@@ -438,7 +439,16 @@ function ProjectsContent() {
   const searchParams = useSearchParams();
   const filterParam = searchParams.get("filter");
 
-  const [activeCategory, setActiveCategory] = useState("All");
+  // Seeded from ?filter= on first render rather than applied by an effect. The
+  // effect version depended on the derived `categories` array, so it re-ran on
+  // every render and immediately overwrote whatever tab the visitor clicked —
+  // the filter bar was frozen for anyone arriving from a homepage discipline
+  // card. Validated against the fixed discipline list so an unknown value falls
+  // back to "All" rather than rendering an empty grid.
+  const [activeCategory, setActiveCategory] = useState(() => {
+    const decoded = filterParam ? decodeURIComponent(filterParam) : "";
+    return defaultCategories.includes(decoded) ? decoded : "All";
+  });
   const [projects, setProjects] = useState<Project[]>(fallbackProjects);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
@@ -454,23 +464,10 @@ function ProjectsContent() {
     fetch("/api/admin/data")
       .then((r) => r.json())
       .then((d) => {
-        if (d.projects && d.projects.length > 0) {
-          setProjects(d.projects.map((p: Project) => ({
-            ...p,
-            stages: p.stages || { concept: { images: [] }, construction: { images: [] }, completed: { images: [] } },
-          })));
-        }
+        if (d.projects && d.projects.length > 0) setProjects(d.projects);
       })
       .catch(() => {});
   }, []);
-
-  useEffect(() => {
-    if (filterParam) {
-      const decoded = decodeURIComponent(filterParam);
-      const match = categories.find((c) => c === decoded);
-      if (match) setActiveCategory(match);
-    }
-  }, [filterParam, categories]);
 
   const filtered = activeCategory === "All"
     ? projects

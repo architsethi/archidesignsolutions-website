@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSiteData, saveSiteData } from "@/lib/data";
+import { getSiteDataForUpdate, saveSiteData } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +12,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const data = await getSiteData();
+    // Strict read: the whole site record is rewritten below with this
+    // submission prepended. Merging into defaults after a failed read would
+    // replace every project, page and prior enquiry with placeholder content.
+    const data = await getSiteDataForUpdate();
     const submission = {
       id: `sub_${Date.now()}`,
       name,

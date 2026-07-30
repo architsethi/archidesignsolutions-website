@@ -80,16 +80,30 @@ export default function ProjectsPage() {
       .catch(() => setLoading(false));
   }, [password]);
 
-  const saveAll = async (updated: Project[]) => {
+  /** Returns true only if the server actually accepted the write. */
+  const saveAll = async (updated: Project[]): Promise<boolean> => {
     setSaving(true);
-    await fetch("/api/admin/data", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", "x-admin-password": password },
-      body: JSON.stringify({ projects: updated }),
-    });
-    setProjects(updated);
-    setSaving(false);
-    showToast("Projects saved!");
+    try {
+      const res = await fetch("/api/admin/data", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", "x-admin-password": password },
+        body: JSON.stringify({ projects: updated }),
+      });
+      if (!res.ok) {
+        // Never report success on a rejected write — the editor would show
+        // changes that were never stored and are lost on the next reload.
+        showToast(res.status === 401 ? "Not saved: session expired, log in again." : `Not saved: server returned ${res.status}.`);
+        return false;
+      }
+      setProjects(updated);
+      showToast("Projects saved! The public site updates within a minute.");
+      return true;
+    } catch {
+      showToast("Not saved: could not reach the server. Check your connection.");
+      return false;
+    } finally {
+      setSaving(false);
+    }
   };
 
   /** Open a project in the editor, normalising legacy stage data into groups. */
@@ -125,7 +139,8 @@ export default function ProjectsPage() {
     const updated = isNew
       ? [...projects, cleaned]
       : projects.map((p) => (p.id === cleaned.id ? cleaned : p));
-    await saveAll(updated);
+    // Stay in the editor if the write failed, so the work is not thrown away.
+    if (!(await saveAll(updated))) return;
     setEditing(null);
     setIsNew(false);
   };
@@ -219,8 +234,18 @@ export default function ProjectsPage() {
   };
 
   const removeImage = (index: number) => {
-    if (!activeGroup) return;
-    updateGroup(activeGroup.id, { images: activeGroup.images.filter((_, i) => i !== index) });
+    if (!activeGroup || !editing) return;
+    const removed = activeGroup.images[index];
+    const remaining = activeGroup.images.filter((_, i) => i !== index);
+    updateGroup(activeGroup.id, { images: remaining });
+    // Don't leave the cover pointing at an image no longer in the project.
+    if (editing.image === removed) {
+      const replacement =
+        remaining[0] ||
+        groups.find((g) => g.id !== activeGroup.id && g.images.length > 0)?.images[0] ||
+        "";
+      setEditing({ ...editing, image: replacement });
+    }
   };
 
   const moveImageTo = (from: number, to: number) => {

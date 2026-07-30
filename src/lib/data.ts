@@ -469,31 +469,48 @@ async function fetchSiteDataJson(token: string): Promise<unknown | null> {
   return await res.json();
 }
 
+/**
+ * Read the stored site data, throwing if the store cannot be reached.
+ *
+ * Every write path merges its partial update into whatever it reads first. If a
+ * failed read quietly returned `defaultSiteData`, the very next save would
+ * overwrite the live site — real projects, gallery, team, blogs, testimonials
+ * and the contact inbox — with hardcoded placeholder content. So writers must
+ * use this and refuse to save when it throws.
+ *
+ * A `null` result is different from a failure: it means the store is reachable
+ * and genuinely empty, so seeding from defaults is safe.
+ */
+export async function getSiteDataForUpdate(): Promise<SiteData> {
+  const token = getToken();
+  if (!token) throw new Error("BLOB_READ_WRITE_TOKEN is not configured");
+
+  const raw = await fetchSiteDataJson(token);
+  if (raw === null) return defaultSiteData;
+
+  const data = raw as Partial<SiteData> & { contact?: ContactInfo };
+  // Merge with defaults so fields newly added in code are available
+  return {
+    ...defaultSiteData,
+    ...data,
+    contact: {
+      ...defaultSiteData.contact,
+      ...(data.contact || {}),
+      socials: { ...defaultSiteData.contact.socials, ...(data.contact?.socials || {}) },
+    },
+  } as SiteData;
+}
+
+/**
+ * Read for rendering. Falls back to defaults so a blob outage degrades to
+ * placeholder content rather than a broken page. Never use this to build a
+ * value that will be written back — use `getSiteDataForUpdate` for that.
+ */
 export async function getSiteData(): Promise<SiteData> {
   try {
-    const token = getToken();
-    if (!token) return defaultSiteData;
-
-    const raw = await fetchSiteDataJson(token);
-    if (raw === null) {
-      // No data stored yet — return defaults but DO NOT auto-save
-      // (the first explicit save from admin panel will persist data)
-      return defaultSiteData;
-    }
-    const data = raw as Partial<SiteData> & { contact?: ContactInfo };
-    // Merge with defaults so new fields added in code are available
-    return {
-      ...defaultSiteData,
-      ...data,
-      contact: {
-        ...defaultSiteData.contact,
-        ...(data.contact || {}),
-        socials: { ...defaultSiteData.contact.socials, ...(data.contact?.socials || {}) },
-      },
-    } as SiteData;
+    return await getSiteDataForUpdate();
   } catch (err) {
     console.error("getSiteData error:", err);
-    // If blob store is unreachable, return defaults without saving
     return defaultSiteData;
   }
 }
