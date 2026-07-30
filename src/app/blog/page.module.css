@@ -125,3 +125,11 @@
   .postTitle { font-size: 20px; }
   .postExcerpt { font-size: 14px; }
 }
+
+.empty {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  padding: var(--space-8) 0;
+}
+.empty a { color: var(--accent-red); text-decoration: underline; text-underline-offset: 3px; }
