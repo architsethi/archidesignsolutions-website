@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { useAdmin } from "../layout";
+import { saveSection } from "@/lib/adminSave";
 import styles from "../admin.module.css";
 
 interface TeamMember {
@@ -37,16 +38,14 @@ export default function TeamPage() {
       .catch(() => setLoading(false));
   }, [password]);
 
-  const save = async (updated: TeamMember[]) => {
+  const save = async (updated: TeamMember[]): Promise<boolean> => {
     setSaving(true);
-    await fetch("/api/admin/data", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", "x-admin-password": password },
-      body: JSON.stringify({ team: updated }),
-    });
-    setTeam(updated);
+    const res = await saveSection(password, { team: updated });
     setSaving(false);
-    showToast("Team updated!");
+    if (!res.ok) { showToast(res.message); return false; }
+    setTeam(updated);
+    showToast("Team updated! The public site updates within a minute.");
+    return true;
   };
 
   const uploadImage = async (file: File): Promise<string> => {
@@ -97,7 +96,7 @@ export default function TeamPage() {
   const handleSaveEdit = async () => {
     if (!editing) return;
     const updated = team.map((m, i) => (i === editing.index ? editing.member : m));
-    await save(updated);
+    if (!(await save(updated))) return; // keep the editor open so edits are not lost
     setEditing(null);
   };
 

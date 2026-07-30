@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { useAdmin } from "../layout";
+import { saveSection } from "@/lib/adminSave";
 import styles from "../admin.module.css";
 import {
   type Project,
@@ -83,27 +84,12 @@ export default function ProjectsPage() {
   /** Returns true only if the server actually accepted the write. */
   const saveAll = async (updated: Project[]): Promise<boolean> => {
     setSaving(true);
-    try {
-      const res = await fetch("/api/admin/data", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json", "x-admin-password": password },
-        body: JSON.stringify({ projects: updated }),
-      });
-      if (!res.ok) {
-        // Never report success on a rejected write — the editor would show
-        // changes that were never stored and are lost on the next reload.
-        showToast(res.status === 401 ? "Not saved: session expired, log in again." : `Not saved: server returned ${res.status}.`);
-        return false;
-      }
-      setProjects(updated);
-      showToast("Projects saved! The public site updates within a minute.");
-      return true;
-    } catch {
-      showToast("Not saved: could not reach the server. Check your connection.");
-      return false;
-    } finally {
-      setSaving(false);
-    }
+    const res = await saveSection(password, { projects: updated });
+    setSaving(false);
+    if (!res.ok) { showToast(res.message); return false; }
+    setProjects(updated);
+    showToast("Projects saved! The public site updates within a minute.");
+    return true;
   };
 
   /** Open a project in the editor, normalising legacy stage data into groups. */

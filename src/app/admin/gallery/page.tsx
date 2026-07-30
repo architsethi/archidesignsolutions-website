@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { useAdmin } from "../layout";
+import { saveSection } from "@/lib/adminSave";
 import styles from "../admin.module.css";
 
 interface GalleryImage {
@@ -77,28 +78,24 @@ export default function GalleryPage() {
     }
   }, [editingLinkIndex]);
 
-  const saveGallery = async (updated: GalleryImage[]) => {
+  const saveGallery = async (updated: GalleryImage[]): Promise<boolean> => {
     setSaving(true);
-    await fetch("/api/admin/data", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", "x-admin-password": password },
-      body: JSON.stringify({ gallery: updated }),
-    });
-    setImages(updated);
+    const res = await saveSection(password, { gallery: updated });
     setSaving(false);
-    showToast("Gallery updated!");
+    if (!res.ok) { showToast(res.message); return false; }
+    setImages(updated);
+    showToast("Gallery updated! The public site updates within a minute.");
+    return true;
   };
 
-  const saveDisciplines = async (updated: ServiceImage[]) => {
+  const saveDisciplines = async (updated: ServiceImage[]): Promise<boolean> => {
     setSaving(true);
-    await fetch("/api/admin/data", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", "x-admin-password": password },
-      body: JSON.stringify({ homeServiceImages: updated }),
-    });
-    setDisciplines(updated);
+    const res = await saveSection(password, { homeServiceImages: updated });
     setSaving(false);
-    showToast("Discipline images updated!");
+    if (!res.ok) { showToast(res.message); return false; }
+    setDisciplines(updated);
+    showToast("Discipline images updated! The public site updates within a minute.");
+    return true;
   };
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {

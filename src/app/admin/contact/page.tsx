@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAdmin } from "../layout";
+import { saveSection } from "@/lib/adminSave";
 import styles from "../admin.module.css";
 
 interface SocialLinks {
@@ -42,13 +43,9 @@ export default function ContactPage() {
 
   const save = async () => {
     setSaving(true);
-    await fetch("/api/admin/data", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", "x-admin-password": password },
-      body: JSON.stringify({ contact }),
-    });
+    const res = await saveSection(password, { contact });
     setSaving(false);
-    showToast("Contact info saved!");
+    showToast(res.ok ? "Contact info saved! The public site updates within a minute." : res.message);
   };
 
   const updatePhone = (index: number, value: string) => {

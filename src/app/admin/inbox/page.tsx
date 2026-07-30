@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAdmin } from "../layout";
+import { saveSection } from "@/lib/adminSave";
 import styles from "../admin.module.css";
 
 interface ContactSubmission {
@@ -32,25 +33,24 @@ export default function InboxPage() {
       .catch(() => setLoading(false));
   }, [password]);
 
+  // These two update local state optimistically, so a failed write has to roll
+  // it back — otherwise an enquiry looks deleted while it is still stored, or
+  // looks read when the next reload will show it unread again.
   const markRead = async (id: string) => {
+    const previous = submissions;
     const updated = submissions.map((s) => s.id === id ? { ...s, read: true } : s);
     setSubmissions(updated);
-    await fetch("/api/admin/data", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", "x-admin-password": password },
-      body: JSON.stringify({ contactSubmissions: updated }),
-    });
+    const res = await saveSection(password, { contactSubmissions: updated });
+    if (!res.ok) { setSubmissions(previous); showToast(res.message); }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Delete this submission?")) return;
+    if (!confirm("Delete this submission? This cannot be undone.")) return;
+    const previous = submissions;
     const updated = submissions.filter((s) => s.id !== id);
     setSubmissions(updated);
-    await fetch("/api/admin/data", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", "x-admin-password": password },
-      body: JSON.stringify({ contactSubmissions: updated }),
-    });
+    const res = await saveSection(password, { contactSubmissions: updated });
+    if (!res.ok) { setSubmissions(previous); showToast(res.message); return; }
     showToast("Deleted");
   };
 

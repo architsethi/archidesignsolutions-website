@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { useAdmin } from "../layout";
+import { saveSection } from "@/lib/adminSave";
 import styles from "../admin.module.css";
 
 interface Testimonial {
@@ -31,16 +32,14 @@ export default function TestimonialsPage() {
       .catch(() => setLoading(false));
   }, [password]);
 
-  const saveAll = async (updated: Testimonial[]) => {
+  const saveAll = async (updated: Testimonial[]): Promise<boolean> => {
     setSaving(true);
-    await fetch("/api/admin/data", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", "x-admin-password": password },
-      body: JSON.stringify({ testimonials: updated }),
-    });
-    setTestimonials(updated);
+    const res = await saveSection(password, { testimonials: updated });
     setSaving(false);
-    showToast("Testimonials saved!");
+    if (!res.ok) { showToast(res.message); return false; }
+    setTestimonials(updated);
+    showToast("Testimonials saved! The public site updates within a minute.");
+    return true;
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,8 +59,11 @@ export default function TestimonialsPage() {
 
   const handleSave = async () => {
     if (!editing) return;
-    const updated = testimonials.map((t) => (t.id === editing.id ? editing : t));
-    await saveAll(updated);
+    const isNewEntry = !testimonials.find((t) => t.id === editing.id);
+    const updated = isNewEntry
+      ? [...testimonials, editing]
+      : testimonials.map((t) => (t.id === editing.id ? editing : t));
+    if (!(await saveAll(updated))) return; // keep the editor open so edits are not lost
     setEditing(null);
   };
 

@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { useAdmin } from "../layout";
+import { saveSection } from "@/lib/adminSave";
 import styles from "../admin.module.css";
 
 interface BlogPost {
@@ -74,16 +75,15 @@ export default function BlogPage() {
       .catch(() => setLoading(false));
   }, [password]);
 
-  const saveAll = async (updated: BlogPost[]) => {
+  /** Returns true only if the server accepted the write. */
+  const saveAll = async (updated: BlogPost[]): Promise<boolean> => {
     setSaving(true);
-    await fetch("/api/admin/data", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json", "x-admin-password": password },
-      body: JSON.stringify({ blogs: updated }),
-    });
-    setBlogs(updated);
+    const res = await saveSection(password, { blogs: updated });
     setSaving(false);
-    showToast("Blog saved!");
+    if (!res.ok) { showToast(res.message); return false; }
+    setBlogs(updated);
+    showToast("Blog saved! The public site updates within a minute.");
+    return true;
   };
 
   const handleNew = () => {
@@ -108,7 +108,8 @@ export default function BlogPage() {
     } else {
       updated = blogs.map((b) => (b.id === post.id ? post : b));
     }
-    await saveAll(updated);
+    // Stay in the editor if the write failed, so the post is not lost.
+    if (!(await saveAll(updated))) return;
     setEditing(null);
     setIsNew(false);
   };
