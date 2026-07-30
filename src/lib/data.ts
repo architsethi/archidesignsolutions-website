@@ -1,4 +1,5 @@
 import { put, list, del } from "@vercel/blob";
+import { unstable_cache } from "next/cache";
 
 const DATA_KEY = "site-data.json";
 
@@ -141,7 +142,7 @@ export const defaultSiteData: SiteData = {
   ],
   contact: {
     phones: ["+91-9826375507", "+91-9179797359"],
-    emails: ["archidesignsolutions@gmail.com"],
+    emails: ["solutions.archit@gmail.com", "solutions.prakriti@gmail.com"],
     address: "208B, Prakriti Corporate, Y.N. Road, Indore 452001",
     socials: {
       instagram: "https://www.instagram.com/archidesignsolutions/",
@@ -514,6 +515,24 @@ export async function getSiteData(): Promise<SiteData> {
     return defaultSiteData;
   }
 }
+
+/**
+ * Read for server-rendered pages.
+ *
+ * `getSiteData` fetches with no-store, which is correct for the admin API but
+ * opts any page using it into fully dynamic rendering — one blob list plus one
+ * fetch for every visitor on every request. Wrapping the whole read (including
+ * the `list` call, which is not a tracked fetch) means one blob read per
+ * revalidate window shared across all visitors instead.
+ *
+ * 60s matches the blob CDN's own propagation floor, so this adds no staleness
+ * that was not already there.
+ */
+export const getSiteDataForPages = unstable_cache(
+  async () => getSiteData(),
+  ["site-data"],
+  { revalidate: 60, tags: ["site-data"] }
+);
 
 export async function saveSiteData(data: SiteData): Promise<void> {
   const token = getToken();

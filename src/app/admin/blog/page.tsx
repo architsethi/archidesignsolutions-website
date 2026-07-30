@@ -38,7 +38,15 @@ const emptyPost: Omit<BlogPost, "id"> = {
   updatedAt: new Date().toISOString(),
 };
 
-const blogCategories = ["Architecture", "Sustainability", "Technology", "Interior Design", "Urban Planning", "Industry News"];
+const blogCategories = [
+  "Architecture",
+  "Project Management",
+  "Interior Design",
+  "Sustainability",
+  "Urban Planning",
+  "Technology",
+  "Industry News",
+];
 
 export default function BlogPage() {
   const { password } = useAdmin();
@@ -200,7 +208,13 @@ export default function BlogPage() {
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Category</label>
               <select className={styles.formSelect} value={editing.category} onChange={(e) => setEditing({ ...editing, category: e.target.value })}>
-                {blogCategories.map((c) => <option key={c}>{c}</option>)}
+                {/* Include the post's own category even if it is not in the list,
+                    otherwise opening the editor silently reassigns it to the
+                    first option and saving loses the original. */}
+                {(blogCategories.includes(editing.category) || !editing.category
+                  ? blogCategories
+                  : [editing.category, ...blogCategories]
+                ).map((c) => <option key={c}>{c}</option>)}
               </select>
             </div>
             <div className={styles.formGroup}>

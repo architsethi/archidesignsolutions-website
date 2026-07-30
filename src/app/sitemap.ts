@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getSiteData } from "@/lib/data";
+import { getSiteDataForPages } from "@/lib/data";
 
 // Refreshed hourly — new posts should be discoverable without a redeploy, but
 // this does not need to be as current as the pages themselves.
@@ -8,7 +8,7 @@ export const revalidate = 3600;
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://archidesignsolutions.com";
 
-  const data = await getSiteData();
+  const data = await getSiteDataForPages();
   const posts: MetadataRoute.Sitemap = (data.blogs || [])
     .filter((b) => b.status === "published")
     .map((b) => ({

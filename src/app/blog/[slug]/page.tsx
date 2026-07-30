@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getSiteData, type BlogPost } from "@/lib/data";
+import { getSiteDataForPages, type BlogPost } from "@/lib/data";
 import { renderMarkdown, readingTime, firstParagraph } from "@/lib/markdown";
 import ScrollReveal from "@/components/ScrollReveal";
 import InteractiveGrid from "@/components/InteractiveGrid";
@@ -15,8 +15,22 @@ const SITE = "https://archidesignsolutions.com";
 // operations to roughly one per minute rather than one per visitor.
 export const revalidate = 60;
 
+// Prerender the posts that exist at build time. `dynamicParams` defaults to
+// true, so a post published later through the admin panel still renders on
+// demand without waiting for a redeploy.
+export async function generateStaticParams() {
+  try {
+    const data = await getSiteDataForPages();
+    return (data.blogs || [])
+      .filter((b) => b.status === "published")
+      .map((b) => ({ slug: b.slug }));
+  } catch {
+    return [];
+  }
+}
+
 async function findPost(slug: string): Promise<BlogPost | null> {
-  const data = await getSiteData();
+  const data = await getSiteDataForPages();
   const post = (data.blogs || []).find((b) => b.slug === slug && b.status === "published");
   return post || null;
 }
@@ -65,7 +79,7 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const data = await getSiteData();
+  const data = await getSiteDataForPages();
   const post = (data.blogs || []).find((b) => b.slug === slug && b.status === "published");
   if (!post) notFound();
 

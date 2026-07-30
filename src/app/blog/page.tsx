@@ -4,7 +4,7 @@ import styles from "./page.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
 import InteractiveGrid from "@/components/InteractiveGrid";
 import TypewriterAccent from "@/components/TypewriterAccent";
-import { getSiteData } from "@/lib/data";
+import { getSiteDataForPages } from "@/lib/data";
 import { readingTime } from "@/lib/markdown";
 
 // Server-rendered so search engines and link previews get the real titles and
@@ -13,7 +13,7 @@ import { readingTime } from "@/lib/markdown";
 export const revalidate = 60;
 
 export default async function BlogPage() {
-  const data = await getSiteData();
+  const data = await getSiteDataForPages();
 
   const posts = (data.blogs || [])
     .filter((b) => b.status === "published")

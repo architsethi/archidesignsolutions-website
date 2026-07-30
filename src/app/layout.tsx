@@ -121,7 +121,7 @@ export default function RootLayout({
     },
     telephone: "+91-9826375507",
     hasMap: "https://maps.app.goo.gl/4AL3qZxvKmPpRSmX6",
-    email: "archidesignsolutions@gmail.com",
+    email: "solutions.archit@gmail.com",
     foundingDate: "1999",
     founder: {
       "@type": "Person",

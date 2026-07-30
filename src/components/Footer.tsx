@@ -24,7 +24,7 @@ interface SocialLinks {
 
 const defaultContact = {
   address: "208B, Prakriti Corporate, Y.N. Road, Indore 452001",
-  emails: ["archidesignsolutions@gmail.com"],
+  emails: ["solutions.archit@gmail.com", "solutions.prakriti@gmail.com"],
   phones: ["+91-9826375507", "+91-9179797359"],
 };
 

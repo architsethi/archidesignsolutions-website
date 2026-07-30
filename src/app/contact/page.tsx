@@ -33,7 +33,7 @@ export default function ContactPage() {
   /* ── Live contact data from API ── */
   const [contact, setContact] = useState<ContactInfo>({
     phones: ["+91-9826375507", "+91-9179797359"],
-    emails: ["archidesignsolutions@gmail.com"],
+    emails: ["solutions.archit@gmail.com", "solutions.prakriti@gmail.com"],
     address: "208B, Prakriti Corporate\nY.N. Road\nIndore — 452001\nMadhya Pradesh, India",
     socials: {
       instagram: "https://www.instagram.com/archidesignsolutions/",
@@ -50,7 +50,7 @@ export default function ContactPage() {
         if (d.contact) {
           setContact({
             phones: d.contact.phones || ["+91-9826375507", "+91-9179797359"],
-            emails: d.contact.emails || ["archidesignsolutions@gmail.com"],
+            emails: d.contact.emails || ["solutions.archit@gmail.com", "solutions.prakriti@gmail.com"],
             address: d.contact.address || "208B, Prakriti Corporate\nY.N. Road\nIndore — 452001\nMadhya Pradesh, India",
             mapEmbedUrl: d.contact.mapEmbedUrl || "",
             socials: d.contact.socials || {},
