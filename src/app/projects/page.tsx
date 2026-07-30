@@ -9,67 +9,17 @@ import ScrollReveal from "@/components/ScrollReveal";
 import InteractiveGrid from "@/components/InteractiveGrid";
 import TypewriterAccent from "@/components/TypewriterAccent";
 
-type ProjectStage = "concept" | "construction" | "completed";
-
-interface ProjectStageData {
-  images: string[];
-}
-
-interface Project {
-  id: string;
-  title: string;
-  subtitle?: string;
-  category: string;
-  categories?: string[];
-  location: string;
-  year: string;
-  description: string;
-  image: string;
-  featured: boolean;
-  stages: {
-    concept?: ProjectStageData;
-    construction?: ProjectStageData;
-    completed?: ProjectStageData;
-  };
-}
-
-function getProjectCategories(p: Project): string[] {
-  if (p.categories && p.categories.length > 0) return p.categories;
-  return p.category ? [p.category] : [];
-}
-
-const stageLabels: Record<ProjectStage, string> = {
-  concept: "Concept",
-  construction: "Under Construction",
-  completed: "Completed",
-};
-
-const stageOrder: ProjectStage[] = ["concept", "construction", "completed"];
-
-function getDisplayStage(p: Project): ProjectStage {
-  if (p.stages?.completed && p.stages.completed.images.length > 0) return "completed";
-  if (p.stages?.construction && p.stages.construction.images.length > 0) return "construction";
-  return "concept";
-}
-
-function getAvailableStages(p: Project): ProjectStage[] {
-  return stageOrder.filter(
-    (s) => p.stages?.[s] && p.stages[s]!.images.length > 0
-  );
-}
+import {
+  type Project,
+  getProjectCategories,
+  getProjectGroups,
+  getProjectStatus,
+  getAllProjectImages,
+  statusLabels,
+} from "@/lib/project";
 
 function getAllImages(p: Project): string[] {
-  const images: string[] = [];
-  for (const stage of stageOrder) {
-    const stageData = p.stages?.[stage];
-    if (stageData?.images) {
-      images.push(...stageData.images);
-    }
-  }
-  if (images.length === 0 && p.image) {
-    images.push(p.image);
-  }
-  return images;
+  return getAllProjectImages(p);
 }
 
 const defaultCategories = [
@@ -97,8 +47,23 @@ const fallbackProjects: Project[] = [
     "description": "A twin-tower residential development planned around a raised podium that lifts landscaped gardens and a swimming pool clear of the vehicular level. The scheme pairs 4BHK apartments of 2,198 sq ft with 5BHK duplexes of 4,170 sq ft, each opening to deep balconies on multiple sides. Parking is resolved across stilt and podium levels — the podium deck alone accommodating 42 cars — freeing the ground plane for landscape and approach.",
     "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-03-street-elevation.jpg",
     "featured": true,
-    "stages": {
-      "concept": {
+    "status": "completed",
+    "groups": [
+      {
+        "id": "renders",
+        "label": "Renders",
+        "images": [
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-01-aerial-view.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-02-tower-detail.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-03-street-elevation.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-04-twin-towers.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-05-central-block.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-06-entrance-gate.jpg"
+        ]
+      },
+      {
+        "id": "drawings",
+        "label": "Drawings",
         "images": [
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/drawing-01-typical-floor-plan.jpg",
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/drawing-02-podium-parking-plan.jpg",
@@ -108,21 +73,8 @@ const fallbackProjects: Project[] = [
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/drawing-06-4bhk-unit-plan.jpg",
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/drawing-07-3bhk-unit-plan.jpg"
         ]
-      },
-      "construction": {
-        "images": []
-      },
-      "completed": {
-        "images": [
-          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-01-aerial-view.jpg",
-          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-02-tower-detail.jpg",
-          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-03-street-elevation.jpg",
-          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-04-twin-towers.jpg",
-          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-05-central-block.jpg",
-          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-06-entrance-gate.jpg"
-        ]
       }
-    }
+    ]
   },
   {
     "id": "shalimar-fortleza",
@@ -137,22 +89,11 @@ const fallbackProjects: Project[] = [
     "description": "Architectural design for Mirchandani Group's Shalimar Fortleza, a high-rise luxury residential development on a four-acre site in Bhopal. Tall residential blocks are arranged around a central landscaped plaza and clubhouse, approached through a formal gated entrance, with a classical vocabulary of colonnades, cornices and pitched-roof pavilions. Our scope ran from master plan and tower elevations through to the entrance gateway, carried from concept drawings into site execution.",
     "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-01-aerial-view.jpg",
     "featured": true,
-    "stages": {
-      "concept": {
-        "images": [
-          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/drawing-01-master-plan.jpg",
-          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/drawing-02-front-elevation.jpg",
-          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/drawing-03-entrance-gate-elevation.jpg"
-        ]
-      },
-      "construction": {
-        "images": [
-          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/construction-01-tower-facade.jpg",
-          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/construction-02-structure.jpg",
-          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/construction-03-site-progress.jpg"
-        ]
-      },
-      "completed": {
+    "status": "completed",
+    "groups": [
+      {
+        "id": "renders",
+        "label": "Renders",
         "images": [
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-01-aerial-view.jpg",
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-02-entrance-gateway.jpg",
@@ -162,8 +103,26 @@ const fallbackProjects: Project[] = [
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-06-tower-facade.jpg",
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-07-approach-view.jpg"
         ]
+      },
+      {
+        "id": "drawings",
+        "label": "Drawings",
+        "images": [
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/drawing-01-master-plan.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/drawing-02-front-elevation.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/drawing-03-entrance-gate-elevation.jpg"
+        ]
+      },
+      {
+        "id": "site-progress",
+        "label": "Site Progress",
+        "images": [
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/construction-01-tower-facade.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/construction-02-structure.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/construction-03-site-progress.jpg"
+        ]
       }
-    }
+    ]
   },
   {
     "id": "leeds-garden-city-platinum-park",
@@ -179,11 +138,11 @@ const fallbackProjects: Project[] = [
     "description": "Landscape and entry design across three Leeds Developers townships in Indore — Garden City, Platinum and Park. The work covers gateway structures and boundary treatments, boulevard streetscapes with shaded seating decks, and the central garden and clubhouse forecourt, using layered palm planting, uplighting and hard-landscape terracing to give each development a distinct arrival identity. Our firm is credited as project consultants on the architectural drawing sets.",
     "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/leeds-garden-city/render-01-garden-city-entrance-dusk.jpg",
     "featured": true,
-    "stages": {
-      "concept": {
-        "images": []
-      },
-      "construction": {
+    "status": "construction",
+    "groups": [
+      {
+        "id": "renders",
+        "label": "Renders",
         "images": [
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/leeds-garden-city/render-01-garden-city-entrance-dusk.jpg",
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/leeds-garden-city/render-02-garden-city-entrance.jpg",
@@ -192,11 +151,8 @@ const fallbackProjects: Project[] = [
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/leeds-garden-city/render-05-clubhouse-forecourt.jpg",
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/leeds-garden-city/render-06-clubhouse-aerial.jpg"
         ]
-      },
-      "completed": {
-        "images": []
       }
-    }
+    ]
   },
   {
     "id": "palm-springs-bhopal",
@@ -213,10 +169,19 @@ const fallbackProjects: Project[] = [
     "description": "A plotted holiday-home and farm development set along a seasonal water stream outside Bhopal. The masterplan organises 42 plots, from 314 to 976 sq m, around a three-metre cycle track and pedestrian loop, with a restaurant, landscaped pockets and services planned into the first phase and further land held for a second. Individual A-frame villas sit lightly on the terrain, their steep roofs and exposed timber structure framing views out to the water and planting.",
     "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-05-cluster-aerial.jpg",
     "featured": true,
-    "stages": {
-      "concept": {
+    "status": "concept",
+    "groups": [
+      {
+        "id": "masterplan",
+        "label": "Masterplan",
         "images": [
-          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/drawing-01-masterplan.jpg",
+          "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/drawing-01-masterplan.jpg"
+        ]
+      },
+      {
+        "id": "renders",
+        "label": "Renders",
+        "images": [
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-01-waterfront-cycle-track.jpg",
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-02-cycle-track-aerial.jpg",
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-03-villa-garden-aerial.jpg",
@@ -227,14 +192,8 @@ const fallbackProjects: Project[] = [
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-08-street-view.jpg",
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-09-waterside-aerial.jpg"
         ]
-      },
-      "construction": {
-        "images": []
-      },
-      "completed": {
-        "images": []
       }
-    }
+    ]
   },
   {
     "id": "shobha-jain-residence",
@@ -249,14 +208,11 @@ const fallbackProjects: Project[] = [
     "description": "A living room interior for a private residence, organised around a fluted timber feature wall and a layered ceiling that carries concealed lighting across the plan. Panelled walls, a muted grey upholstery palette and a mirrored dining edge extend the sense of space while keeping the room warm and unmistakably residential.",
     "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shobha-jain-residence/living-room-01.jpg",
     "featured": false,
-    "stages": {
-      "concept": {
-        "images": []
-      },
-      "construction": {
-        "images": []
-      },
-      "completed": {
+    "status": "completed",
+    "groups": [
+      {
+        "id": "living-room",
+        "label": "Living Room",
         "images": [
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shobha-jain-residence/living-room-01.jpg",
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shobha-jain-residence/living-room-02.jpg",
@@ -264,7 +220,7 @@ const fallbackProjects: Project[] = [
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shobha-jain-residence/living-room-04.jpg"
         ]
       }
-    }
+    ]
   },
   {
     "id": "bhatnagar-residence",
@@ -279,8 +235,11 @@ const fallbackProjects: Project[] = [
     "description": "Concept design for the living room of a private residence in Indore. The scheme works with generous ceiling height and full-height glazing, using a sculptural linear light, fluted screens and a soft neutral palette of plaster, oak and stone to hold the volume together. Currently under construction — completed photography to follow.",
     "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bhatnagar-residence/concept-01-living-room.jpg",
     "featured": false,
-    "stages": {
-      "concept": {
+    "status": "construction",
+    "groups": [
+      {
+        "id": "concept",
+        "label": "Concept",
         "images": [
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bhatnagar-residence/concept-01-living-room.jpg",
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bhatnagar-residence/concept-02-living-room.jpg",
@@ -288,14 +247,8 @@ const fallbackProjects: Project[] = [
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bhatnagar-residence/concept-04-living-room.jpg",
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bhatnagar-residence/concept-05-living-room.jpg"
         ]
-      },
-      "construction": {
-        "images": []
-      },
-      "completed": {
-        "images": []
       }
-    }
+    ]
   },
   {
     "id": "rathi-residence",
@@ -310,14 +263,11 @@ const fallbackProjects: Project[] = [
     "description": "A living room interior within a residence at Emaar Indore Greens. Double-height ceilings are articulated with exposed timber beams, set against a teal panelled accent wall in glass and metal that screens the stair beyond. A bespoke mandir, brass detailing and a restrained grey seating palette balance the scale of the volume against the intimacy the family wanted.",
     "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/rathi-residence/living-room-01.jpg",
     "featured": false,
-    "stages": {
-      "concept": {
-        "images": []
-      },
-      "construction": {
-        "images": []
-      },
-      "completed": {
+    "status": "completed",
+    "groups": [
+      {
+        "id": "living-room",
+        "label": "Living Room",
         "images": [
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/rathi-residence/living-room-01.jpg",
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/rathi-residence/living-room-02.jpg",
@@ -326,25 +276,23 @@ const fallbackProjects: Project[] = [
           "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/rathi-residence/living-room-05.jpg"
         ]
       }
-    }
+    ]
   }
 ];
 
 function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [activeStage, setActiveStage] = useState<ProjectStage>("completed");
-  const availableStages = getAvailableStages(project);
+  const groups = getProjectGroups(project);
+  const [activeGroupId, setActiveGroupId] = useState<string>(groups[0]?.id ?? "");
   const allImages = getAllImages(project);
 
   useEffect(() => {
-    if (availableStages.length > 0) {
-      setActiveStage(availableStages[availableStages.length - 1]);
-    }
+    if (groups.length > 0) setActiveGroupId(groups[0].id);
   }, []);
 
   useEffect(() => {
     setCurrentSlide(0);
-  }, [activeStage]);
+  }, [activeGroupId]);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -360,8 +308,8 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
     };
   }, [currentSlide, allImages.length]);
 
-  const stageImages = project.stages?.[activeStage]?.images || [];
-  const displayImages = stageImages.length > 0 ? stageImages : allImages;
+  const activeGroup = groups.find((g) => g.id === activeGroupId) || groups[0];
+  const displayImages = activeGroup && activeGroup.images.length > 0 ? activeGroup.images : allImages;
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % displayImages.length);
@@ -371,7 +319,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
     setCurrentSlide((prev) => (prev - 1 + displayImages.length) % displayImages.length);
   }, [displayImages.length]);
 
-  const displayStage = getDisplayStage(project);
+  const displayStage = getProjectStatus(project);
 
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
@@ -429,7 +377,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           {/* Right: Project Details */}
           <div className={styles.modalDetails}>
             <div className={styles.modalStageBadge} data-stage={displayStage}>
-              {stageLabels[displayStage]}
+              {statusLabels[displayStage]}
             </div>
             <h2 className={styles.modalTitle}>{project.title}</h2>
             {project.subtitle && (
@@ -456,18 +404,18 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
               <p className={styles.modalDescription}>{project.description}</p>
             )}
 
-            {/* Stage tabs */}
-            {availableStages.length > 1 && (
+            {/* Image group tabs — "Renders", "Living Room", "Drawings"… */}
+            {groups.length > 1 && (
               <div className={styles.modalStages}>
-                <span className={styles.modalStagesLabel}>View Stage:</span>
+                <span className={styles.modalStagesLabel}>View:</span>
                 <div className={styles.modalStageTabs}>
-                  {availableStages.map((s) => (
+                  {groups.map((g) => (
                     <button
-                      key={s}
-                      className={`${styles.modalStageTab} ${activeStage === s ? styles.modalStageTabActive : ""}`}
-                      onClick={() => setActiveStage(s)}
+                      key={g.id}
+                      className={`${styles.modalStageTab} ${activeGroupId === g.id ? styles.modalStageTabActive : ""}`}
+                      onClick={() => setActiveGroupId(g.id)}
                     >
-                      {stageLabels[s]}
+                      {g.label} <span style={{ opacity: 0.55 }}>({g.images.length})</span>
                     </button>
                   ))}
                 </div>
@@ -577,7 +525,7 @@ function ProjectsContent() {
         <div className="container">
           <div className={styles.projectsGrid}>
             {filtered.map((project, i) => {
-              const displayStage = getDisplayStage(project);
+              const displayStage = getProjectStatus(project);
 
               return (
                 <ScrollReveal key={project.id} delay={i * 0.05}>
@@ -597,7 +545,7 @@ function ProjectsContent() {
                         <span className={styles.projectCategory}>{project.category}</span>
                       </div>
                       <div className={styles.projectStageBadge} data-stage={displayStage}>
-                        {stageLabels[displayStage]}
+                        {statusLabels[displayStage]}
                       </div>
                     </div>
                     <div className={styles.projectInfo}>

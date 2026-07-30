@@ -36,43 +36,22 @@ export interface ContactInfo {
   architerraxUrl?: string;
 }
 
-export type ProjectStage = "concept" | "construction" | "completed";
+// Project types and normalisers live in ./project so the admin panel and the
+// public site share one definition. Re-exported here for existing importers.
+export type {
+  Project,
+  ProjectStatus,
+  ImageGroup,
+  ProjectStageData,
+} from "./project";
+export {
+  getProjectGroups,
+  getProjectStatus,
+  getProjectCategories,
+  statusLabels,
+} from "./project";
 
-export interface ProjectStageData {
-  images: string[];
-}
-
-export interface Project {
-  id: string;
-  title: string;
-  subtitle?: string;
-  category: string;
-  categories?: string[];
-  location: string;
-  year: string;
-  description: string;
-  image: string; // cover/thumbnail image
-  featured: boolean;
-  stages: {
-    concept?: ProjectStageData;
-    construction?: ProjectStageData;
-    completed?: ProjectStageData;
-  };
-}
-
-/** Returns the highest stage that has images */
-export function getProjectDisplayStage(project: Project): ProjectStage {
-  if (project.stages.completed && project.stages.completed.images.length > 0) return "completed";
-  if (project.stages.construction && project.stages.construction.images.length > 0) return "construction";
-  if (project.stages.concept && project.stages.concept.images.length > 0) return "concept";
-  return "concept";
-}
-
-export const stageLabels: Record<ProjectStage, string> = {
-  concept: "Concept",
-  construction: "Under Construction",
-  completed: "Completed",
-};
+import type { Project } from "./project";
 
 export interface BlogPost {
   id: string;
@@ -185,8 +164,23 @@ export const defaultSiteData: SiteData = {
       "description": "A twin-tower residential development planned around a raised podium that lifts landscaped gardens and a swimming pool clear of the vehicular level. The scheme pairs 4BHK apartments of 2,198 sq ft with 5BHK duplexes of 4,170 sq ft, each opening to deep balconies on multiple sides. Parking is resolved across stilt and podium levels — the podium deck alone accommodating 42 cars — freeing the ground plane for landscape and approach.",
       "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-03-street-elevation.jpg",
       "featured": true,
-      "stages": {
-        "concept": {
+      "status": "completed",
+      "groups": [
+        {
+          "id": "renders",
+          "label": "Renders",
+          "images": [
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-01-aerial-view.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-02-tower-detail.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-03-street-elevation.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-04-twin-towers.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-05-central-block.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-06-entrance-gate.jpg"
+          ]
+        },
+        {
+          "id": "drawings",
+          "label": "Drawings",
           "images": [
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/drawing-01-typical-floor-plan.jpg",
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/drawing-02-podium-parking-plan.jpg",
@@ -196,21 +190,8 @@ export const defaultSiteData: SiteData = {
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/drawing-06-4bhk-unit-plan.jpg",
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/drawing-07-3bhk-unit-plan.jpg"
           ]
-        },
-        "construction": {
-          "images": []
-        },
-        "completed": {
-          "images": [
-            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-01-aerial-view.jpg",
-            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-02-tower-detail.jpg",
-            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-03-street-elevation.jpg",
-            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-04-twin-towers.jpg",
-            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-05-central-block.jpg",
-            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bicholi-hapsi-high-rise/render-06-entrance-gate.jpg"
-          ]
         }
-      }
+      ]
     },
     {
       "id": "shalimar-fortleza",
@@ -225,22 +206,11 @@ export const defaultSiteData: SiteData = {
       "description": "Architectural design for Mirchandani Group's Shalimar Fortleza, a high-rise luxury residential development on a four-acre site in Bhopal. Tall residential blocks are arranged around a central landscaped plaza and clubhouse, approached through a formal gated entrance, with a classical vocabulary of colonnades, cornices and pitched-roof pavilions. Our scope ran from master plan and tower elevations through to the entrance gateway, carried from concept drawings into site execution.",
       "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-01-aerial-view.jpg",
       "featured": true,
-      "stages": {
-        "concept": {
-          "images": [
-            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/drawing-01-master-plan.jpg",
-            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/drawing-02-front-elevation.jpg",
-            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/drawing-03-entrance-gate-elevation.jpg"
-          ]
-        },
-        "construction": {
-          "images": [
-            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/construction-01-tower-facade.jpg",
-            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/construction-02-structure.jpg",
-            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/construction-03-site-progress.jpg"
-          ]
-        },
-        "completed": {
+      "status": "completed",
+      "groups": [
+        {
+          "id": "renders",
+          "label": "Renders",
           "images": [
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-01-aerial-view.jpg",
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-02-entrance-gateway.jpg",
@@ -250,8 +220,26 @@ export const defaultSiteData: SiteData = {
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-06-tower-facade.jpg",
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/render-07-approach-view.jpg"
           ]
+        },
+        {
+          "id": "drawings",
+          "label": "Drawings",
+          "images": [
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/drawing-01-master-plan.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/drawing-02-front-elevation.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/drawing-03-entrance-gate-elevation.jpg"
+          ]
+        },
+        {
+          "id": "site-progress",
+          "label": "Site Progress",
+          "images": [
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/construction-01-tower-facade.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/construction-02-structure.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shalimar-fortleza/construction-03-site-progress.jpg"
+          ]
         }
-      }
+      ]
     },
     {
       "id": "leeds-garden-city-platinum-park",
@@ -267,11 +255,11 @@ export const defaultSiteData: SiteData = {
       "description": "Landscape and entry design across three Leeds Developers townships in Indore — Garden City, Platinum and Park. The work covers gateway structures and boundary treatments, boulevard streetscapes with shaded seating decks, and the central garden and clubhouse forecourt, using layered palm planting, uplighting and hard-landscape terracing to give each development a distinct arrival identity. Our firm is credited as project consultants on the architectural drawing sets.",
       "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/leeds-garden-city/render-01-garden-city-entrance-dusk.jpg",
       "featured": true,
-      "stages": {
-        "concept": {
-          "images": []
-        },
-        "construction": {
+      "status": "construction",
+      "groups": [
+        {
+          "id": "renders",
+          "label": "Renders",
           "images": [
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/leeds-garden-city/render-01-garden-city-entrance-dusk.jpg",
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/leeds-garden-city/render-02-garden-city-entrance.jpg",
@@ -280,11 +268,8 @@ export const defaultSiteData: SiteData = {
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/leeds-garden-city/render-05-clubhouse-forecourt.jpg",
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/leeds-garden-city/render-06-clubhouse-aerial.jpg"
           ]
-        },
-        "completed": {
-          "images": []
         }
-      }
+      ]
     },
     {
       "id": "palm-springs-bhopal",
@@ -301,10 +286,19 @@ export const defaultSiteData: SiteData = {
       "description": "A plotted holiday-home and farm development set along a seasonal water stream outside Bhopal. The masterplan organises 42 plots, from 314 to 976 sq m, around a three-metre cycle track and pedestrian loop, with a restaurant, landscaped pockets and services planned into the first phase and further land held for a second. Individual A-frame villas sit lightly on the terrain, their steep roofs and exposed timber structure framing views out to the water and planting.",
       "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-05-cluster-aerial.jpg",
       "featured": true,
-      "stages": {
-        "concept": {
+      "status": "concept",
+      "groups": [
+        {
+          "id": "masterplan",
+          "label": "Masterplan",
           "images": [
-            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/drawing-01-masterplan.jpg",
+            "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/drawing-01-masterplan.jpg"
+          ]
+        },
+        {
+          "id": "renders",
+          "label": "Renders",
+          "images": [
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-01-waterfront-cycle-track.jpg",
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-02-cycle-track-aerial.jpg",
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-03-villa-garden-aerial.jpg",
@@ -315,14 +309,8 @@ export const defaultSiteData: SiteData = {
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-08-street-view.jpg",
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/palm-springs/render-09-waterside-aerial.jpg"
           ]
-        },
-        "construction": {
-          "images": []
-        },
-        "completed": {
-          "images": []
         }
-      }
+      ]
     },
     {
       "id": "shobha-jain-residence",
@@ -337,14 +325,11 @@ export const defaultSiteData: SiteData = {
       "description": "A living room interior for a private residence, organised around a fluted timber feature wall and a layered ceiling that carries concealed lighting across the plan. Panelled walls, a muted grey upholstery palette and a mirrored dining edge extend the sense of space while keeping the room warm and unmistakably residential.",
       "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shobha-jain-residence/living-room-01.jpg",
       "featured": false,
-      "stages": {
-        "concept": {
-          "images": []
-        },
-        "construction": {
-          "images": []
-        },
-        "completed": {
+      "status": "completed",
+      "groups": [
+        {
+          "id": "living-room",
+          "label": "Living Room",
           "images": [
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shobha-jain-residence/living-room-01.jpg",
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shobha-jain-residence/living-room-02.jpg",
@@ -352,7 +337,7 @@ export const defaultSiteData: SiteData = {
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/shobha-jain-residence/living-room-04.jpg"
           ]
         }
-      }
+      ]
     },
     {
       "id": "bhatnagar-residence",
@@ -367,8 +352,11 @@ export const defaultSiteData: SiteData = {
       "description": "Concept design for the living room of a private residence in Indore. The scheme works with generous ceiling height and full-height glazing, using a sculptural linear light, fluted screens and a soft neutral palette of plaster, oak and stone to hold the volume together. Currently under construction — completed photography to follow.",
       "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bhatnagar-residence/concept-01-living-room.jpg",
       "featured": false,
-      "stages": {
-        "concept": {
+      "status": "construction",
+      "groups": [
+        {
+          "id": "concept",
+          "label": "Concept",
           "images": [
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bhatnagar-residence/concept-01-living-room.jpg",
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bhatnagar-residence/concept-02-living-room.jpg",
@@ -376,14 +364,8 @@ export const defaultSiteData: SiteData = {
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bhatnagar-residence/concept-04-living-room.jpg",
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/bhatnagar-residence/concept-05-living-room.jpg"
           ]
-        },
-        "construction": {
-          "images": []
-        },
-        "completed": {
-          "images": []
         }
-      }
+      ]
     },
     {
       "id": "rathi-residence",
@@ -398,14 +380,11 @@ export const defaultSiteData: SiteData = {
       "description": "A living room interior within a residence at Emaar Indore Greens. Double-height ceilings are articulated with exposed timber beams, set against a teal panelled accent wall in glass and metal that screens the stair beyond. A bespoke mandir, brass detailing and a restrained grey seating palette balance the scale of the volume against the intimacy the family wanted.",
       "image": "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/rathi-residence/living-room-01.jpg",
       "featured": false,
-      "stages": {
-        "concept": {
-          "images": []
-        },
-        "construction": {
-          "images": []
-        },
-        "completed": {
+      "status": "completed",
+      "groups": [
+        {
+          "id": "living-room",
+          "label": "Living Room",
           "images": [
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/rathi-residence/living-room-01.jpg",
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/rathi-residence/living-room-02.jpg",
@@ -414,7 +393,7 @@ export const defaultSiteData: SiteData = {
             "https://yxn3us72dwnk0m94.public.blob.vercel-storage.com/projects/rathi-residence/living-room-05.jpg"
           ]
         }
-      }
+      ]
     }
   ],
   blogs: [
@@ -476,19 +455,32 @@ export const defaultSiteData: SiteData = {
 
 const getToken = () => process.env.BLOB_READ_WRITE_TOKEN || "";
 
+/**
+ * Resolve the data blob through `list()` rather than constructing its public URL
+ * from the token. The constructed URL is served from the CDN edge and was
+ * observed returning a stale copy minutes after an overwrite, which would make
+ * admin edits look like they had not saved. `list()` costs one blob operation
+ * per read but always resolves to fresh content — correctness over cost here.
+ */
+async function fetchSiteDataJson(token: string): Promise<unknown | null> {
+  const { blobs } = await list({ prefix: DATA_KEY, token });
+  if (blobs.length === 0) return null;
+  const res = await fetch(blobs[0].url, { cache: "no-store" });
+  return await res.json();
+}
+
 export async function getSiteData(): Promise<SiteData> {
   try {
     const token = getToken();
     if (!token) return defaultSiteData;
 
-    const { blobs } = await list({ prefix: DATA_KEY, token });
-    if (blobs.length === 0) {
+    const raw = await fetchSiteDataJson(token);
+    if (raw === null) {
       // No data stored yet — return defaults but DO NOT auto-save
       // (the first explicit save from admin panel will persist data)
       return defaultSiteData;
     }
-    const response = await fetch(blobs[0].url, { cache: "no-store" });
-    const data = await response.json();
+    const data = raw as Partial<SiteData> & { contact?: ContactInfo };
     // Merge with defaults so new fields added in code are available
     return {
       ...defaultSiteData,
@@ -508,18 +500,17 @@ export async function getSiteData(): Promise<SiteData> {
 
 export async function saveSiteData(data: SiteData): Promise<void> {
   const token = getToken();
-  // Delete existing blob first
-  try {
-    const { blobs } = await list({ prefix: DATA_KEY, token });
-    for (const blob of blobs) {
-      await del(blob.url, { token });
-    }
-  } catch {
-    // ignore
-  }
+  // Overwrite in place: one blob operation instead of list + delete + put.
+  // The pathname is fixed and addRandomSuffix is off, so this always replaces
+  // the same object rather than accumulating copies.
+  // cacheControlMaxAge keeps the CDN copy short-lived — the default is months,
+  // which left stale site data being served from the edge after an admin save.
   await put(DATA_KEY, JSON.stringify(data, null, 2), {
     access: "public",
     contentType: "application/json",
+    addRandomSuffix: false,
+    allowOverwrite: true,
+    cacheControlMaxAge: 60,
     token,
   });
 }
