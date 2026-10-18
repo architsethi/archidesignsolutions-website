@@ -1,5 +1,5 @@
 import { put, list, del } from "@vercel/blob";
-import { unstable_cache } from "next/cache";
+import { unstable_cache, revalidateTag } from "next/cache";
 
 const DATA_KEY = "site-data.json";
 
@@ -517,22 +517,41 @@ export async function getSiteData(): Promise<SiteData> {
 }
 
 /**
- * Read for server-rendered pages.
+ * Read for everything public: server-rendered pages and the open GET on
+ * /api/admin/data that the Footer, home, about, contact and projects pages
+ * fetch from the browser.
  *
- * `getSiteData` fetches with no-store, which is correct for the admin API but
- * opts any page using it into fully dynamic rendering — one blob list plus one
- * fetch for every visitor on every request. Wrapping the whole read (including
- * the `list` call, which is not a tracked fetch) means one blob read per
- * revalidate window shared across all visitors instead.
+ * Why this exists: every uncached read costs a `list()`, which Vercel Blob
+ * bills as an *advanced* operation, and the Hobby plan allows 2,000 a month
+ * before the store is blocked for 30 days. When public pages read through
+ * `getSiteData`, each page view cost two or more of them, so roughly 1,000
+ * visits a month took the whole site down (it happened in October 2026).
  *
- * 60s matches the blob CDN's own propagation floor, so this adds no staleness
- * that was not already there.
+ * So public reads share one cached copy. It is refreshed on demand —
+ * `saveSiteData` expires the "site-data" tag on every write, so admin edits
+ * still appear immediately — and otherwise at most once a day as a safety net.
+ * Steady-state cost: about 30 list() calls a month plus one per save.
+ *
+ * A failed read throws inside the cached function, and thrown results are
+ * not cached, so a blob outage is not pinned in place for a day; the wrapper
+ * then falls back to defaults for that one render.
  */
-export const getSiteDataForPages = unstable_cache(
-  async () => getSiteData(),
-  ["site-data"],
-  { revalidate: 60, tags: ["site-data"] }
+const SITE_DATA_TAG = "site-data";
+
+const readSiteDataCached = unstable_cache(
+  async () => getSiteDataForUpdate(),
+  ["site-data-v2"],
+  { revalidate: 86400, tags: [SITE_DATA_TAG] }
 );
+
+export async function getSiteDataForPages(): Promise<SiteData> {
+  try {
+    return await readSiteDataCached();
+  } catch (err) {
+    console.error("getSiteDataForPages error:", err);
+    return defaultSiteData;
+  }
+}
 
 export async function saveSiteData(data: SiteData): Promise<void> {
   const token = getToken();
@@ -552,6 +571,8 @@ export async function saveSiteData(data: SiteData): Promise<void> {
     cacheControlMaxAge: 60,
     token,
   });
+  // Expire the shared public copy now, so the next visitor reads the new data.
+  revalidateTag(SITE_DATA_TAG, { expire: 0 });
 }
 
 export async function uploadImage(

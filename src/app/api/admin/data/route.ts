@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSiteData, getSiteDataForUpdate, saveSiteData, type SiteData } from "@/lib/data";
+import { getSiteData, getSiteDataForPages, getSiteDataForUpdate, saveSiteData, type SiteData } from "@/lib/data";
 
 // Always read fresh data from blob store — never cache at the edge
 export const dynamic = "force-dynamic";
@@ -19,9 +19,12 @@ const NO_STORE = { "Cache-Control": "no-store, no-cache, must-revalidate" };
  * round-trips this response back through PUT cannot blank the stored inbox.
  */
 export async function GET(req: NextRequest) {
-  const data = await getSiteData();
-  if (isAuthed(req)) return NextResponse.json(data, { headers: NO_STORE });
+  // The admin panel reads live; everyone else gets the shared cached copy
+  // (see getSiteDataForPages — an uncached read here per page view is what
+  // exhausted the Blob operation quota and blocked the store).
+  if (isAuthed(req)) return NextResponse.json(await getSiteData(), { headers: NO_STORE });
 
+  const data = await getSiteDataForPages();
   const publicData: Partial<SiteData> = { ...data };
   delete publicData.contactSubmissions;
   return NextResponse.json(publicData, { headers: NO_STORE });
